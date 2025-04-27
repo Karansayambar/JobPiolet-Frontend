@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { CiLocationOn } from "react-icons/ci";
 import { PiCurrencyDollarThin } from "react-icons/pi";
 import logo from "../../assets/auth/Rectangle 43.png";
-import { Button, Stack, TableCell, TableRow, Typography } from "@mui/material";
+import {
+  Button,
+  Stack,
+  styled,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { MdAccessTime, MdCancel, MdLock, MdWork } from "react-icons/md";
+import { dateConverter } from "../../utils/dateConverter";
+import { useNavigate } from "react-router-dom";
+import CompanyLogo from "./CompanyLogo";
 
 interface Job {
   id: number;
@@ -121,46 +132,106 @@ const getStatusColor = (status: Job["status"]): string => {
   }
 };
 
-const DashboardJobCard = () => {
+export const JobModeChip = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: 5,
+  backgroundColor: `#E7F7FA`,
+  textTransform: "capitalize",
+  color: "#5c99dd",
+  padding: "4px 8px",
+  fontSize: "16px",
+  fontWeight: 600,
+  marginRight: theme.spacing(2),
+  width: "80px",
+  textAlign: "center",
+}));
+
+const DashboardJobCard = ({ data }) => {
+  const navigate = useNavigate();
+  const [job, setJob] = useState([]);
+
+  useEffect(() => {
+    setJob(data);
+  }, [data]);
+
   return (
     <>
-      {jobs.map((job: Job) => (
+      {job?.map((job: Job) => (
         <TableRow key={job.id}>
           <TableCell>
             <Stack direction="row" alignItems="center" gap={2}>
-              <img src={logo} height={50} alt="Company Logo" />
+              {/* <img
+                src={logo}
+                height={50}
+                alt="Company Logo"
+                style={{ backgroundColor: "#E7F7FA", padding: "4px" }}
+              /> */}
+              <CompanyLogo companyName={job?.companyName} size={40} />
+
               <Stack>
                 <Stack direction="row" alignItems="center" gap={2}>
-                  <Typography fontWeight="bold">{job.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {job.remote ? "Remote" : "On-site"}
+                  <Typography fontWeight="bold">
+                    {job.jobTitle || job?.jobDetails?.jobTitle}
                   </Typography>
+                  <JobModeChip>
+                    {job.workMode || job?.jobDetails?.workMode
+                      ? "Remote"
+                      : "On-site"}
+                  </JobModeChip>
                 </Stack>
                 <Stack direction="row" alignItems="center" gap={2}>
                   <Stack direction="row" alignItems="center" gap={1}>
                     <CiLocationOn size={20} />
-                    <Typography variant="body2">{job.location}</Typography>
+                    <Typography variant="body2">
+                      {job?.city?.toUpperCase() ||
+                        job?.jobDetails?.city.toUpperCase()}
+                    </Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" gap={1}>
                     <PiCurrencyDollarThin size={20} />
-                    <Typography variant="body2">{job.salary}</Typography>
+                    <Typography variant="body2">
+                      {job.minSalary || job?.jobDetails?.minSalary} -
+                      {job.maxSalary || job?.jobDetails?.minSalary}
+                    </Typography>
                   </Stack>
                 </Stack>
               </Stack>
             </Stack>
           </TableCell>
           <TableCell>
-            <Typography>{job.dateApplied}</Typography>
+            <Typography>{dateConverter(job.createdAt)}</Typography>
           </TableCell>
           <TableCell>
             <Stack direction="row" alignItems="center" gap={1}>
-              <Typography color={getStatusColor(job.status)}>
+              <Stack
+                color={getStatusColor(job.status)}
+                alignItems={"center"}
+                direction={"row"}
+                gap={1}
+              >
+                {job.status === "Active" ? (
+                  <MdWork color="green" />
+                ) : job.status === "Pending" ? (
+                  <MdAccessTime color="orange" />
+                ) : job.status === "Rejected" ? (
+                  <MdCancel color="red" />
+                ) : (
+                  <MdLock color="gray" />
+                )}
                 {job.status}
-              </Typography>
+              </Stack>
             </Stack>
           </TableCell>
           <TableCell>
-            <Button variant="contained">View Details</Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                console.log("jobId", job);
+                navigate(`/candidate/findjob/${job._id || job.jobDetails._id}`);
+              }}
+            >
+              View Details
+            </Button>
           </TableCell>
         </TableRow>
       ))}

@@ -1,9 +1,11 @@
-import { Box, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { questions } from "../../utils/data";
 import Question from "../../components/Common/Question";
 import * as blazeface from "@tensorflow-models/blazeface";
 import * as tf from "@tensorflow/tfjs";
+import { useApplyToJobMutation } from "../../services/jobsApi";
+import { useParams } from "react-router-dom";
 
 const TestPage = () => {
   const theme = useTheme();
@@ -12,6 +14,8 @@ const TestPage = () => {
   const [answers, setAnswers] = useState({});
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const [faceViolations, setFaceViolations] = useState(0);
+  const [applyToJob] = useApplyToJobMutation();
+  const { jobId } = useParams();
 
   const videoRef = useRef(null);
 
@@ -126,6 +130,17 @@ const TestPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // job apply functionality
+  const handleApply = async () => {
+    try {
+      jobId;
+      const response = await applyToJob(jobId).unwrap();
+      console.log("Response:", response);
+    } catch (err) {
+      console.error("Error applying:", err);
+    }
+  };
+
   return (
     <Box>
       <Stack>
@@ -170,21 +185,10 @@ const TestPage = () => {
           </Stack>
 
           <Stack flex={4}>
-            <Stack alignItems={"center"}>
-              <Stack gap={2} alignItems={"center"}>
-                <Typography variant="h5" gutterBottom>
-                  30.0 Minutes Remaining
-                </Typography>
-                <Typography color="error">
-                  Tab Switches: {tabSwitchCount}
-                </Typography>
-                <Typography color="error">
-                  Face Violations: {faceViolations}
-                </Typography>
-                <Typography variant="h6" color="error">
-                  Face Violations: {faceViolations}
-                </Typography>
-              </Stack>
+            <Stack alignItems={"center"} spacing={2}>
+              <Button onClick={() => handleApply()} variant="contained">
+                Submit Test
+              </Button>
 
               <Box width={350} height={200} border={1} my={4}>
                 <video
@@ -208,6 +212,17 @@ const TestPage = () => {
                   * No tab switching or background movement allowed.
                 </Typography>
                 <Typography>* Read each question carefully.</Typography>
+              </Stack>
+              <Stack gap={2} alignItems={"center"}>
+                {/* <Typography variant="h5" gutterBottom>
+                  30.0 Minutes Remaining
+                </Typography> */}
+                <Typography color="error">
+                  Tab Switches: {tabSwitchCount}
+                </Typography>
+                <Typography color="error">
+                  Face Violations: {faceViolations}
+                </Typography>
               </Stack>
             </Stack>
           </Stack>

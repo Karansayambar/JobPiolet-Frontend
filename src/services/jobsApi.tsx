@@ -26,7 +26,75 @@ export const jobsApi = createApi({
         method: "GET",
       }),
     }),
+    getAllJobs: builder.query({
+      query: () => ({
+        url: "/getAllJobs",
+        method: "GET",
+      }),
+    }),
+    applyToJob: builder.mutation({
+      query: (jobId) => ({
+        url: `/apply-to-job/${jobId}`,
+        method: "POST",
+      }),
+    }),
+    getAppliedJobs: builder.query({
+      query: () => ({
+        url: "/getAppliedJobs",
+        method: "GET",
+      }),
+    }),
+    getJobDetail: builder.query({
+      query: (jobId) => ({
+        url: `/getJobDetails/${jobId}`,
+        method: "GET",
+      }),
+    }),
+    getAppliedStatus: builder.query({
+      query: (jobId) => ({
+        url: `/getAppliedStatus/${jobId}`,
+        method: "GET",
+      }),
+    }),
+    addToFavorite: builder.mutation({
+      query: (jobId) => ({
+        url: `/addToFavorite/${jobId}`,
+        method: "POST",
+      }),
+    }),
+
+    getAllfavorites: builder.query({
+      query: () => ({
+        url: "/favorites",
+        method: "GET",
+      }),
+    }),
+    getFavioriteJob: builder.query({
+      query: (jobId) => ({
+        url: `/is-favorited/${jobId}`,
+        method: "GET",
+      }),
+    }),
+
+    viewApplicants: builder.query({
+      query: (jobId) => ({
+        url: `/viewApplicants/${jobId}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCreateJobPostMutation, useGetMyJobsQuery } = jobsApi;
+export const {
+  useCreateJobPostMutation,
+  useGetMyJobsQuery,
+  useGetAllJobsQuery,
+  useApplyToJobMutation,
+  useGetAppliedJobsQuery,
+  useGetJobDetailQuery,
+  useGetAppliedStatusQuery,
+  useAddToFavoriteMutation,
+  useGetAllfavoritesQuery,
+  useGetFavioriteJobQuery,
+  useViewApplicantsQuery,
+} = jobsApi;

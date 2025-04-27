@@ -1,4 +1,4 @@
-import { ArrowForward, Check } from "@mui/icons-material";
+import { ArrowForward } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -16,9 +16,22 @@ import { IoBag } from "react-icons/io5";
 import { CiBookmark } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
 import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
+import { useGetAllJobsQuery } from "../../../services/jobsApi";
+import { useEffect, useState } from "react";
 
 const Overview: React.FC = () => {
   const theme = useTheme();
+  const [jobs, setJobs] = useState([]);
+
+  const { data, isLoading, isError, refetch } = useGetAllJobsQuery();
+
+  useEffect(() => {
+    if (data) {
+      console.log("Fetched Jobs:", data.jobs);
+      const allJobs = data.jobs;
+      setJobs(allJobs);
+    }
+  }, [data]);
 
   const stats = [
     { label: "Applied Jobs", count: 589, icon: <IoBag size={30} /> },
@@ -123,7 +136,7 @@ const Overview: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <DashboardJobCard />
+          <DashboardJobCard data={jobs} />
         </TableBody>
       </Table>
     </Stack>

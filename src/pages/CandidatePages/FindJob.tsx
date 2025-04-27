@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   Stack,
   Typography,
@@ -18,7 +19,8 @@ import JobCard from "../../components/Common/JobCard";
 import CustomIcons from "../../utils/PaginationItem";
 import SideBar from "../../sections/Candidate/SideBar";
 import { useSelector } from "react-redux";
-import { jobs } from "../../utils/data";
+import { useGetAllJobsQuery } from "../../services/jobsApi";
+// import { jobs } from "../../utils/data";
 
 const FindJob: React.FC = () => {
   const theme = useTheme();
@@ -28,7 +30,24 @@ const FindJob: React.FC = () => {
   const [quickFilter, setQuickFilter] = useState([]);
   const [advanceFilters, setAdvanceFilters] = useState([]);
   const [page, setPage] = useState(1);
+  const [jobs, setJobs] = useState([]);
   const itemsPerPage = 12;
+
+  const { data, isError, isLoading } = useGetAllJobsQuery();
+
+  useEffect(() => {
+    if (data) {
+      setJobs(data.jobs);
+      console.log("jobs", data);
+    }
+  });
+  // if (isLoading) {
+  //   return (
+  //     <Box display="flex" justifyContent="center" p={4}>
+  //       <CircularProgress />
+  //     </Box>
+  //   );
+  // }
 
   const { filters } = useSelector((state) => state.jobs);
 

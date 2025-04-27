@@ -4,7 +4,6 @@ import { Star, Bell, Gear, StackOverflowLogo } from "phosphor-react";
 import { BsSuitcaseLg } from "react-icons/bs";
 
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Overview from "../../sections/Candidate/dashboard/Overview";
 import AppliedJobs from "../../sections/Candidate/dashboard/AppliedJobs";
 import FavoriteJobs from "../../sections/Candidate/dashboard/FavoriteJobs";
@@ -13,7 +12,6 @@ import Settings from "../../sections/Candidate/dashboard/Settings/Settings";
 
 const DashboardPage: React.FC = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const [selectedSection, setSelectedSection] = useState<string>("Overview");
 

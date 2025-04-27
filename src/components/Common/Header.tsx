@@ -1,6 +1,7 @@
 import { ArrowDropDown } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Link as MuiLink,
   Stack,
   Typography,
@@ -21,6 +22,12 @@ const Header: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const handleSignout = () => {
+    localStorage.removeItem("role");
+    localStorage.removeItem("user_id");
+    navigate("/auth/");
+  };
 
   return (
     <Box
@@ -69,6 +76,9 @@ const Header: React.FC = () => {
             <Typography>English</Typography>
             <ArrowDropDown />
           </Stack>
+          <Button onClick={() => handleSignout()} variant="contained">
+            SignOut
+          </Button>
         </Stack>
       </Stack>
     </Box>

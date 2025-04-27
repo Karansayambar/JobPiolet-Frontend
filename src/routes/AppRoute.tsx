@@ -37,6 +37,7 @@ import { store } from "../redux/store";
 import ProtectedRoute from "./ProtectedRoute";
 import FindJob from "../pages/CandidatePages/FindJob";
 import TestPage from "../pages/CandidatePages/TestPage";
+import ViewApplicants from "../sections/Employee/dashboard/ViewApplicants";
 
 // Redirect based on authentication
 // const AuthRedirect = () => {
@@ -99,7 +100,7 @@ const AppRoute: React.FC = () => {
                   }
                 />
                 <Route
-                  path="findjob/:id"
+                  path="findjob/:jobId"
                   element={
                     <ProtectedRoute
                       isAllowed={isAuthenticated && isCandidate}
@@ -123,7 +124,7 @@ const AppRoute: React.FC = () => {
                 />
               </Route>
               <Route
-                path="/candidate/test"
+                path="/candidate/test/:jobId"
                 element={
                   <ProtectedRoute
                     isAllowed={isAuthenticated && isCandidate}
@@ -160,6 +161,19 @@ const AppRoute: React.FC = () => {
                       redirectPath="/company/dashboard"
                     >
                       <CompanyDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="viewApplicants/:id"
+                  element={
+                    <ProtectedRoute
+                      isAllowed={
+                        isAuthenticated && isCompany && isProfileCreated
+                      }
+                      redirectPath="/company/viewApplicants"
+                    >
+                      <ViewApplicants />
                     </ProtectedRoute>
                   }
                 />

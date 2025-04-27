@@ -8,7 +8,7 @@ import Personal from "./Personal";
 import Profile from "./Profile";
 import SocialLinks from "./SocialLinks";
 import AccountSettings from "./AccountSettings";
-import Contact from "../../../Employee/Profile/Contact";
+import Contact from "./Contact";
 
 const Settings: React.FC = () => {
   const [selector, setSelector] = useState<Number>(0);

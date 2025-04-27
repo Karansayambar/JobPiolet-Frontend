@@ -1,8 +1,18 @@
 import { Box, Stack, Table, TableBody, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
+import { useGetAllfavoritesQuery } from "../../../services/jobsApi";
 
 const FavoriteJobs: React.FC = () => {
+  const [favouriteJob, setFaviorateJob] = useState([]);
+  const { data } = useGetAllfavoritesQuery();
+  useEffect(() => {
+    if (data) {
+      console.log("data form favorite", data);
+      setFaviorateJob(data.favoriteJobs);
+    }
+  }, [data]);
+
   return (
     <Stack
       flex={4}
@@ -20,7 +30,7 @@ const FavoriteJobs: React.FC = () => {
       </Typography>
       <Table>
         <TableBody>
-          <DashboardJobCard />
+          <DashboardJobCard data={favouriteJob} />
         </TableBody>
       </Table>
     </Stack>

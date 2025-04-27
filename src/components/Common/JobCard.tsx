@@ -1,8 +1,8 @@
 import { Box, Icon, Stack, styled, Typography, useTheme } from "@mui/material";
 import { BookmarkSimple, MapPin } from "phosphor-react";
 import React from "react";
-import { Job } from "../../utils/data";
 import { useNavigate } from "react-router-dom";
+import CompanyLogo from "./CompanyLogo";
 
 // Styled component for job type
 export const Duration = styled("div")(({ theme }) => ({
@@ -19,7 +19,7 @@ export const Duration = styled("div")(({ theme }) => ({
   textAlign: "center",
 }));
 
-const CompanyLogo = styled("div")(({ theme }) => ({
+const CompanyLogoStyle = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: 3, // Removed quotes, now valid
   backgroundColor: "#e1f5fe",
@@ -40,6 +40,9 @@ interface JobCardProps {
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  console.log("jobId", job._id);
+  // Random company logo (returns URL)
+
   return (
     <Box
       sx={{
@@ -74,10 +77,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           justifyContent="space-between"
           mt={2}
         >
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <CompanyLogo>
-              <img src={job.logo} alt="" style={{ width: 50 }} />
-            </CompanyLogo>
+          <Stack direction="row" alignItems="center" spacing={3}>
+            <CompanyLogoStyle>
+              <CompanyLogo companyName={job.companyName} size={60} />
+            </CompanyLogoStyle>
             <Stack>
               <Typography fontSize="18px" fontWeight={500}>
                 {job.companyName}

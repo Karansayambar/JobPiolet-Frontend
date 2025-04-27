@@ -1,21 +1,22 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
-  userProfileData: {
-    userInfo: {
+  candidateProfileData: {
+    candidateInfo: {
       userFullName: "",
       title: "",
       experience: "",
       education: "",
       personalWebsite: "",
-      cv: "",
+      resume: "",
     },
-    profileData: {
+    profileInfo: {
       nationality: "",
       gender: "",
-      matrialStatus: "",
-      education: "",
-      experience: "",
+      maritalStatus: "",
+      address: "",
       dateOfBirth: "",
-      description: "",
+      biography: "",
     },
     SocialInfo: [],
     contactInfo: {
@@ -25,3 +26,19 @@ const initialState = {
     },
   },
 };
+
+const candidateSlice = createSlice({
+  name: "candidateProfile",
+  initialState,
+  reducers: {
+    updateCandidateData: (state, action) => {
+      state.candidateProfileData = {
+        ...state.candidateProfileData,
+        ...action.payload,
+      };
+    },
+  },
+});
+
+export const { updateCandidateData } = candidateSlice.actions;
+export default candidateSlice.reducer;

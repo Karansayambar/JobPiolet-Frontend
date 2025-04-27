@@ -8,10 +8,19 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
+import { useGetAppliedJobsQuery } from "../../../services/jobsApi";
 
 const AppliedJobs: React.FC = () => {
+  const { data, isLoading, isError } = useGetAppliedJobsQuery();
+  const [appliedJobs, setappliedJobs] = useState([]);
+  useEffect(() => {
+    if (data) {
+      console.log("applied jobs:", data.data);
+      setappliedJobs(data.data);
+    }
+  }, [data]);
   return (
     <Stack
       flex={4}
@@ -39,7 +48,7 @@ const AppliedJobs: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <DashboardJobCard />
+          <DashboardJobCard data={appliedJobs} />
         </TableBody>
       </Table>
     </Stack>

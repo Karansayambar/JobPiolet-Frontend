@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   Grid,
   IconButton,
@@ -11,7 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Book, BookmarkSimple, Calendar, Link } from "phosphor-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import JobCard, { Duration } from "../../components/Common/JobCard";
 import {
   ArrowForward,
@@ -22,35 +23,85 @@ import {
   X,
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
-import { jobs } from "../../utils/data";
+// import { jobs } from "../../utils/data";
 import { BsClock, BsDot } from "react-icons/bs";
 import { MdCastForEducation } from "react-icons/md";
 import logo from "../../assets/auth/Rectangle 43.png";
+import {
+  useAddToFavoriteMutation,
+  useApplyToJobMutation,
+  useGetAppliedStatusQuery,
+  useGetFavioriteJobQuery,
+  useGetJobDetailQuery,
+} from "../../services/jobsApi";
 
 const JobDetails: React.FC = () => {
-  const { id } = useParams();
+  const { jobId } = useParams();
   const theme = useTheme();
-  const job = jobs.find((job) => job._id == id) || null; // Fetch job safely
+  const [job, setJob] = useState({});
   const navigate = useNavigate();
 
+  // Api calls
+  const { data: jobData, isLoading, isError } = useGetJobDetailQuery(jobId);
+  const { data: isAppliedValue } = useGetAppliedStatusQuery(jobId);
+  const { data: isFavorited } = useGetFavioriteJobQuery(jobId);
+  // const [applyToJob] = useApplyToJobMutation();
+  const [addToFavorite] = useAddToFavoriteMutation();
+
+  useEffect(() => {
+    if (jobData) {
+      setJob(jobData?.data);
+    }
+    console.log("isAppliedValue", isAppliedValue);
+    console.log("isFavoriteeValue", isFavorited?.isFavorited);
+  }, [jobData, isAppliedValue, isFavorited]);
+
+  // // job apply functionality
+  // const handleApply = async () => {
+  //   try {
+  //     jobId;
+  //     const response = await applyToJob(jobId).unwrap();
+  //     console.log("Response:", response);
+  //   } catch (err) {
+  //     console.error("Error applying:", err);
+  //   }
+  // };
+
+  const handleFavorite = async () => {
+    console.log("jobId from handleFavorite", jobId);
+    try {
+      const response = await addToFavorite(jobId).unwrap();
+      console.log("Response:", response);
+    } catch (error) {
+      console.error("Error applying:", error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" p={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <Box px={30}>
+    <Box>
       {/* Header */}
-      {/* <Stack
+      <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        p={3}
-        px={30}
-        bgcolor={theme.palette.grey[100]}
+        p={2}
+        bgcolor={theme.palette.grey[300]}
       >
         <Typography variant="h6">Job Details</Typography>
         <Typography variant="body2">Home / Find Job</Typography>
-      </Stack> */}
+      </Stack>
 
       {/* Job Details */}
       {job ? (
-        <Stack px={30}>
+        <Stack px={50}>
           {/* Job Heading */}
           <Stack
             py={4}
@@ -59,24 +110,39 @@ const JobDetails: React.FC = () => {
             justifyContent="space-between"
           >
             <Stack direction="row" alignIalignItemstems="center" gap={2}>
-              <img src={logo} height={50} alt={job.companyName} />
+              <img src={logo} height={50} alt={job?.companyName} />
               <Stack>
-                <Typography variant="h5">{job.jobTitle}</Typography>
+                <Typography variant="h5">{job?.jobTitle}</Typography>
                 <Stack direction="row" gap={2}>
-                  <Typography variant="body2">at {job.companyName}</Typography>
-                  <Duration>{job.workMode}</Duration>
+                  <Typography variant="body2">at {job?.companyName}</Typography>
+                  <Duration>{job?.workMode}</Duration>
                 </Stack>
               </Stack>
             </Stack>
             <Stack direction="row" alignItems="center" gap={3}>
-              <IconButton>
-                <BookmarkSimple size={26} />
+              <IconButton onClick={() => handleFavorite(job?._id)}>
+                <BookmarkSimple
+                  size={26}
+                  weight={isFavorited?.isFavorited ? "fill" : "regular"}
+                  color={isFavorited?.isFavorited ? "#1976d2" : "#757575"}
+                />
               </IconButton>
               <Button
                 variant="contained"
-                onClick={() => navigate("/candidate/test")}
+                onClick={() => navigate(`/candidate/test/${jobId}`)}
+                // onClick={
+                //   !isAppliedValue?.isApplied && !isLoading
+                //     ? handleApply
+                //     : "undefined"
+                // }
+                disabled={isAppliedValue?.isApplied || isLoading}
               >
-                Apply Now <ArrowForward />
+                {isLoading
+                  ? "Applying..."
+                  : isAppliedValue?.isApplied
+                  ? "Applied"
+                  : "Applay Now"}
+                <ArrowForward />
               </Button>
             </Stack>
           </Stack>
@@ -89,14 +155,14 @@ const JobDetails: React.FC = () => {
                 Job Description
               </Typography>
               <Typography fontSize={20} mb={3}>
-                {job.jobDescription}
+                {job?.jobDescription}
               </Typography>
 
               <Typography variant="h6" fontSize={25} fontWeight={600}>
                 Requirements
               </Typography>
               <List>
-                {job.jobRequirements?.map((req, index) => (
+                {job?.jobRequirements?.map((req, index) => (
                   <ListItem key={index} sx={{ fontSize: "20px" }}>
                     <BsDot /> {req}
                   </ListItem>
@@ -107,7 +173,7 @@ const JobDetails: React.FC = () => {
                 Responsibilities
               </Typography>
               <List>
-                {job.jobResponsibilities?.map((benefit, index) => (
+                {job?.jobResponsibilities?.map((benefit, index) => (
                   <ListItem key={index} sx={{ fontSize: "20px" }}>
                     <BsDot /> {benefit}
                   </ListItem>
@@ -118,7 +184,7 @@ const JobDetails: React.FC = () => {
                 Preferences
               </Typography>
               <List>
-                {job.jobPreferences?.map((benefit, index) => (
+                {job?.jobPreferences?.map((benefit, index) => (
                   <ListItem key={index} sx={{ fontSize: "20px" }}>
                     <BsDot /> {benefit}
                   </ListItem>
@@ -144,10 +210,10 @@ const JobDetails: React.FC = () => {
                     Salary (USD)
                   </Typography>
                   <Typography variant="h6">
-                    {`${job?.minSalary} - ${job.maxSalary}`}
+                    {`${job?.minSalary} - ${job?.maxSalary}`}
                   </Typography>
                   <Typography variant="body2" color="gray">
-                    {job.salaryType} Salary
+                    {job?.salaryType} Salary
                   </Typography>
                 </Grid>
 
@@ -166,7 +232,7 @@ const JobDetails: React.FC = () => {
                   <Typography variant="subtitle1" fontWeight="bold">
                     {job?.city ?? "Location Unavailable"}
                   </Typography>
-                  <Typography variant="body2">{job.address}</Typography>
+                  <Typography variant="body2">{job?.address}</Typography>
                 </Grid>
               </Grid>
 
@@ -208,17 +274,17 @@ const JobDetails: React.FC = () => {
                     {
                       icon: <Calendar size={24} />,
                       label: "Job Posted",
-                      value: job.posted,
+                      value: job?.posted,
                     },
                     {
                       icon: <BsClock size={24} />,
                       label: "Job Expire In",
-                      value: job.deadline,
+                      value: job?.deadline,
                     },
                     {
                       icon: <BsClock size={24} />,
                       label: "Job Level",
-                      value: job.jobLevel,
+                      value: job?.jobLevel,
                     },
                     {
                       icon: <WalletOutlined size={24} />,
@@ -310,7 +376,7 @@ const JobDetails: React.FC = () => {
         </Stack>
       ) : (
         <Typography variant="h6" textAlign="center" py={5}>
-          Job not found!
+          {isLoading && <>Loading</>}
         </Typography>
       )}
 
@@ -328,9 +394,9 @@ const JobDetails: React.FC = () => {
           justifyContent={"start"}
           gap={4}
         >
-          {jobs.slice(0, 6).map((job, index) => (
+          {/* {jobs.slice(0, 6).map((job, index) => (
             <JobCard key={index} job={job} />
-          ))}
+          ))} */}
         </Stack>
       </Stack>
     </Box>
