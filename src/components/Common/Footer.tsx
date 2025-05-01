@@ -1,4 +1,3 @@
-import { ArrowForward } from "@mui/icons-material";
 import {
   Box,
   Grid,
@@ -7,17 +6,19 @@ import {
   Stack,
   Typography,
   Divider,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import { Suitcase } from "phosphor-react";
 import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <Box bgcolor={"#000"} color={"white"} py={5} px={3}>
+    <Box bgcolor="#000" color="white" py={5} px={3}>
       {/* Main Grid Container */}
       <Grid container spacing={8} justifyContent="center">
         {/* Logo & Contact Section */}
-        <Grid item xs={12} md={4} width={400}>
+        <Grid item xs={12} md={4} component="div">
           <Stack spacing={2}>
             <Stack direction={"row"} alignItems="center" spacing={1}>
               <Suitcase size={24} weight="bold" />
@@ -26,8 +27,9 @@ const Footer: React.FC = () => {
               </Typography>
             </Stack>
             <Typography variant="body2" color="gray">
-              Call now: <Typography>(319) 555-0115</Typography>
+              Call now: <span style={{ color: "white" }}>(319) 555-0115</span>
             </Typography>
+
             <Typography variant="body2" color="grey">
               6391 Elgin St. Celina, Delaware 10299, New York, United States of
               America
@@ -36,19 +38,25 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Quick Links Section */}
-        <Grid item xs={12} md={2}>
-          <Typography variant="h6" fontWeight={600} mb={2}>
-            Quick Links
-          </Typography>
-          <List dense>
-            {["About", "Contact", "Pricing", "Blog"].map((item, index) => (
-              <ListItem key={index} sx={{ py: 0.5 }}>
-                <Typography variant="body2" color="grey">
-                  {item}
-                </Typography>
-              </ListItem>
-            ))}
-          </List>
+        <Grid item xs={12} md={2} component="div">
+          <Box textAlign={{ xs: "center", md: "left" }}>
+            <Typography variant="h6" fontWeight={600} mb={2}>
+              Quick Links
+            </Typography>
+            <List dense>
+              {["About", "Contact", "Pricing", "Blog"].map((item, index) => (
+                <ListItemButton sx={{ py: 0.5 }}>
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{
+                      variant: "body2",
+                      sx: { color: "gray", "&:hover": { color: "white" } },
+                    }}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+          </Box>
         </Grid>
 
         {/* Candidate Section */}
@@ -59,32 +67,46 @@ const Footer: React.FC = () => {
           <List dense>
             {["Find Jobs", "Upload Resume", "Job Alerts", "Career Advice"].map(
               (item, index) => (
-                <ListItem key={index} sx={{ py: 0.5 }}>
-                  <Typography variant="body2" color="grey">
-                    {item}
-                  </Typography>
-                </ListItem>
+                <ListItemButton sx={{ py: 0.5 }}>
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{
+                      variant: "body2",
+                      sx: { color: "gray", "&:hover": { color: "white" } },
+                    }}
+                  />
+                </ListItemButton>
               )
             )}
           </List>
         </Grid>
 
         {/* Employers Section */}
-        <Grid item xs={12} md={2}>
-          <Typography variant="h6" fontWeight={600} mb={2}>
-            Employers
-          </Typography>
-          <List dense>
-            {["Post a Job", "Company Profiles", "Pricing", "Hiring Advice"].map(
-              (item, index) => (
-                <ListItem key={index} sx={{ py: 0.5 }}>
-                  <Typography variant="body2" color="grey">
-                    {item}
-                  </Typography>
-                </ListItem>
-              )
-            )}
-          </List>
+        <Grid item xs={12} md={2} component="div">
+          {/* Or use another HTML element */}
+          <Box textAlign={{ xs: "center", md: "left" }}>
+            <Typography variant="h6" fontWeight={600} mb={2}>
+              Employers
+            </Typography>
+            <List dense>
+              {[
+                "Post a Job",
+                "Company Profiles",
+                "Pricing",
+                "Hiring Advice",
+              ].map((item, index) => (
+                <ListItemButton sx={{ py: 0.5 }}>
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{
+                      variant: "body2",
+                      sx: { color: "gray", "&:hover": { color: "white" } },
+                    }}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+          </Box>
         </Grid>
 
         {/* Support Section */}
@@ -99,11 +121,15 @@ const Footer: React.FC = () => {
               "Terms of Use",
               "Contact Us",
             ].map((item, index) => (
-              <ListItem key={index} sx={{ py: 0.5 }}>
-                <Typography variant="body2" color="grey">
-                  {item}
-                </Typography>
-              </ListItem>
+              <ListItemButton sx={{ py: 0.5 }}>
+                <ListItemText
+                  primary={item}
+                  primaryTypographyProps={{
+                    variant: "body2",
+                    sx: { color: "gray", "&:hover": { color: "white" } },
+                  }}
+                />
+              </ListItemButton>
             ))}
           </List>
         </Grid>

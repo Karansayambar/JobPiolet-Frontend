@@ -13,7 +13,7 @@ export const paymentApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getPaymentDetails: builder.query({
+    getPaymentDetails: builder.query<Response, void>({
       query: () => ({
         url: "/get-payment-details",
         method: "GET",

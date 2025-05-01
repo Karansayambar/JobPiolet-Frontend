@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   IconButton,
@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { X } from "phosphor-react";
 import { useDispatch } from "react-redux";
-import filteredJobs, { setFilters } from "../../redux/slices/jobSlice";
+import { setFilters } from "../../redux/slices/jobSlice";
 
 const locations = [
   "New York",
@@ -42,7 +42,11 @@ const salaryRanges = [
   { label: "Custom", value: "custom" },
 ];
 
-const SideBar: React.FC = ({ handleSidebarClose }) => {
+interface SideBarProps {
+  handleSidebarClose: () => void;
+}
+
+const SideBar: React.FC<SideBarProps> = ({ handleSidebarClose }) => {
   const dispatch = useDispatch();
 
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -167,7 +171,7 @@ const SideBar: React.FC = ({ handleSidebarClose }) => {
         <Autocomplete
           options={roles}
           value={selectedRole}
-          onChange={(event, newValue) => handleRoleChange(newValue)}
+          onChange={(newValue) => handleRoleChange(newValue)}
           renderInput={(params) => (
             <TextField {...params} label="Job Role" variant="outlined" />
           )}
@@ -203,7 +207,7 @@ const SideBar: React.FC = ({ handleSidebarClose }) => {
         <Autocomplete
           options={locations}
           value={selectedLocation}
-          onChange={(event, newValue) => handleLocationChange(newValue)}
+          onChange={(newValue) => handleLocationChange(newValue)}
           renderInput={(params) => (
             <TextField {...params} label="Job Location" variant="outlined" />
           )}

@@ -1,4 +1,4 @@
-import { Box, Input, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 import { MdOutlineCloudUpload } from "react-icons/md";
@@ -9,14 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateCandidateData } from "../../../../../redux/slices/userProfileSlice";
 import { FaFileAlt } from "react-icons/fa";
 import { Plus } from "phosphor-react";
+import { RootState } from "../../../../../redux/store";
 
 const PersonalForm: React.FC = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { candidateProfileData } = useSelector((state) => state);
+  const { candidateProfileData } = useSelector((state: RootState) => state);
   const [selectedResume, setSelectedResume] = useState<File | null>(null);
-
-  console.log("candidateProfileData", candidateProfileData);
 
   // get data from candidate slice
   const personalInfo = candidateProfileData?.candidateInfo;
@@ -32,7 +31,7 @@ const PersonalForm: React.FC = () => {
       resume: "",
     },
   });
-  const { register, handleSubmit, control, reset } = methods;
+  const { register, handleSubmit, reset } = methods;
 
   useEffect(() => {
     if (personalInfo) {

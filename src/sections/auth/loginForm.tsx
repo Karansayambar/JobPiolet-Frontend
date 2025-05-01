@@ -30,6 +30,7 @@ const AuthLoginForm: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //yup resorver
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email is required")
@@ -37,6 +38,7 @@ const AuthLoginForm: React.FC = () => {
     password: Yup.string().required("Password is required"),
   });
 
+  //method
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
   });

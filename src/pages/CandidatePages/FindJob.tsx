@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  CircularProgress,
   Divider,
   Stack,
   Typography,
@@ -20,41 +19,49 @@ import CustomIcons from "../../utils/PaginationItem";
 import SideBar from "../../sections/Candidate/SideBar";
 import { useSelector } from "react-redux";
 import { useGetAllJobsQuery } from "../../services/jobsApi";
-// import { jobs } from "../../utils/data";
+import { RootState } from "../../redux/store";
+
+export type Job = {
+  id: string;
+  title: string;
+  location: string;
+  type: string;
+  companyName?: string;
+  description?: string;
+  [key: string]: any; // fallback to allow other fields
+};
+
+export type GetJobsResponse = {
+  jobs: Job[];
+};
 
 const FindJob: React.FC = () => {
   const theme = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [locationInput, setLocationInput] = useState("");
-  const [quickFilter, setQuickFilter] = useState([]);
-  const [advanceFilters, setAdvanceFilters] = useState([]);
+  const [quickFilter, setQuickFilter] = useState<Job[]>([]);
+  const [advanceFilters, setAdvanceFilters] = useState<Job[]>([]);
   const [page, setPage] = useState(1);
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const itemsPerPage = 12;
 
-  const { data, isError, isLoading } = useGetAllJobsQuery();
+  const { data } = useGetAllJobsQuery<GetJobsResponse>();
 
   useEffect(() => {
-    if (data) {
-      setJobs(data.jobs);
+    if (data?.jobs) {
+      setJobs(data?.jobs);
       console.log("jobs", data);
     }
-  });
-  // if (isLoading) {
-  //   return (
-  //     <Box display="flex" justifyContent="center" p={4}>
-  //       <CircularProgress />
-  //     </Box>
-  //   );
-  // }
+  }, [data]);
 
-  const { filters } = useSelector((state) => state.jobs);
-
+  const filters: Record<string, string> = useSelector(
+    (state: RootState) => state.jobs.filters
+  );
   const handleSearch = () => {
-    const parsedFilters = {};
-    Object.values(filters).forEach((item) => {
-      const [key, value] = item.split(":").map((str) => str.trim());
+    const parsedFilters: any = {};
+    Object.values(filters).forEach((item: any) => {
+      const [key, value] = item.split(":").map((str: any) => str.trim());
       if (key && value) parsedFilters[key] = value;
     });
     console.log("parsedFilters", parsedFilters);
@@ -108,7 +115,7 @@ const FindJob: React.FC = () => {
     setShowSidebar(true);
   };
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (value: any) => {
     setPage(value);
   };
 
@@ -128,7 +135,7 @@ const FindJob: React.FC = () => {
     <>
       <Box>
         {/* Header */}
-        {/* <Stack
+        <Stack
           direction={"row"}
           alignItems={"center"}
           justifyContent={"space-between"}
@@ -138,7 +145,7 @@ const FindJob: React.FC = () => {
         >
           <Typography>Job Details</Typography>
           <Typography>Home / Find Job /</Typography>
-        </Stack> */}
+        </Stack>
 
         {/* Search & Filter */}
         <Stack direction={"row"} alignItems={"center"} px={30} py={3}>
@@ -162,7 +169,7 @@ const FindJob: React.FC = () => {
                 placeholder="Job title, keyword, company"
                 inputProps={{ "aria-label": "JobTitle, Company" }}
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={(e: any) => setSearchInput(e.target.value)}
               />
             </Search>
 
@@ -171,13 +178,15 @@ const FindJob: React.FC = () => {
             {/* Search by location */}
             <Search>
               <SearchIconWrapper>
-                <PinDropOutlined color="#709CE6" size={18} />
+                <PinDropOutlined style={{ color: "#709CE6", fontSize: 18 }} />
               </SearchIconWrapper>
               <StyledInputBase
                 placeholder="Your Location"
                 inputProps={{ "aria-label": "location" }}
                 value={locationInput}
-                onChange={(e) => setLocationInput(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchInput(e.target.value)
+                }
               />
             </Search>
 
@@ -225,7 +234,7 @@ const FindJob: React.FC = () => {
           sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}
         >
           {currentJobs?.map((job, index) => (
-            <JobCard key={`${job.id}-${index}`} job={job} />
+            <JobCard key={`${job.id} - ${index}`} job={job} />
           ))}
         </Stack>
 

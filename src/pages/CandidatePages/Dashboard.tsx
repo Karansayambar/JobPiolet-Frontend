@@ -1,4 +1,3 @@
-import { ArrowForward, Check, Pin } from "@mui/icons-material";
 import { Box, Divider, Stack, Typography, useTheme } from "@mui/material";
 import { Star, Bell, Gear, StackOverflowLogo } from "phosphor-react";
 import { BsSuitcaseLg } from "react-icons/bs";
@@ -70,7 +69,7 @@ const DashboardPage: React.FC = () => {
               bgcolor={
                 item.label === selectedSection
                   ? "#D6E6FF"
-                  : theme.palette.background
+                  : theme.palette.background.paper
               }
               mb={1}
               sx={{

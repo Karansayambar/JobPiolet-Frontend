@@ -1,4 +1,3 @@
-import { useState } from "react";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver, SubmitHandler } from "@hookform/resolvers/yup";
@@ -69,7 +68,7 @@ export default function VerifyForm() {
         otp: `${data.code1}${data.code2}${data.code3}${data.code4}${data.code5}${data.code6}`,
       }).unwrap();
       console.log("Verification successful:", response);
-      navigate("/auth");
+      navigate("/");
     } catch (error) {
       console.error("Verification failed:", error);
     }

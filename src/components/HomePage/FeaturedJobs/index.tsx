@@ -1,5 +1,4 @@
 import { Stack, Typography } from "@mui/material";
-import { jobs } from "../../../utils/data";
 import JobCard from "../../Common/JobCard";
 
 // JobList component to render multiple JobCards
@@ -16,9 +15,9 @@ const FeaturedJobs: React.FC = () => {
         alignItems={"center"}
         sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}
       >
-        {jobs.slice(0, 9).map((job, index) => (
+        {/* {jobs.slice(0, 9).map((job, index) => (
           <JobCard key={index} job={job} />
-        ))}
+        ))} */}
       </Stack>
     </Stack>
   );

@@ -11,8 +11,8 @@ import RHFTagInput from "../../../../hooks/hooks-form/RHFTagInput";
 import { useCreateJobPostMutation } from "../../../../services/jobsApi";
 import {
   allBenifits,
+  cityOptions,
   countries,
-  countryOptions,
   industryOptions,
   jobFunctionOptions,
   languages,
@@ -148,6 +148,7 @@ const JobPostForm = () => {
                 { value: "highschool", label: "High School Diploma" },
                 { value: "diploma", label: "Diploma" },
                 { value: "bachelors", label: "Bachelor's Degree" },
+                { value: "contentwriting", label: "Content Writing" },
                 { value: "btech", label: "B.Tech / B.E." },
                 { value: "masters", label: "Master's Degree" },
                 { value: "mtech", label: "M.Tech / M.E." },
@@ -266,7 +267,7 @@ const JobPostForm = () => {
           </Stack>
 
           <Typography variant="h6" gutterBottom>
-            Job Benefits
+            Job BenefitsPost Job
           </Typography>
           <Stack direction="row" gap={2} py={2}>
             <Box display={"flex"} gap={1} flexWrap="wrap" mt={2}>
@@ -310,7 +311,7 @@ const JobPostForm = () => {
                 name="city"
                 label="City"
                 required
-                options={countryOptions}
+                options={cityOptions}
               />
               <RHFSelect
                 name="state"

@@ -10,6 +10,7 @@ import {
 type RHFSelectProps = {
   name: string;
   label: string;
+  required?: boolean;
   options: { value: string | number; label: string }[];
 };
 

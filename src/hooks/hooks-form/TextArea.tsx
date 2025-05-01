@@ -6,6 +6,7 @@ interface RHFTextAreaProps {
   label: string;
   rows?: number;
   placeholder?: string;
+  required?: boolean;
 }
 
 const RHFTextArea: React.FC<RHFTextAreaProps> = ({

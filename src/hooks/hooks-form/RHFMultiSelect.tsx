@@ -1,6 +1,14 @@
-import React from "react";
 import { useController, useFormContext } from "react-hook-form";
 import { Autocomplete, TextField } from "@mui/material";
+
+interface RHFMultiSelectProps {
+  name: string;
+  label: string;
+  placeholder?: string;
+  options: Array<string | { value: string }>;
+  creatable?: boolean;
+  [key: string]: any; // for any other props like 'disabled' etc
+}
 
 export default function RHFMultiSelect({
   name,
@@ -9,14 +17,14 @@ export default function RHFMultiSelect({
   options = [],
   creatable = false,
   ...other
-}) {
+}: RHFMultiSelectProps) {
   const { control } = useFormContext();
   const {
     field: { value, onChange, ref },
   } = useController({ name, control });
 
-  const handleChange = (event, newValue) => {
-    // Prevent duplicates
+  const handleChange = (newValue: any) => {
+    // Remove duplicates
     const uniqueValues = Array.from(new Set(newValue));
     onChange(uniqueValues);
   };

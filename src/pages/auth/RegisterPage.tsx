@@ -1,5 +1,4 @@
 import { Box, Button, Link, Stack, Typography } from "@mui/material";
-import AuthLoginForm from "../../sections/auth/loginForm";
 import { FacebookOutlined, Google } from "@mui/icons-material";
 import AuthRegisterPage from "../../sections/auth/RegisterForm";
 import SideImage from "../../components/Common/SideImage";
@@ -35,7 +34,7 @@ const RegisterPage = () => {
             <Typography>or</Typography>
           </Stack>
 
-          <Stack direction={"Row"} justifyContent={"space-around"} spacing={2}>
+          <Stack direction={"row"} justifyContent={"space-around"} spacing={2}>
             <Button variant="outlined" sx={{ gap: "10px" }}>
               <FacebookOutlined /> Sign up with facebook
             </Button>

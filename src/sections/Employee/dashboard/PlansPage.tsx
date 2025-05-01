@@ -3,19 +3,16 @@ import {
   Button,
   Card,
   CardContent,
-  IconButton,
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 import planImage from "../../../assets/plan-image.png";
 import { Check } from "@mui/icons-material";
-import { loadStripe } from "@stripe/stripe-js";
-import CustomePlanCard from "../../../components/CustomePlanCard";
-import { Elements } from "@stripe/react-stripe-js";
-const stripePromise = loadStripe(
-  "pk_test_51QwlGiFvL7ejiYUx21FXJtV9OdSzrIa5kW7ess7cQnj5pm13CefzNJRA3MkYIrrAmO1aFHBcHq2oQXZ8xqJ7upo900PzpApPCg"
-);
+// import { loadStripe } from "@stripe/stripe-js";
+
+// const stripePromise = loadStripe(
+//   "pk_test_51QwlGiFvL7ejiYUx21FXJtV9OdSzrIa5kW7ess7cQnj5pm13CefzNJRA3MkYIrrAmO1aFHBcHq2oQXZ8xqJ7upo900PzpApPCg"
+// );
 
 const plans = [
   {
@@ -66,7 +63,7 @@ const plans = [
 ];
 
 const PlansPage = () => {
-  const handlePayment = async (plan) => {
+  const handlePayment = async (plan: any) => {
     const token = localStorage.getItem("token");
     try {
       const res = await fetch(

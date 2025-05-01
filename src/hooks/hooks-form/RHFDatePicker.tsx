@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 type RHFDatePickerProps = {
   name: string;
   label: string;
+  required?: boolean;
 };
 
 const RHFDatePicker: React.FC<RHFDatePickerProps> = ({ name, label }) => {

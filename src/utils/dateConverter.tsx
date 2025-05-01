@@ -1,5 +1,5 @@
-export const dateConverter = () => {
-  const date = new Date();
+export const dateConverter = (dateString: string) => {
+  const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",

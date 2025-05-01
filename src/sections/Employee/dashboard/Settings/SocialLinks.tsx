@@ -5,8 +5,17 @@ import { useForm } from "react-hook-form";
 import FormProvider from "../../../../hooks/hooks-form/FormProvider";
 import RHFSocialForm from "../../../../hooks/hooks-form/RHFSocial";
 
+interface SocialLink {
+  platform: string;
+  link: string;
+}
+
+interface FormValues {
+  socialLinks: SocialLink[];
+}
+
 const SocialLinks: React.FC = () => {
-  const methods = useForm({
+  const methods = useForm<FormValues>({
     defaultValues: {
       socialLinks: [],
     },
@@ -30,7 +39,7 @@ const SocialLinks: React.FC = () => {
       <Stack>
         <FormProvider methods={methods}>
           {socialLinks.map((_, index) => (
-            <Stack py={2}>
+            <Stack py={2} key={index}>
               <Typography>Social Link {index + 1}</Typography>
               <RHFSocialForm
                 key={index}

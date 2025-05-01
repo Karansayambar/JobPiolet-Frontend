@@ -23,7 +23,7 @@ const Overview: React.FC = () => {
   const theme = useTheme();
   const [jobs, setJobs] = useState([]);
 
-  const { data, isLoading, isError, refetch } = useGetAllJobsQuery();
+  const { data } = useGetAllJobsQuery();
 
   useEffect(() => {
     if (data) {
@@ -34,9 +34,9 @@ const Overview: React.FC = () => {
   }, [data]);
 
   const stats = [
-    { label: "Applied Jobs", count: 589, icon: <IoBag size={30} /> },
-    { label: "Favorite Jobs", count: 245, icon: <CiBookmark size={30} /> },
-    { label: "Job Alerts", count: 102, icon: <FaBell size={30} /> },
+    { label: "Applied Jobs", count: 2, icon: <IoBag size={30} /> },
+    { label: "Favorite Jobs", count: 1, icon: <CiBookmark size={30} /> },
+    { label: "Job Alerts", count: 0, icon: <FaBell size={30} /> },
   ];
 
   const bgColors = ["#D6E6FF", "#FFE6CC", "#D4EDDA"]; // Light Blue, Light Orange, Light Green

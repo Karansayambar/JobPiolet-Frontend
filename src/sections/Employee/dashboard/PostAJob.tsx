@@ -1,28 +1,55 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import JobPostForm from "./forms/JobPostForm";
 import { useEffect } from "react";
 import PlansPage from "./PlansPage";
 import { useGetPaymentDetailsQuery } from "../../../services/paymentApi";
 
-const PostAJob = () => {
-  const { data, error, isLoading } = useGetPaymentDetailsQuery();
+// Define the interface for payment details response
+interface PaymentDetailsResponse {
+  data: {
+    data: { status: string };
+  };
+  error: string;
+  isLoading: boolean;
+}
 
+const PostAJob = () => {
+  // Use the query with the correct type for response
+  const { data, error, isLoading } =
+    useGetPaymentDetailsQuery<PaymentDetailsResponse>();
+
+  // Log the data for debugging purposes
   useEffect(() => {
     console.log("I am here");
-    console.log("data", data);
     if (data) {
       console.log("Payment Details:", data);
     }
     console.log(data?.data?.status);
   }, [data]);
+
   const status = data?.data?.status;
 
-  if (isLoading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography>Error fetching payment details</Typography>;
+  // Handle the loading state
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" p={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
+  // Handle the error state
+  if (error) {
+    const errorMessage =
+      (error as { message?: string })?.message ||
+      "Error fetching payment details";
+    return <Typography color="error">{errorMessage}</Typography>;
+  }
+
+  // Render the main content based on the payment status
   return (
     <Box>
-      <Typography>Post a job</Typography>
+      <Typography variant="h5">Post a Job</Typography>
       {status === "active" ? <JobPostForm /> : <PlansPage />}
     </Box>
   );

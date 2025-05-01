@@ -1,8 +1,9 @@
-import { ArrowForward, Check } from "@mui/icons-material";
+import { ArrowForward } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Stack,
   Table,
   TableBody,
@@ -12,18 +13,17 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { IoBag } from "react-icons/io5";
 import { CiBookmark } from "react-icons/ci";
-import { FaBell } from "react-icons/fa";
 import DashboardJobCard from "../../../components/Common/CompanyDashboardJobCard";
 import { useGetMyJobsQuery } from "../../../services/jobsApi";
 import { useEffect } from "react";
 import { Suitcase } from "phosphor-react";
+import notfound from "../../../assets/404.png";
 
 const OverviewCompany: React.FC = () => {
   const theme = useTheme();
 
-  const { data, isLoading, isError, error, refetch } = useGetMyJobsQuery();
+  const { data, isLoading } = useGetMyJobsQuery();
 
   useEffect(() => {
     if (data) {
@@ -39,8 +39,16 @@ const OverviewCompany: React.FC = () => {
       count: openJobs?.length,
       icon: <Suitcase size={30} />,
     },
-    { label: "Saved Candidates", count: 245, icon: <CiBookmark size={30} /> },
+    { label: "Saved Candidates", count: 0, icon: <CiBookmark size={30} /> },
   ];
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" p={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   const bgColors = ["#D6E6FF", "#FFE6CC", "#D4EDDA"]; // Light Blue, Light Orange, Light Green
 
@@ -127,21 +135,32 @@ const OverviewCompany: React.FC = () => {
       </Stack>
 
       {/* Jobs Table */}
-      <Table>
-        <TableHead>
-          <TableRow
-            sx={{ textTransform: "uppercase", bgcolor: "action.hover" }}
-          >
-            <TableCell>Jobs</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Applications</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data && <DashboardJobCard jobDetails={data?.jobs} />}
-        </TableBody>
-      </Table>
+      {data ? (
+        <>
+          <Table>
+            <TableHead>
+              <TableRow
+                sx={{ textTransform: "uppercase", bgcolor: "action.hover" }}
+              >
+                <TableCell>Jobs</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Applications</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data && <DashboardJobCard jobDetails={data?.jobs} />}
+            </TableBody>
+          </Table>
+        </>
+      ) : (
+        <Stack alignItems={"center"}>
+          <img style={{ width: "500px" }} src={notfound} alt="" />
+          <Typography variant="body2" fontSize={30}>
+            Not Jobs Posted Ate
+          </Typography>
+        </Stack>
+      )}
     </Stack>
   );
 };

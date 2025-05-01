@@ -38,6 +38,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import FindJob from "../pages/CandidatePages/FindJob";
 import TestPage from "../pages/CandidatePages/TestPage";
 import ViewApplicants from "../sections/Employee/dashboard/ViewApplicants";
+import NotFound from "../pages/404NotFound";
 
 // Redirect based on authentication
 // const AuthRedirect = () => {
@@ -76,7 +77,7 @@ const AppRoute: React.FC = () => {
         <Provider store={store}>
           <Suspense fallback={<CircularProgress />}>
             <Routes>
-              {/* ✅ Auth Routes */}
+              {/*  Auth Routes */}
               <Route path="/" element={<AuthLayout />}>
                 <Route index element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />
@@ -85,7 +86,7 @@ const AppRoute: React.FC = () => {
                 <Route path="new-password" element={<ConfirmPasswordPage />} />
               </Route>
 
-              {/* ✅ Candidate Routes */}
+              {/*  Candidate Routes */}
               <Route path="/candidate" element={<CandidateLayout />}>
                 <Route index element={<HomePage />} />
                 <Route
@@ -122,6 +123,7 @@ const AppRoute: React.FC = () => {
                     </ProtectedRoute>
                   }
                 />
+                <Route path="*" element={<NotFound />} />
               </Route>
               <Route
                 path="/candidate/test/:jobId"
@@ -135,7 +137,7 @@ const AppRoute: React.FC = () => {
                 }
               />
 
-              {/* ✅ Company Routes */}
+              {/*  Company Routes */}
               <Route path="/company" element={<CompanyLayout />}>
                 <Route
                   path="create-profile"
@@ -179,8 +181,8 @@ const AppRoute: React.FC = () => {
                 />
                 {/* <Route path="dashboard/:priceId" /> */}
               </Route>
-              {/* ✅ Catch-all */}
-              <Route path="*" element={<Navigate to="/" />} />
+              {/*  Catch-all */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </Provider>

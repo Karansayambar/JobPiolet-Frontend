@@ -5,6 +5,8 @@ import { Controller, useFormContext } from "react-hook-form";
 interface RHFTagInputProps {
   name: string;
   label: string;
+  required?: boolean;
+  options: Array<string | { value: string }>;
 }
 
 const RHFTagInput = ({ name, label }: RHFTagInputProps) => {
@@ -29,7 +31,7 @@ const RHFTagInput = ({ name, label }: RHFTagInputProps) => {
             "TypeScript",
           ]}
           value={value}
-          onChange={(e, newValue) => onChange(newValue)}
+          onChange={(newValue) => onChange(newValue)}
           renderTags={(value: string[], getTagProps) =>
             value.map((option, index) => (
               <Chip

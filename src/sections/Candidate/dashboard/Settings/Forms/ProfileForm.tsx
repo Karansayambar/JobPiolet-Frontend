@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCandidateData } from "../../../../../redux/slices/userProfileSlice";
 import RHFTextField from "../../../../../hooks/hooks-form/RHFTextField";
+import { RootState } from "../../../../../redux/store";
 
 type ProfileFormValues = {
   nationality: string;
@@ -20,7 +21,7 @@ type ProfileFormValues = {
 };
 
 const ProfileForm: React.FC = () => {
-  const { candidateProfileData } = useSelector((state) => state);
+  const candidateProfileData = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
   const theme = useTheme();
@@ -38,7 +39,7 @@ const ProfileForm: React.FC = () => {
     },
   });
 
-  const { register, handleSubmit, control, reset } = methods;
+  const { reset } = methods;
 
   useEffect(() => {
     if (profileInfo) {

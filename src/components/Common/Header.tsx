@@ -26,7 +26,7 @@ const Header: React.FC = () => {
   const handleSignout = () => {
     localStorage.removeItem("role");
     localStorage.removeItem("user_id");
-    navigate("/auth/");
+    navigate("/");
   };
 
   return (

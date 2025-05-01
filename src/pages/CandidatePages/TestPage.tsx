@@ -1,25 +1,35 @@
-import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import { questions } from "../../utils/data";
 import Question from "../../components/Common/Question";
 import * as blazeface from "@tensorflow-models/blazeface";
-import * as tf from "@tensorflow/tfjs";
 import { useApplyToJobMutation } from "../../services/jobsApi";
 import { useParams } from "react-router-dom";
 
+interface AnswerParams {
+  qIndex: number;
+  selectedOption: string; // or whatever type your options are
+  isCorrect: boolean;
+}
+
 const TestPage = () => {
-  const theme = useTheme();
   const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState<Record<number, string>>({});
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const [faceViolations, setFaceViolations] = useState(0);
   const [applyToJob] = useApplyToJobMutation();
   const { jobId } = useParams();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 mins in seconds
 
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null); // Type videoRef
 
-  const handleAnswer = ({ qIndex, selectedOption, isCorrect }) => {
+  const handleAnswer = ({
+    qIndex,
+    selectedOption,
+    isCorrect,
+  }: AnswerParams) => {
     setAnswers((prev) => ({
       ...prev,
       [qIndex]: selectedOption,
@@ -27,6 +37,28 @@ const TestPage = () => {
     if (isCorrect) {
       setScore((prev) => prev + 1);
     }
+  };
+
+  // Timer countdown
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          handleApply();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (seconds: number): string => {
+    // Type seconds
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   // Start camera
@@ -59,53 +91,51 @@ const TestPage = () => {
     };
   }, []);
 
-  // Clipboard actions block
+  // Clipboard restrictions
   useEffect(() => {
-    const handleCopy = (e) => {
+    const preventAction = (e: ClipboardEvent) => {
+      // Type the event as ClipboardEvent
       e.preventDefault();
-      alert("❌ Copying is not allowed!");
+      alert("❌ This action is not allowed!");
     };
-    const handlePaste = (e) => {
-      e.preventDefault();
-      alert("❌ Pasting is not allowed!");
-    };
-    const handleCut = (e) => {
-      e.preventDefault();
-      alert("❌ Cutting is not allowed!");
-    };
-
-    document.addEventListener("copy", handleCopy);
-    document.addEventListener("paste", handlePaste);
-    document.addEventListener("cut", handleCut);
-
+    document.addEventListener("copy", preventAction);
+    document.addEventListener("paste", preventAction);
+    document.addEventListener("cut", preventAction);
     return () => {
-      document.removeEventListener("copy", handleCopy);
-      document.removeEventListener("paste", handlePaste);
-      document.removeEventListener("cut", handleCut);
+      document.removeEventListener("copy", preventAction);
+      document.removeEventListener("paste", preventAction);
+      document.removeEventListener("cut", preventAction);
     };
   }, []);
 
-  // Face detection logic
-  const detectFace = async (video, model) => {
+  const detectFace = async (video: HTMLVideoElement, model: any) => {
     const predictions = await model.estimateFaces(video, false);
 
     if (predictions.length === 0) return { status: "no-face" };
     if (predictions.length > 1) return { status: "multiple-faces" };
 
     const face = predictions[0];
-    const rightEye = face.landmarks[0];
-    const leftEye = face.landmarks[1];
+    const landmarks = face.landmarks as [number, number][]; // Explicitly cast landmarks as an array of [x, y] pairs
+
+    // Ensure landmarks are defined and of the expected length
+    if (!landmarks || landmarks.length < 2) {
+      return { status: "no-face" };
+    }
+
+    const rightEye = landmarks[0]; // [x, y]
+    const leftEye = landmarks[1]; // [x, y]
+
     const eyeDiffX = Math.abs(rightEye[0] - leftEye[0]);
 
-    const threshold = 100; // tune if needed
+    const threshold = 100;
     if (eyeDiffX < threshold) return { status: "looking-away" };
 
     return { status: "face-detected" };
   };
 
-  // Load model and periodically check face
+  // Face detection
   useEffect(() => {
-    let model;
+    let model: blazeface.BlazeFaceModel;
     const init = async () => {
       model = await blazeface.load();
     };
@@ -113,8 +143,7 @@ const TestPage = () => {
 
     const interval = setInterval(async () => {
       if (videoRef.current && model) {
-        const result = await detectFace(videoRef);
-
+        const result = await detectFace(videoRef.current, model);
         if (
           result.status === "no-face" ||
           result.status === "multiple-faces" ||
@@ -122,7 +151,6 @@ const TestPage = () => {
         ) {
           setFaceViolations((prev) => prev + 1);
         }
-
         console.log("Face Status:", result.status);
       }
     }, 3000);
@@ -130,12 +158,17 @@ const TestPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // job apply functionality
   const handleApply = async () => {
+    if (!jobId) {
+      alert("Invalid job ID!");
+      return;
+    }
+
     try {
-      jobId;
-      const response = await applyToJob(jobId).unwrap();
+      const response = await applyToJob({ jobId, score }).unwrap();
       console.log("Response:", response);
+      setIsSubmitted(true);
+      alert("✅ Test submitted successfully!");
     } catch (err) {
       console.error("Error applying:", err);
     }
@@ -143,87 +176,93 @@ const TestPage = () => {
 
   return (
     <Box>
-      <Stack>
-        <Stack direction={"row"} p={4}>
-          <Stack
-            flex={1}
-            spacing={3}
-            textAlign={"center"}
-            overflow={"scroll"}
-            height={"100vh"}
-            p={4}
-          >
-            {questions.map((el, index) => {
-              const isSelected = selectedQuestionIndex === index;
-              const isAnswered = answers[index] !== undefined;
-              return (
-                <Box
-                  key={index}
-                  p={4}
-                  m={1}
-                  bgcolor={
-                    isSelected ? "#1976d2" : isAnswered ? "#90caf9" : "#EEEEEE"
-                  }
-                  color={isSelected ? "white" : "black"}
-                  borderRadius={1}
-                  boxShadow={1}
-                  sx={{ cursor: "pointer", transition: "0.3s" }}
-                  onClick={() => setSelectedQuestionIndex(index)}
-                >
-                  <Typography variant="h6">{index + 1}</Typography>
-                </Box>
-              );
-            })}
-          </Stack>
-
-          <Stack flex={14} p={5}>
-            <Question
-              question={questions[selectedQuestionIndex]}
-              index={selectedQuestionIndex}
-              onAnswer={handleAnswer}
-            />
-          </Stack>
-
-          <Stack flex={4}>
-            <Stack alignItems={"center"} spacing={2}>
-              <Button onClick={() => handleApply()} variant="contained">
-                Submit Test
-              </Button>
-
-              <Box width={350} height={200} border={1} my={4}>
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  muted
-                  playsInline
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+      <Stack direction="row" p={4}>
+        {/* Left side - Questions navigation */}
+        <Stack
+          flex={1}
+          spacing={3}
+          textAlign="center"
+          overflow="scroll"
+          height="100vh"
+          p={4}
+        >
+          {questions.map((_, index) => {
+            const isSelected = selectedQuestionIndex === index;
+            const isAnswered = answers[index] !== undefined;
+            return (
+              <Box
+                key={index}
+                p={4}
+                m={1}
+                bgcolor={
+                  isSelected ? "#1976d2" : isAnswered ? "#90caf9" : "#EEEEEE"
+                }
+                color={isSelected ? "white" : "black"}
+                borderRadius={1}
+                boxShadow={1}
+                sx={{ cursor: "pointer", transition: "0.3s" }}
+                onClick={() => setSelectedQuestionIndex(index)}
+              >
+                <Typography variant="h6">{index + 1}</Typography>
               </Box>
+            );
+          })}
+        </Stack>
 
-              <Typography variant="h5" gutterBottom>
-                Test Instructions
+        {/* Center - Question display */}
+        <Stack flex={14} p={5}>
+          <Question
+            question={questions[selectedQuestionIndex]}
+            index={selectedQuestionIndex}
+            onAnswer={handleAnswer}
+          />
+        </Stack>
+
+        {/* Right side - Info panel */}
+        <Stack flex={4}>
+          <Stack alignItems="center" spacing={2}>
+            <Button
+              onClick={handleApply}
+              variant="contained"
+              disabled={isSubmitted}
+            >
+              Submit Test
+            </Button>
+
+            <Box width={350} height={200} border={1} my={4}>
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </Box>
+
+            <Typography variant="h5" gutterBottom>
+              Test Instructions
+            </Typography>
+            <Stack gap={4}>
+              <Typography>* Stay in front of your webcam.</Typography>
+              <Typography>
+                * 30 MCQs | 30 mins | 1 correct option per question.
               </Typography>
-              <Stack gap={4}>
-                <Typography>* Stay in front of your webcam.</Typography>
-                <Typography>
-                  * 30 MCQs | 30 mins | 1 correct option per question.
-                </Typography>
-                <Typography>
-                  * No tab switching or background movement allowed.
-                </Typography>
-                <Typography>* Read each question carefully.</Typography>
-              </Stack>
-              <Stack gap={2} alignItems={"center"}>
-                {/* <Typography variant="h5" gutterBottom>
-                  30.0 Minutes Remaining
-                </Typography> */}
-                <Typography color="error">
-                  Tab Switches: {tabSwitchCount}
-                </Typography>
-                <Typography color="error">
-                  Face Violations: {faceViolations}
-                </Typography>
-              </Stack>
+              <Typography>
+                * No tab switching or background movement allowed.
+              </Typography>
+              <Typography>* Read each question carefully.</Typography>
+            </Stack>
+
+            <Stack gap={2} alignItems="center" mt={3}>
+              <Typography variant="h6">
+                ⏱️ Time Left: {formatTime(timeLeft)}
+              </Typography>
+              <Typography color="error">
+                Tab Switches: {tabSwitchCount}
+              </Typography>
+              <Typography color="error">
+                Face Violations: {faceViolations}
+              </Typography>
             </Stack>
           </Stack>
         </Stack>

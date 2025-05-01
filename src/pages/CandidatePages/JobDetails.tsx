@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Book, BookmarkSimple, Calendar, Link } from "phosphor-react";
 import React, { useEffect, useState } from "react";
-import JobCard, { Duration } from "../../components/Common/JobCard";
+import { Duration } from "../../components/Common/JobCard";
 import {
   ArrowForward,
   Facebook,
@@ -29,20 +29,48 @@ import { MdCastForEducation } from "react-icons/md";
 import logo from "../../assets/auth/Rectangle 43.png";
 import {
   useAddToFavoriteMutation,
-  useApplyToJobMutation,
   useGetAppliedStatusQuery,
   useGetFavioriteJobQuery,
   useGetJobDetailQuery,
 } from "../../services/jobsApi";
 
+type Job = {
+  jobTitle: string;
+  companyName: string;
+  workMode: string;
+  jobDescription: string;
+  jobRequirements: string[];
+  jobResponsibilities: string[];
+  jobPreferences: string[];
+  minSalary: number;
+  maxSalary: number;
+  salaryType: string;
+  city?: string;
+  address?: string;
+  jobBenefits: string[];
+  sills?: string[];
+  posted: string;
+  deadline: string;
+  jobLevel: string;
+  experience: string;
+  workingHours: string;
+  jobStatus: string;
+  contractLength: string;
+  education: string;
+  vacancies: string;
+};
+
 const JobDetails: React.FC = () => {
   const { jobId } = useParams();
   const theme = useTheme();
-  const [job, setJob] = useState({});
+  const [job, setJob] = useState<Job | null>(null);
+  const [localFavorited, setLocalFavorited] = useState(false);
+  console.log("jobId", jobId);
+
   const navigate = useNavigate();
 
   // Api calls
-  const { data: jobData, isLoading, isError } = useGetJobDetailQuery(jobId);
+  const { data: jobData, isLoading } = useGetJobDetailQuery(jobId);
   const { data: isAppliedValue } = useGetAppliedStatusQuery(jobId);
   const { data: isFavorited } = useGetFavioriteJobQuery(jobId);
   // const [applyToJob] = useApplyToJobMutation();
@@ -56,6 +84,12 @@ const JobDetails: React.FC = () => {
     console.log("isFavoriteeValue", isFavorited?.isFavorited);
   }, [jobData, isAppliedValue, isFavorited]);
 
+  useEffect(() => {
+    if (isFavorited) {
+      setLocalFavorited(isFavorited?.isFavorited);
+    }
+  }, [isFavorited, localFavorited]);
+
   // // job apply functionality
   // const handleApply = async () => {
   //   try {
@@ -68,16 +102,15 @@ const JobDetails: React.FC = () => {
   // };
 
   const handleFavorite = async () => {
-    console.log("jobId from handleFavorite", jobId);
+    setLocalFavorited((prev) => !prev);
     try {
-      const response = await addToFavorite(jobId).unwrap();
-      console.log("Response:", response);
+      await addToFavorite(jobId);
     } catch (error) {
       console.error("Error applying:", error);
     }
   };
 
-  if (isLoading) {
+  if (!job) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
         <CircularProgress />
@@ -120,11 +153,11 @@ const JobDetails: React.FC = () => {
               </Stack>
             </Stack>
             <Stack direction="row" alignItems="center" gap={3}>
-              <IconButton onClick={() => handleFavorite(job?._id)}>
+              <IconButton onClick={() => handleFavorite()}>
                 <BookmarkSimple
                   size={26}
-                  weight={isFavorited?.isFavorited ? "fill" : "regular"}
-                  color={isFavorited?.isFavorited ? "#1976d2" : "#757575"}
+                  weight={localFavorited ? "fill" : "regular"}
+                  color={localFavorited ? "#1976d2" : "#757575"}
                 />
               </IconButton>
               <Button

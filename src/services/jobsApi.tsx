@@ -1,4 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { AllJobsResponse } from "../sections/Employee/dashboard/MyJobs";
+import { GetJobsResponse } from "../pages/CandidatePages/FindJob";
+import { JobResponse } from "../sections/Candidate/dashboard/AppliedJobs";
 
 export const jobsApi = createApi({
   reducerPath: "jobsApi",
@@ -20,25 +23,26 @@ export const jobsApi = createApi({
         body,
       }),
     }),
-    getMyJobs: builder.query({
+    getMyJobs: builder.query<AllJobsResponse, void>({
       query: () => ({
         url: "/get-my-jobs",
         method: "GET",
       }),
     }),
-    getAllJobs: builder.query({
+    getAllJobs: builder.query<GetJobsResponse, void>({
       query: () => ({
         url: "/getAllJobs",
         method: "GET",
       }),
     }),
     applyToJob: builder.mutation({
-      query: (jobId) => ({
+      query: ({ jobId, score }) => ({
         url: `/apply-to-job/${jobId}`,
         method: "POST",
+        body: score,
       }),
     }),
-    getAppliedJobs: builder.query({
+    getAppliedJobs: builder.query<JobResponse, void>({
       query: () => ({
         url: "/getAppliedJobs",
         method: "GET",
@@ -63,7 +67,7 @@ export const jobsApi = createApi({
       }),
     }),
 
-    getAllfavorites: builder.query({
+    getAllfavorites: builder.query<Response, void>({
       query: () => ({
         url: "/favorites",
         method: "GET",

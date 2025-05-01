@@ -7,11 +7,43 @@ import {
   Typography,
   ListItem,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 import { dateConverter } from "../../utils/dateConverter";
 import { Download } from "phosphor-react";
+import { useState } from "react";
+import ViewApplicantsDetailsModel from "../../sections/Employee/dashboard/ViewApplicantsDetailsModel";
 
-const ApplicantsCard = ({ applicants }) => {
+interface CandidateInfo {
+  avatar: string;
+  fullName: string;
+  title: string;
+  experience: string;
+  education: string;
+  resume: string;
+}
+interface Applicant {
+  id: string;
+  appliedDate: string;
+  candidateInfo: CandidateInfo;
+}
+
+interface ApplicantsCardProps {
+  applicants: Applicant[];
+}
+
+const ApplicantsCard: React.FC<ApplicantsCardProps> = ({ applicants }) => {
+  const [openModel, setOpenModel] = useState(false);
+  const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(
+    null
+  );
+
+  const handleOpenModel = (applicant: Applicant) => {
+    setSelectedApplicant(applicant);
+    setOpenModel(true);
+  };
+
+  // const handleCloseModel = () => {
+  //   setOpenModel(false);
+  // };
   console.log("applicant from ApplicantCard", applicants);
 
   // Add safety checks
@@ -20,91 +52,108 @@ const ApplicantsCard = ({ applicants }) => {
   }
 
   return (
-    <Box p={4}>
-      {applicants.map((applicant, index) => {
-        // Skip if applicant data is invalid
-        if (!applicant?.candidateInfo) return null;
+    <>
+      <Box p={4} style={{ opacity: openModel ? 0.3 : 1 }}>
+        {applicants.map((applicant, index) => {
+          // Skip if applicant data is invalid
+          if (!applicant?.candidateInfo) return null;
 
-        return (
-          <Box
-            key={applicant.id || `applicant-${index}`}
-            mb={2}
-            border={1}
-            width={250}
-            borderRadius={2}
-            borderColor={"#e0e0e0"}
-          >
-            <Stack direction="row" alignItems="center" spacing={2} p={2}>
-              <Avatar
-                src={applicant.candidateInfo.avatar}
-                alt={applicant.candidateInfo.fullName}
-                sx={{ width: 56, height: 56 }} // Better sizing
-              />
-              <Stack>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  {applicant.candidateInfo.fullName || "No name provided"}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {applicant.candidateInfo.title || "No title provided"}
-                </Typography>
+          return (
+            <Box
+              key={applicant.id || `applicant-${index}`}
+              mb={2}
+              border={1}
+              width={250}
+              borderRadius={2}
+              borderColor={"#e0e0e0"}
+            >
+              <Stack direction="row" alignItems="center" spacing={2} p={2}>
+                <Avatar
+                  src={applicant.candidateInfo.avatar}
+                  alt={applicant.candidateInfo.fullName}
+                  sx={{ width: 56, height: 56 }} // Better sizing
+                />
+                <Stack>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    {applicant.candidateInfo.fullName || "No name provided"}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {applicant.candidateInfo.title || "No title provided"}
+                  </Typography>
+                </Stack>
               </Stack>
-            </Stack>
 
-            <Divider />
+              <Divider />
 
-            <List>
-              <ListItem>
-                <Typography variant="body2">
-                  {applicant.candidateInfo.experience || "0"} years of
-                  experience
-                </Typography>
-              </ListItem>
-              <ListItem>
-                <Typography variant="body2">
-                  Education:{" "}
-                  {applicant.candidateInfo.education || "Not specified"}
-                </Typography>
-              </ListItem>
-              <ListItem>
-                <Typography variant="body2">
-                  Applied:{" "}
-                  {dateConverter(applicant.appliedDate) || "Date not available"}
-                </Typography>
-              </ListItem>
-            </List>
-            <Stack
-              alignItems={"end"}
-              gap={1}
-              direction={"row"}
-              p={1}
-              color={"#0a65cc"}
-            >
-              <Download size={25} />{" "}
-              <a
-                href={applicant.candidateInfo.resume.replace(
-                  "/upload/",
-                  "/upload/fl_attachment/"
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "#0a65cc", textDecoration: "none" }}
+              <List>
+                <ListItem>
+                  <Typography variant="body2">
+                    {applicant.candidateInfo.experience || "0"} years of
+                    experience
+                  </Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant="body2">
+                    Education:{" "}
+                    {applicant.candidateInfo.education || "Not specified"}
+                  </Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant="body2">
+                    Applied:{" "}
+                    {dateConverter(applicant.appliedDate) ||
+                      "Date not available"}
+                  </Typography>
+                </ListItem>
+              </List>
+              <Stack
+                alignItems={"end"}
+                gap={1}
+                direction={"row"}
+                p={1}
+                color={"#0a65cc"}
               >
-                Download Resume
-              </a>
-            </Stack>
+                <Download size={25} />{" "}
+                <a
+                  href={applicant.candidateInfo.resume.replace(
+                    "/upload/",
+                    "/upload/fl_attachment/"
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#0a65cc", textDecoration: "none" }}
+                >
+                  Download Resume
+                </a>
+              </Stack>
 
-            <Link
-              to={`/candidates/${applicant.id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <Typography color="primary" textAlign="center" p={1}>
+              <Typography
+                color="primary"
+                textAlign="center"
+                p={1}
+                onClick={() => handleOpenModel(applicant)}
+              >
                 View Profile
               </Typography>
-            </Link>
-          </Box>
-        );
-      })}
-    </Box>
+            </Box>
+          );
+        })}
+      </Box>
+      {openModel && selectedApplicant && (
+        <Box
+          position="fixed"
+          top="20%"
+          left="35%"
+          transform="translate(-50%, -50%)"
+          zIndex={1000}
+        >
+          <ViewApplicantsDetailsModel
+            applicant={selectedApplicant}
+            onClose={() => setOpenModel(false)}
+          />
+        </Box>
+      )}
+    </>
   );
 };
 

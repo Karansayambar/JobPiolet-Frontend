@@ -2,17 +2,23 @@ import { PiCurrencyDollarThin } from "react-icons/pi";
 import { Button, Stack, TableCell, TableRow, Typography } from "@mui/material";
 import { dateConverter } from "../../utils/dateConverter";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 interface Job {
-  id: number;
-  title: string;
-  dateApplied: string;
+  _id: string;
+  jobTitle: string;
+  workMode: string;
+  updatedAt: string;
   applicants: string;
-  status: "ActivPendinge" | "Pending" | "Expire";
+  jobStatus: "open" | "Pending" | "closed";
   type: string;
 }
 
-const getStatusColor = (status: Job["status"]): string => {
+interface DashboardJobCardProps {
+  jobDetails: Job[];
+}
+
+const getStatusColor = (status: Job["jobStatus"]): string => {
   switch (status) {
     case "open":
       return "success.main";
@@ -23,14 +29,13 @@ const getStatusColor = (status: Job["status"]): string => {
   }
 };
 
-const DashboardJobCard = ({ jobDetails }: { jobDetails: any }) => {
-  console.log("job details", jobDetails);
+const DashboardJobCard: React.FC<DashboardJobCardProps> = ({ jobDetails }) => {
   const navigate = useNavigate();
 
   return (
     <>
-      {jobDetails.map((job: Job) => (
-        <TableRow key={job.id}>
+      {jobDetails.map((job) => (
+        <TableRow key={job._id}>
           <TableCell>
             <Stack direction="row" alignItems="center" gap={2}>
               <Stack>
