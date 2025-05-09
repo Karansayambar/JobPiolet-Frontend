@@ -5,6 +5,9 @@ import {
   CardContent,
   Stack,
   Typography,
+  Grid,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import planImage from "../../../assets/plan-image.png";
 import { Check } from "@mui/icons-material";
@@ -63,8 +66,18 @@ const plans = [
 ];
 
 const PlansPage = () => {
+  const [loading, setLoading] = React.useState(false); // Loading state for payment
+  const [error, setError] = React.useState(""); // Error state for API calls
+
   const handlePayment = async (plan: any) => {
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      setError("You need to be logged in to subscribe.");
+      return;
+    }
+
+    setLoading(true);
     try {
       const res = await fetch(
         "http://localhost:5000/api/payment/create-subscription",
@@ -86,11 +99,16 @@ const PlansPage = () => {
         window.location.href = data.url; // ✅ Redirects to Stripe checkout
       } else {
         console.error("Checkout session URL not found");
+        setError("An error occurred while creating the subscription.");
       }
     } catch (err) {
       console.error("Checkout error:", err);
+      setError("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <>
       <Box>
@@ -120,97 +138,92 @@ const PlansPage = () => {
             </Typography>
           </Box>
           <Box>
-            <img src={planImage} />
+            <img src={planImage} alt="Subscription Plans" />
           </Box>
         </Stack>
-        <Stack
-          direction={"row"}
-          gap={5}
-          py={5}
-          alignItems={"center"}
-          position={"relative"}
-        >
-          {plans?.map((plan, index) => (
-            <Card
-              variant="outlined"
-              key={index}
-              sx={{
-                width: index % 2 === 0 ? 250 : 350,
-                height: index % 2 === 0 ? 650 : 580,
-
-                p: 2,
-                borderRadius: 2,
-                "&:hover": {
-                  borderColor: "primary.main",
-                  cursor: "pointer",
-                },
-              }}
-              outlined
-              elevation={1}
-              position={"relative"}
-            >
-              <CardContent>
-                {plan.price === "$49" && (
-                  <Stack
-                    position={"absolute"}
-                    top={50}
-                    padding={1}
-                    paddingInline={3}
-                    bgcolor={"primary.main"}
-                    textAlign={"center"}
-                    color={"white"}
-                    borderRadius={1}
-                  >
-                    <Typography fontSize={18}>Recomended</Typography>
-                  </Stack>
-                )}
-                <Typography
-                  variant="body2"
-                  py={2}
-                  textTransform={"uppercase"}
-                  fontSize={25}
-                >
-                  {plan.name}
-                </Typography>
-                <Typography>{plan.subtext}</Typography>
-                <Stack py={3} direction={"row"} gap={2} alignItems={"center"}>
-                  <Typography sx={{ color: "primary.main", fontSize: 40 }}>
-                    {plan.price}
-                  </Typography>
-                  <Typography variant="h6" color="text.secondary" fontSize={30}>
-                    {plan.billingCycle}
-                  </Typography>
-                </Stack>
-                <Stack>
-                  {plan.features.map((feature) => (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      alignItems={"center"}
-                      padding={2}
-                      fontSize={18}
+        {error && <Alert severity="error">{error}</Alert>}
+        <Grid container spacing={5} py={5} justifyContent="center">
+          {plans.map((plan, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
+                variant="outlined"
+                sx={{
+                  height: 550,
+                  p: 2,
+                  borderRadius: 2,
+                  "&:hover": {
+                    borderColor: "primary.main",
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                <CardContent>
+                  {plan.price === "$49" && (
+                    <Stack
+                      position={"absolute"}
+                      top={50}
+                      padding={1}
+                      paddingInline={3}
+                      bgcolor={"primary.main"}
+                      textAlign={"center"}
+                      color={"white"}
+                      borderRadius={1}
                     >
-                      <Check
-                        sx={{ color: "primary.main", paddingInline: "5px" }}
-                      />
-                      {feature}
+                      <Typography fontSize={18}>Recommended</Typography>
+                    </Stack>
+                  )}
+                  <Typography
+                    variant="body2"
+                    py={2}
+                    textTransform={"uppercase"}
+                    fontSize={25}
+                  >
+                    {plan.name}
+                  </Typography>
+                  <Typography>{plan.subtext}</Typography>
+                  <Stack py={3} direction={"row"} gap={2} alignItems={"center"}>
+                    <Typography sx={{ color: "primary.main", fontSize: 40 }}>
+                      {plan.price}
                     </Typography>
-                  ))}
-                </Stack>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3 }}
-                  onClick={() => {
-                    handlePayment(plan);
-                  }}
-                >
-                  {plan.buttonText}
-                </Button>
-              </CardContent>
-            </Card>
+                    <Typography
+                      variant="h6"
+                      color="text.secondary"
+                      fontSize={30}
+                    >
+                      {plan.billingCycle}
+                    </Typography>
+                  </Stack>
+                  <Stack>
+                    {plan.features.map((feature, index) => (
+                      <Typography
+                        key={index}
+                        variant="body2"
+                        color="text.secondary"
+                        alignItems={"center"}
+                        padding={2}
+                        fontSize={18}
+                      >
+                        <Check
+                          sx={{ color: "primary.main", paddingInline: "5px" }}
+                        />
+                        {feature}
+                      </Typography>
+                    ))}
+                  </Stack>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3 }}
+                    onClick={() => handlePayment(plan)}
+                    disabled={loading} // Disable the button when loading
+                  >
+                    {loading ? <CircularProgress size={24} /> : plan.buttonText}
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
-        </Stack>
+        </Grid>
       </Box>
     </>
   );

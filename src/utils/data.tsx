@@ -1,5 +1,4 @@
 // src/types/job.ts
-import logo from "../assets/auth/Logo.png";
 
 export interface Job {
   _id: string;
@@ -7,7 +6,6 @@ export interface Job {
   jobTitle: string;
   jobRole: string;
   companyName: string;
-  logo: string;
   type: string;
   minSalary: string;
   maxSalary: string;

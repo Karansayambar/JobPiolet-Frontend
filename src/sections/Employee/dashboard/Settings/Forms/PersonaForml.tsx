@@ -9,7 +9,7 @@ import RHFTextField from "../../../../../hooks/hooks-form/RHFTextField";
 const PersonalForm: React.FC = () => {
   const theme = useTheme();
   const methods = useForm();
-  const { handleSubmit, control } = methods;
+  const { handleSubmit } = methods;
 
   const onSubmit = (data: any) => {
     console.log("Form Data:", data);

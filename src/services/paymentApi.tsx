@@ -1,5 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+interface PaymentDetailsResponse {
+  data: {
+    planName?: string;
+    price?: number;
+    createdAt?: string;
+    features?: string[];
+  };
+}
+
 export const paymentApi = createApi({
   reducerPath: "paymentApi",
   baseQuery: fetchBaseQuery({
@@ -13,7 +22,7 @@ export const paymentApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getPaymentDetails: builder.query<Response, void>({
+    getPaymentDetails: builder.query<PaymentDetailsResponse, void>({
       query: () => ({
         url: "/get-payment-details",
         method: "GET",

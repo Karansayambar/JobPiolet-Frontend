@@ -1,5 +1,4 @@
 import {
-  Box,
   IconButton,
   InputAdornment,
   Link,
@@ -15,15 +14,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FormProvider from "../../hooks/hooks-form/FormProvider";
 import RHFTextField from "../../hooks/hooks-form/RHFTextField";
 import { LoadingButton } from "@mui/lab";
-import {
-  Buildings,
-  Eye,
-  EyeSlash,
-  Password,
-  Person,
-  User,
-} from "phosphor-react";
-import { useDispatch, useSelector } from "react-redux";
+import { Buildings, Eye, EyeSlash, User } from "phosphor-react";
+import { useDispatch } from "react-redux";
 import { useRegisterMutation } from "../../services/authApi";
 import { updateRegisterEmail } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +34,7 @@ const AuthRegisterPage: React.FC = () => {
   const [selectRole, setSelectRole] = useState<"candidate" | "company" | "">(
     ""
   );
-  const [register, { data, isLoading, error }] = useRegisterMutation();
+  const [register] = useRegisterMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -71,12 +63,7 @@ const AuthRegisterPage: React.FC = () => {
     defaultValues,
   });
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { isSubmitting },
-  } = methods;
+  const { handleSubmit, setValue } = methods;
 
   const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
     console.log("Registering with email:", data.email);

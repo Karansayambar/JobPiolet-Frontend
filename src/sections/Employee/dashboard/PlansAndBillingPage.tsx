@@ -4,25 +4,37 @@ import React, { useEffect, useState } from "react";
 import { useGetPaymentDetailsQuery } from "../../../services/paymentApi";
 import { dateConverter } from "../../../utils/dateConverter";
 
+// Type definition for payment data
+interface PaymentData {
+  planName?: string;
+  price?: number;
+  createdAt?: string;
+  features?: string[];
+}
+
 const PlansAndBillingPage = () => {
-  const { data } = useGetPaymentDetailsQuery();
-  const [paymentData, setpaymentData] = useState<any>({});
+  const { data } = useGetPaymentDetailsQuery(); // TypeScript should now know the type of `data`
+  const [paymentData, setPaymentData] = useState<PaymentData>({});
 
   useEffect(() => {
-    console.log("Payment Details:", data?.data);
-    setpaymentData(data?.data);
+    if (data?.data) {
+      setPaymentData(data.data); // 'data' should now be correctly typed
+    }
   }, [data]);
 
-  const plan = data?.data;
-  console.log("plan", plan);
+  const plan = paymentData; // Using the already destructured data
 
+  // Formatting date and adding 30 days to it
   const getFormattedDatePlus30 = (dateString: string) => {
-    console.log("i am working in getFormatedDataPlus30");
     const date = new Date(dateString);
-    console.log(date);
     date.setDate(date.getDate() + 30);
     return dateConverter(date); // assuming this formats your date
   };
+
+  // Formatting price as currency
+  const formattedPrice = paymentData.price
+    ? `${paymentData.price.toFixed(2)} USD`
+    : "N/A";
 
   return (
     <Box p={4}>
@@ -46,11 +58,10 @@ const PlansAndBillingPage = () => {
                 Current Plan
               </Typography>
               <Typography variant="h5" fontWeight={700}>
-                {paymentData?.planName || "No Plan"}
+                {plan?.planName || "No Plan"}
               </Typography>
               <Typography color="text.secondary" fontSize={16}>
-                You are subscribed to the {paymentData?.planName || "free"}{" "}
-                plan.
+                You are subscribed to the {plan?.planName || "free"} plan.
               </Typography>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained">Change Plan</Button>
@@ -72,11 +83,11 @@ const PlansAndBillingPage = () => {
                 Next Invoice
               </Typography>
               <Typography variant="h4" color="text.secondary">
-                {paymentData.price}.00 USD
+                {formattedPrice}
               </Typography>
               <Typography fontSize={18}>
-                {paymentData.createdAt
-                  ? getFormattedDatePlus30(paymentData.createdAt)
+                {plan?.createdAt
+                  ? getFormattedDatePlus30(plan.createdAt)
                   : "N/A"}
               </Typography>
 
@@ -107,9 +118,9 @@ const PlansAndBillingPage = () => {
               <Typography color="text.secondary" fontSize={16}>
                 Enjoy premium features including:
               </Typography>
-              {paymentData?.features?.map((el, index) => (
+              {plan?.features?.map((feature, index) => (
                 <Typography key={index} variant="body2">
-                  ✔ {el}
+                  ✔ {feature}
                 </Typography>
               ))}
 

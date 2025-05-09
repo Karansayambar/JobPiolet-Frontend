@@ -14,18 +14,45 @@ import { useState } from "react";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import FormProvider from "../../../../hooks/hooks-form/FormProvider";
 import RHFTextField from "../../../../hooks/hooks-form/RHFTextField";
+import { useForm } from "react-hook-form";
 
 const Personal = () => {
   const [open, setOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const methods = useForm();
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 12 * 1024 * 1024) {
+        alert("File size exceeds 12MB.");
+        setSelectedFile(null);
+        return;
+      }
+      if (!file.name.endsWith(".pdf")) {
+        alert("Only PDF files are allowed.");
+        setSelectedFile(null);
+        return;
+      }
+      setSelectedFile(file);
+    } else {
+      setSelectedFile(null);
+    }
   };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const onSubmit = (data: any) => {
+    if (!selectedFile) return;
+
+    console.log("Resume Name:", data.resumeName);
+    console.log("Selected File:", selectedFile);
+
+    // TODO: handle your file upload logic here
+
+    handleClose(); // close modal after submission
+  };
 
   return (
     <>
@@ -54,59 +81,67 @@ const Personal = () => {
         </Stack>
       </Stack>
 
-      {/* Open Upload Modal Button */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
         Upload New Resume
       </Button>
 
-      {/* Upload CV Modal */}
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>Add Cv/Resume</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} mt={1}>
-            {/* Resume Name Input */}
-            <Typography>CV/Resume Name</Typography>
-            <FormProvider>
+
+        <FormProvider
+          methods={methods}
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
+          <DialogContent>
+            <Stack spacing={2} mt={1}>
+              <Typography>CV/Resume Name</Typography>
               <RHFTextField
                 name="resumeName"
                 label="Enter Resume Name"
                 fullWidth
               />
-            </FormProvider>
 
-            {/* Upload Box */}
-            <Typography>Upload your Cv/Resume</Typography>
-            <Stack
-              spacing={2}
-              alignItems="center"
-              justifyContent="center"
-              border={2}
-              borderStyle="dashed"
-              borderRadius={2}
-              p={5}
-              width="100%"
-            >
-              <MdOutlineCloudUpload size={36} />
-              <Typography fontWeight="bold">
-                Browse File or Drop here
-              </Typography>
-              <Typography fontSize="14px" color="gray">
-                Only PDF format available. Max file size 12MB.
-              </Typography>
-              <Input type="file" accept=".pdf" onChange={handleFileChange} />
+              <Typography>Upload your Cv/Resume</Typography>
+              <Stack
+                spacing={2}
+                alignItems="center"
+                justifyContent="center"
+                border={2}
+                borderStyle="dashed"
+                borderRadius={2}
+                p={5}
+                width="100%"
+              >
+                <MdOutlineCloudUpload size={36} />
+                <Typography fontWeight="bold">
+                  Browse File or Drop here
+                </Typography>
+                <Typography fontSize="14px" color="gray">
+                  Only PDF format available. Max file size 12MB.
+                </Typography>
+                <Input
+                  type="file"
+                  inputProps={{ accept: ".pdf" }}
+                  onChange={handleFileChange}
+                />
+              </Stack>
             </Stack>
-          </Stack>
-        </DialogContent>
+          </DialogContent>
 
-        {/* Buttons */}
-        <DialogActions>
-          <Button variant="outlined" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="contained" color="primary" disabled={!selectedFile}>
-            Add Cv/Resume
-          </Button>
-        </DialogActions>
+          <DialogActions>
+            <Button variant="outlined" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!selectedFile}
+            >
+              Add Cv/Resume
+            </Button>
+          </DialogActions>
+        </FormProvider>
       </Dialog>
     </>
   );

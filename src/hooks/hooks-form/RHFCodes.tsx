@@ -1,23 +1,35 @@
 import { useRef } from "react";
 // form
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext, Controller, FieldValues } from "react-hook-form";
 // @mui
-import { Stack, TextField } from "@mui/material";
+import { Stack, TextField, TextFieldProps } from "@mui/material";
 
-export default function RHFCodes({ keyName = "", inputs = [], ...other }) {
-  const codesRef = useRef(null);
+type RHFCodesProps = {
+  keyName?: string;
+  inputs: string[];
+} & TextFieldProps;
 
-  const { control } = useFormContext();
+export default function RHFCodes({
+  keyName = "",
+  inputs = [],
+  ...other
+}: RHFCodesProps) {
+  const codesRef = useRef<HTMLDivElement | null>(null);
 
-  const handleChangeWithNextField = (event, handleChange) => {
+  const { control } = useFormContext<FieldValues>();
+
+  const handleChangeWithNextField = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  ) => {
     const { maxLength, value, name } = event.target;
 
     const fieldIndex = name.replace(keyName, "");
 
     const fieldIntIndex = Number(fieldIndex);
 
-    const nextfield = document.querySelector(
-      `input[name=${keyName}${fieldIntIndex + 1}]`
+    const nextfield = document.querySelector<HTMLInputElement>(
+      `input[name='${keyName}${fieldIntIndex + 1}']`
     );
 
     if (value.length > maxLength) {

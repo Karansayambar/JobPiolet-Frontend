@@ -1,5 +1,4 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import React from "react";
 import { PopularCategoryChip } from "../../Common/HeroChip";
 import { ArrowForward } from "@mui/icons-material";
 

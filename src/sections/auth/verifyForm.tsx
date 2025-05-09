@@ -1,6 +1,6 @@
 import * as Yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver, SubmitHandler } from "@hookform/resolvers/yup";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Stack, Button } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
 import { useVerifyMutation } from "../../services/authApi";
@@ -9,15 +9,26 @@ import { useNavigate } from "react-router-dom";
 import FormProvider from "../../hooks/hooks-form/FormProvider";
 import RHFCodes from "../../hooks/hooks-form/RHFCodes";
 
-// Define form values
-type LoginFormValues = {
+// Define Redux RootState
+interface AuthState {
   email: string;
-  password: string;
+}
+interface RootState {
+  auth: AuthState;
+}
+// Define form values
+type VerifyFormValues = {
+  code1: string;
+  code2: string;
+  code3: string;
+  code4: string;
+  code5: string;
+  code6: string;
 };
 
 export default function VerifyForm() {
-  const email = useSelector((state) => state.auth.email);
-  const [verify, { isLoading, error }] = useVerifyMutation();
+  const email = useSelector((state: RootState) => state.auth.email);
+  const [verify] = useVerifyMutation();
   const navigate = useNavigate();
 
   console.log("Current email in Redux:", email); // Debugging step
@@ -43,7 +54,7 @@ export default function VerifyForm() {
   };
 
   // Initialize react-hook-form
-  const methods = useForm({
+  const methods = useForm<VerifyFormValues>({
     mode: "onChange",
     resolver: yupResolver(VerifyCodeSchema),
     defaultValues,
@@ -52,7 +63,7 @@ export default function VerifyForm() {
   const { handleSubmit } = methods;
 
   // Submit handler
-  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<VerifyFormValues> = async (data: any) => {
     console.log("Login data:", data);
 
     if (!email) {

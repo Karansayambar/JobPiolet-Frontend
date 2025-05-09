@@ -29,6 +29,7 @@
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
     "face-api.js": "^0.22.2",
+    "notistack": "^3.0.2",
     "phosphor-react": "^1.4.1",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",

@@ -1,19 +1,20 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Stack } from "@mui/material";
-import React from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import FormProvider from "../../hooks/hooks-form/FormProvider";
 import RHFTextField from "../../hooks/hooks-form/RHFTextField";
 import { LoadingButton } from "@mui/lab";
 import { useResetPasswordMutation } from "../../services/authApi";
+import { useSnackbar } from "notistack"; // Optional for notifications
 
 interface ResetFormValue {
   email: string;
 }
 
 const ResetPasswordForm = () => {
-  const [resetPassword, { email }] = useResetPasswordMutation();
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const { enqueueSnackbar } = useSnackbar(); // Optional
+
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email is required")
@@ -23,14 +24,19 @@ const ResetPasswordForm = () => {
   const methods = useForm<ResetFormValue>({
     resolver: yupResolver(ResetPasswordSchema),
   });
+
   const { handleSubmit } = methods;
 
   const onSubmit: SubmitHandler<ResetFormValue> = async (data) => {
     try {
       const response = await resetPassword(data).unwrap();
-      console.log(response);
-    } catch (error) {
+      console.log("Reset password request successful:", response);
+      enqueueSnackbar("Reset link sent to your email!", { variant: "success" }); // Optional
+    } catch (error: any) {
       console.error("Reset Password Error:", error);
+      enqueueSnackbar(error?.data?.message || "Failed to send reset link.", {
+        variant: "error",
+      }); // Optional
     }
   };
 
@@ -43,6 +49,7 @@ const ResetPasswordForm = () => {
         size="large"
         type="submit"
         variant="contained"
+        loading={isLoading}
         sx={{
           mt: 3,
           color: (theme) =>

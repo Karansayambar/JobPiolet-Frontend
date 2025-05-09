@@ -13,9 +13,9 @@ import FormProvider from "../../hooks/hooks-form/FormProvider";
 import RHFTextField from "../../hooks/hooks-form/RHFTextField";
 import { LoadingButton } from "@mui/lab";
 import { Eye, EyeSlash } from "phosphor-react";
-import { Link as RouterLink, useNavigate } from "react-router-dom"; // ✅ Import Router Link
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../services/authApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logIn, updateRegisterEmail } from "../../redux/slices/authSlice";
 
 // Define form values shape
@@ -44,8 +44,6 @@ const AuthLoginForm: React.FC = () => {
   });
 
   const {
-    reset,
-    setError,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -65,7 +63,6 @@ const AuthLoginForm: React.FC = () => {
           token: response.token,
           user_id: response.user_id,
           role: response.role,
-          // profileCreated : response.profileCreated,
         })
       );
       console.log("Login successful:", response);

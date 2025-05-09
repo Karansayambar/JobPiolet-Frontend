@@ -141,10 +141,13 @@ const ApplicantsCard: React.FC<ApplicantsCardProps> = ({ applicants }) => {
       </Box>
       {openModel && selectedApplicant && (
         <Box
-          position="fixed"
-          top="20%"
-          left="35%"
-          transform="translate(-50%, -50%)"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+          }}
           zIndex={1000}
         >
           <ViewApplicantsDetailsModel

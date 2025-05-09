@@ -4,7 +4,6 @@ import { FaUserAlt } from "react-icons/fa";
 import { PiUserCircleLight } from "react-icons/pi";
 import { FaGlobe } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
-import AccountSettings from "./AccountSettings";
 import CompanyInfo from "../../Profile/CompanyInfo";
 import FoundingInfo from "../../Profile/FoundingInfo";
 import SocialLinks from "./SocialLinks";
@@ -14,23 +13,18 @@ import { useGetProfileQuery } from "../../../../services/companyApi";
 import { updateCompanyData } from "../../../../redux/slices/createCompanyProfileSlice";
 
 const Settings: React.FC = () => {
-  const [selector, setSelector] = useState<Number>(0);
+  const [selector, setSelector] = useState<number>(0);
 
   // List of sections with their corresponding components
   const dispatch = useDispatch();
   const userId = localStorage.getItem("user_id");
 
-  const { data, isLoading, isError } = useGetProfileQuery(userId);
+  const { data } = useGetProfileQuery(userId);
 
   useEffect(() => {
-    console.assert;
-    console.log("userId", userId);
-    console.log(data);
     if (data?.userProfile) {
       const profile = data.userProfile;
-      console.log("profile", profile);
       dispatch(updateCompanyData(profile));
-      console.log("Fetched profile from RTK Query:", profile);
     }
   }, [data]);
 

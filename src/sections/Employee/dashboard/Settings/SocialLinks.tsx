@@ -1,62 +1,36 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import React from "react";
-import { BsPlus } from "react-icons/bs";
-import { useForm } from "react-hook-form";
-import FormProvider from "../../../../hooks/hooks-form/FormProvider";
-import RHFSocialForm from "../../../../hooks/hooks-form/RHFSocial";
+import { Stack, TextField, Button } from "@mui/material";
+import { useController } from "react-hook-form";
 
-interface SocialLink {
-  platform: string;
-  link: string;
+interface RHFSocialFormProps {
+  index: number;
+  onRemove: () => void;
 }
 
-interface FormValues {
-  socialLinks: SocialLink[];
-}
-
-const SocialLinks: React.FC = () => {
-  const methods = useForm<FormValues>({
-    defaultValues: {
-      socialLinks: [],
-    },
+const RHFSocialForm: React.FC<RHFSocialFormProps> = ({ index, onRemove }) => {
+  const { field: platformField } = useController({
+    name: `socialLinks[${index}].platform`,
+    defaultValue: "",
   });
 
-  const { setValue, watch } = methods;
-  const socialLinks = watch("socialLinks");
+  const { field: linkField } = useController({
+    name: `socialLinks[${index}].link`,
+    defaultValue: "",
+  });
 
-  const handleAddSocialLink = () => {
-    setValue("socialLinks", [...socialLinks, { platform: "", link: "" }]);
-  };
-
-  const handleRemoveSocialLink = (index: number) => {
-    setValue(
-      "socialLinks",
-      socialLinks.filter((_, i) => i !== index)
-    );
-  };
   return (
-    <Box>
-      <Stack>
-        <FormProvider methods={methods}>
-          {socialLinks.map((_, index) => (
-            <Stack py={2} key={index}>
-              <Typography>Social Link {index + 1}</Typography>
-              <RHFSocialForm
-                key={index}
-                index={index}
-                onRemove={() => handleRemoveSocialLink(index)}
-              />
-            </Stack>
-          ))}
-
-          <Button variant="contained" fullWidth onClick={handleAddSocialLink}>
-            <BsPlus size={28} />
-            Add new social link
-          </Button>
-        </FormProvider>
-      </Stack>
-    </Box>
+    <Stack direction="row" spacing={2}>
+      <TextField
+        {...platformField}
+        label={`Platform ${index + 1}`}
+        fullWidth
+        variant="outlined"
+      />
+      <TextField {...linkField} label="Link" fullWidth variant="outlined" />
+      <Button variant="contained" color="error" onClick={onRemove}>
+        Remove
+      </Button>
+    </Stack>
   );
 };
 
-export default SocialLinks;
+export default RHFSocialForm;

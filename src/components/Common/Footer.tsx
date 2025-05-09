@@ -2,7 +2,6 @@ import {
   Box,
   Grid,
   List,
-  ListItem,
   Stack,
   Typography,
   Divider,
@@ -18,7 +17,7 @@ const Footer: React.FC = () => {
       {/* Main Grid Container */}
       <Grid container spacing={8} justifyContent="center">
         {/* Logo & Contact Section */}
-        <Grid item xs={12} md={4} component="div">
+        <Grid>
           <Stack spacing={2}>
             <Stack direction={"row"} alignItems="center" spacing={1}>
               <Suitcase size={24} weight="bold" />
@@ -38,21 +37,15 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Quick Links Section */}
-        <Grid item xs={12} md={2} component="div">
+        <Grid>
           <Box textAlign={{ xs: "center", md: "left" }}>
             <Typography variant="h6" fontWeight={600} mb={2}>
               Quick Links
             </Typography>
             <List dense>
-              {["About", "Contact", "Pricing", "Blog"].map((item, index) => (
+              {["About", "Contact", "Pricing", "Blog"].map((item) => (
                 <ListItemButton sx={{ py: 0.5 }}>
-                  <ListItemText
-                    primary={item}
-                    primaryTypographyProps={{
-                      variant: "body2",
-                      sx: { color: "gray", "&:hover": { color: "white" } },
-                    }}
-                  />
+                  <ListItemText primary={item} />
                 </ListItemButton>
               ))}
             </List>
@@ -60,21 +53,15 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Candidate Section */}
-        <Grid item xs={12} md={2}>
+        <Grid>
           <Typography variant="h6" fontWeight={600} mb={2}>
             Candidate
           </Typography>
           <List dense>
             {["Find Jobs", "Upload Resume", "Job Alerts", "Career Advice"].map(
-              (item, index) => (
+              (item) => (
                 <ListItemButton sx={{ py: 0.5 }}>
-                  <ListItemText
-                    primary={item}
-                    primaryTypographyProps={{
-                      variant: "body2",
-                      sx: { color: "gray", "&:hover": { color: "white" } },
-                    }}
-                  />
+                  <ListItemText primary={item} />
                 </ListItemButton>
               )
             )}
@@ -82,7 +69,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Employers Section */}
-        <Grid item xs={12} md={2} component="div">
+        <Grid>
           {/* Or use another HTML element */}
           <Box textAlign={{ xs: "center", md: "left" }}>
             <Typography variant="h6" fontWeight={600} mb={2}>
@@ -94,15 +81,9 @@ const Footer: React.FC = () => {
                 "Company Profiles",
                 "Pricing",
                 "Hiring Advice",
-              ].map((item, index) => (
+              ].map((item) => (
                 <ListItemButton sx={{ py: 0.5 }}>
-                  <ListItemText
-                    primary={item}
-                    primaryTypographyProps={{
-                      variant: "body2",
-                      sx: { color: "gray", "&:hover": { color: "white" } },
-                    }}
-                  />
+                  <ListItemText primary={item} />
                 </ListItemButton>
               ))}
             </List>
@@ -110,7 +91,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Support Section */}
-        <Grid item xs={12} md={2}>
+        <Grid>
           <Typography variant="h6" fontWeight={600} mb={2}>
             Support
           </Typography>
@@ -120,15 +101,9 @@ const Footer: React.FC = () => {
               "Privacy Policy",
               "Terms of Use",
               "Contact Us",
-            ].map((item, index) => (
+            ].map((item) => (
               <ListItemButton sx={{ py: 0.5 }}>
-                <ListItemText
-                  primary={item}
-                  primaryTypographyProps={{
-                    variant: "body2",
-                    sx: { color: "gray", "&:hover": { color: "white" } },
-                  }}
-                />
+                <ListItemText primary={item} />
               </ListItemButton>
             ))}
           </List>
