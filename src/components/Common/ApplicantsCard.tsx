@@ -148,7 +148,6 @@ const ApplicantsCard: React.FC<ApplicantsCardProps> = ({ applicants }) => {
             transform: "translate(-50%, -50%)",
             zIndex: 9999,
           }}
-          zIndex={1000}
         >
           <ViewApplicantsDetailsModel
             applicant={selectedApplicant}

@@ -17,9 +17,9 @@ const Footer: React.FC = () => {
       {/* Main Grid Container */}
       <Grid container spacing={8} justifyContent="center">
         {/* Logo & Contact Section */}
-        <Grid>
+        <Grid item xs={12} md={4}>
           <Stack spacing={2}>
-            <Stack direction={"row"} alignItems="center" spacing={1}>
+            <Stack direction="row" alignItems="center" spacing={1}>
               <Suitcase size={24} weight="bold" />
               <Typography variant="h6" fontWeight={700}>
                 Jobpilot
@@ -28,8 +28,7 @@ const Footer: React.FC = () => {
             <Typography variant="body2" color="gray">
               Call now: <span style={{ color: "white" }}>(319) 555-0115</span>
             </Typography>
-
-            <Typography variant="body2" color="grey">
+            <Typography variant="body2" color="gray">
               6391 Elgin St. Celina, Delaware 10299, New York, United States of
               America
             </Typography>
@@ -37,15 +36,18 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Quick Links Section */}
-        <Grid>
+        <Grid item xs={6} md={2}>
           <Box textAlign={{ xs: "center", md: "left" }}>
             <Typography variant="h6" fontWeight={600} mb={2}>
               Quick Links
             </Typography>
             <List dense>
               {["About", "Contact", "Pricing", "Blog"].map((item) => (
-                <ListItemButton sx={{ py: 0.5 }}>
-                  <ListItemText primary={item} />
+                <ListItemButton key={item} sx={{ py: 0.5 }}>
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{ color: "gray" }}
+                  />
                 </ListItemButton>
               ))}
             </List>
@@ -53,15 +55,18 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Candidate Section */}
-        <Grid>
+        <Grid item xs={6} md={2}>
           <Typography variant="h6" fontWeight={600} mb={2}>
             Candidate
           </Typography>
           <List dense>
             {["Find Jobs", "Upload Resume", "Job Alerts", "Career Advice"].map(
               (item) => (
-                <ListItemButton sx={{ py: 0.5 }}>
-                  <ListItemText primary={item} />
+                <ListItemButton key={item} sx={{ py: 0.5 }}>
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{ color: "gray" }}
+                  />
                 </ListItemButton>
               )
             )}
@@ -69,8 +74,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Employers Section */}
-        <Grid>
-          {/* Or use another HTML element */}
+        <Grid item xs={6} md={2}>
           <Box textAlign={{ xs: "center", md: "left" }}>
             <Typography variant="h6" fontWeight={600} mb={2}>
               Employers
@@ -82,8 +86,11 @@ const Footer: React.FC = () => {
                 "Pricing",
                 "Hiring Advice",
               ].map((item) => (
-                <ListItemButton sx={{ py: 0.5 }}>
-                  <ListItemText primary={item} />
+                <ListItemButton key={item} sx={{ py: 0.5 }}>
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{ color: "gray" }}
+                  />
                 </ListItemButton>
               ))}
             </List>
@@ -91,7 +98,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Support Section */}
-        <Grid>
+        <Grid item xs={6} md={2}>
           <Typography variant="h6" fontWeight={600} mb={2}>
             Support
           </Typography>
@@ -102,8 +109,11 @@ const Footer: React.FC = () => {
               "Terms of Use",
               "Contact Us",
             ].map((item) => (
-              <ListItemButton sx={{ py: 0.5 }}>
-                <ListItemText primary={item} />
+              <ListItemButton key={item} sx={{ py: 0.5 }}>
+                <ListItemText
+                  primary={item}
+                  primaryTypographyProps={{ color: "gray" }}
+                />
               </ListItemButton>
             ))}
           </List>
@@ -112,7 +122,7 @@ const Footer: React.FC = () => {
 
       {/* Divider & Copyright */}
       <Divider sx={{ my: 4, backgroundColor: "gray" }} />
-      <Typography variant="body2" textAlign="center">
+      <Typography variant="body2" color="gray" textAlign="center">
         © {new Date().getFullYear()} Jobpilot. All Rights Reserved.
       </Typography>
     </Box>
