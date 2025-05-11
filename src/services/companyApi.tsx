@@ -3,7 +3,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const companyApi = createApi({
   reducerPath: "companyApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/company", // Update this!
+    // baseUrl: "http://localhost:5000/api/company", // Update this!
+    baseUrl: "https://jobpiolet-backend-1.onrender.com/api/company",
+
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
       if (token) {

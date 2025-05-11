@@ -12,7 +12,8 @@ interface PaymentDetailsResponse {
 export const paymentApi = createApi({
   reducerPath: "paymentApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/payment",
+    // baseUrl: "http://localhost:5000/api/payment",
+    baseUrl: "https://jobpiolet-backend-1.onrender.com/api/payment",
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
       if (token) {

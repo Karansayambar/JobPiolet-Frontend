@@ -7,7 +7,8 @@ import { AllJobsResponse } from "../sections/Employee/dashboard/MyJobs";
 export const jobsApi = createApi({
   reducerPath: "jobsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/jobs",
+    // baseUrl: "http://localhost:5000/api/jobs",
+    baseUrl: "https://jobpiolet-backend-1.onrender.com/api/jobs",
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
       if (token) {
