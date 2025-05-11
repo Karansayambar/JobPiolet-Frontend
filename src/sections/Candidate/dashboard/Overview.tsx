@@ -15,13 +15,22 @@ import {
 import { IoBag } from "react-icons/io5";
 import { CiBookmark } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
-import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
+
 import { useGetAllJobsQuery } from "../../../services/jobsApi";
 import { useEffect, useState } from "react";
+import DashboardJobCard, {
+  Job,
+} from "../../../components/Common/CandidateDashboardJobCard";
+
+export type GetAllJobsResponse = {
+  success: boolean;
+  message: string;
+  jobs: Job[];
+};
 
 const Overview: React.FC = () => {
   const theme = useTheme();
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
 
   const { data } = useGetAllJobsQuery();
 

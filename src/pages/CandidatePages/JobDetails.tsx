@@ -142,7 +142,7 @@ const JobDetails: React.FC = () => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Stack direction="row" alignIalignItemstems="center" gap={2}>
+            <Stack direction="row" alignItems="center" gap={2}>
               <img src={logo} height={50} alt={job?.companyName} />
               <Stack>
                 <Typography variant="h5">{job?.jobTitle}</Typography>
@@ -238,7 +238,7 @@ const JobDetails: React.FC = () => {
                 p={4}
               >
                 {/* Salary Section */}
-                <Grid item xs={5} textAlign="center">
+                <Grid textAlign="center">
                   <Typography variant="subtitle1" fontWeight="bold">
                     Salary (USD)
                   </Typography>
@@ -251,7 +251,7 @@ const JobDetails: React.FC = () => {
                 </Grid>
 
                 {/* Vertical Divider */}
-                <Grid item xs={1} display="flex" justifyContent="center">
+                <Grid display="flex" justifyContent="center">
                   <Divider
                     orientation="vertical"
                     flexItem
@@ -260,7 +260,7 @@ const JobDetails: React.FC = () => {
                 </Grid>
 
                 {/* Job Location Section */}
-                <Grid item xs={6} textAlign="center">
+                <Grid textAlign="center">
                   <Book size={32} />
                   <Typography variant="subtitle1" fontWeight="bold">
                     {job?.city ?? "Location Unavailable"}
@@ -320,24 +320,23 @@ const JobDetails: React.FC = () => {
                       value: job?.jobLevel,
                     },
                     {
-                      icon: <WalletOutlined size={24} />,
+                      icon: <WalletOutlined fontSize="medium" />,
                       label: "Experience",
                       value: job.experience,
                     },
                     {
-                      icon: <WalletOutlined size={24} />,
-                      label: "workingHours",
+                      icon: <WalletOutlined fontSize="medium" />,
+                      label: "Working Hours",
                       value: job.workingHours,
                     },
-
                     {
-                      icon: <WalletOutlined size={24} />,
-                      label: "jobStatus",
+                      icon: <WalletOutlined fontSize="medium" />,
+                      label: "Job Status",
                       value: job.jobStatus,
                     },
                     {
-                      icon: <WalletOutlined size={24} />,
-                      label: "contractLength",
+                      icon: <WalletOutlined fontSize="medium" />,
+                      label: "Contract Length",
                       value: job.contractLength,
                     },
                     {
@@ -351,7 +350,7 @@ const JobDetails: React.FC = () => {
                       value: job.vacancies,
                     },
                   ].map((item, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
+                    <Grid key={index}>
                       <Stack alignItems="center" spacing={1} width={100}>
                         <Box color={theme.palette.primary.main}>
                           {item.icon}

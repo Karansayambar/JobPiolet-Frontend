@@ -1,6 +1,6 @@
 import { ArrowForward } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetPaymentDetailsQuery } from "../../../services/paymentApi";
 import { dateConverter } from "../../../utils/dateConverter";
 

@@ -1,52 +1,68 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import React from "react";
-import { BsPlus } from "react-icons/bs";
-import { useForm } from "react-hook-form";
-import FormProvider from "../../../../hooks/hooks-form/FormProvider";
+import React, { useState } from "react";
+import { Button, Stack, Typography } from "@mui/material";
+import { useForm, FormProvider } from "react-hook-form";
 import RHFSocialForm from "../../../../hooks/hooks-form/RHFSocial";
 
+interface FormValues {
+  socialLinks: { platform: string; link: string }[];
+}
+
 const SocialLinks: React.FC = () => {
-  const methods = useForm({
+  const methods = useForm<FormValues>({
     defaultValues: {
-      socialLinks: [],
+      socialLinks: [{ platform: "", link: "" }],
     },
   });
 
-  const { setValue, watch } = methods;
-  const socialLinks = watch("socialLinks");
+  const [socialLinks, setSocialLinks] = useState([{ platform: "", link: "" }]);
 
-  const handleAddSocialLink = () => {
-    setValue("socialLinks", [...socialLinks, { platform: "", link: "" }]);
+  const handleAdd = () => {
+    setSocialLinks([...socialLinks, { platform: "", link: "" }]);
   };
 
-  const handleRemoveSocialLink = (index: number) => {
-    setValue(
+  const handleRemove = (index: number) => {
+    const updatedLinks = socialLinks.filter((_, i) => i !== index);
+    setSocialLinks(updatedLinks);
+    // Also remove from react-hook-form values if needed
+    methods.setValue(
       "socialLinks",
-      socialLinks.filter((_, i) => i !== index)
+      updatedLinks.map((_, idx) => ({
+        platform: methods.getValues(`socialLinks.${idx}.platform`),
+        link: methods.getValues(`socialLinks.${idx}.link`),
+      }))
     );
   };
+
+  const onSubmit = (data: FormValues) => {
+    console.log("Submitted Social Links:", data.socialLinks);
+  };
+
   return (
-    <Box>
-      <Stack>
-        <FormProvider methods={methods}>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <Typography variant="h6" gutterBottom>
+          Social Links
+        </Typography>
+
+        <Stack spacing={2}>
           {socialLinks.map((_, index) => (
-            <Stack py={2}>
-              <Typography>Social Link {index + 1}</Typography>
-              <RHFSocialForm
-                key={index}
-                index={index}
-                onRemove={() => handleRemoveSocialLink(index)}
-              />
-            </Stack>
+            <RHFSocialForm
+              key={index}
+              index={index}
+              onRemove={() => handleRemove(index)}
+            />
           ))}
 
-          <Button variant="contained" fullWidth onClick={handleAddSocialLink}>
-            <BsPlus size={28} />
-            Add new social link
+          <Button variant="contained" onClick={handleAdd}>
+            Add Social Link
           </Button>
-        </FormProvider>
-      </Stack>
-    </Box>
+
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </Stack>
+      </form>
+    </FormProvider>
   );
 };
 

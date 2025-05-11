@@ -1,8 +1,9 @@
-import { Box, Icon, Stack, styled, Typography, useTheme } from "@mui/material";
+import { Box, Icon, Stack, styled, Typography } from "@mui/material";
 import { BookmarkSimple, MapPin } from "phosphor-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
+import { Job } from "../../pages/CandidatePages/FindJob";
 
 // Styled component for job type
 export const Duration = styled("div")(({ theme }) => ({
@@ -19,7 +20,7 @@ export const Duration = styled("div")(({ theme }) => ({
   textAlign: "center",
 }));
 
-const CompanyLogoStyle = styled("div")(({ theme }) => ({
+const CompanyLogoStyle = styled("div")(() => ({
   position: "relative",
   borderRadius: 3, // Removed quotes, now valid
   backgroundColor: "#e1f5fe",
@@ -38,7 +39,6 @@ interface JobCardProps {
 
 // JobCard component
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
-  const theme = useTheme();
   const navigate = useNavigate();
   console.log("jobId", job._id);
   // Random company logo (returns URL)

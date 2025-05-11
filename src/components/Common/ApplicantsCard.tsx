@@ -22,7 +22,7 @@ interface CandidateInfo {
 }
 interface Applicant {
   id: string;
-  appliedDate: string;
+  appliedDate: Date;
   candidateInfo: CandidateInfo;
 }
 

@@ -1,15 +1,36 @@
 import { Avatar, Box, Divider, Stack, Typography } from "@mui/material";
-import authHero from "../../../assets/auth/authHero.png"; // Replace with your image path
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGetProfileQuery } from "../../../services/companyApi";
 
+// TypeScript interface for expected user profile structure
+interface CompanyProfileData {
+  companyInfo?: {
+    companyName?: string;
+    address?: string;
+    bannerUrl?: string;
+    logoUrl?: string;
+    about?: string;
+  };
+  foundingInfo?: {
+    organisationType?: string;
+    industryType?: string;
+    teamSize?: string;
+    companyVision?: string;
+    companyWebsite?: string;
+  };
+  contactInfo?: {
+    email?: string;
+    phone?: string;
+    address?: string;
+  };
+}
+
 const CompanyProfile = () => {
   const user_id = localStorage.getItem("user_id");
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState<CompanyProfileData>({});
 
   // Component
-  const { data, isLoading, isError } = useGetProfileQuery(user_id);
+  const { data } = useGetProfileQuery(user_id);
 
   useEffect(() => {
     if (data?.userProfile) {
@@ -111,13 +132,14 @@ const CompanyProfile = () => {
             </Typography>
             <Typography>
               <strong>Website:</strong>{" "}
-              <Link
-                to={userData?.foundingInfo?.companyWebsite}
+              <a
+                href={userData?.foundingInfo?.companyWebsite}
                 target="_blank"
+                rel="noopener noreferrer"
                 style={{ color: "#1976d2" }}
               >
                 {userData?.foundingInfo?.companyWebsite}
-              </Link>
+              </a>
             </Typography>
           </Stack>
         </Box>

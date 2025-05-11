@@ -4,21 +4,25 @@ import { dateConverter } from "../../utils/dateConverter";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 
-interface Job {
+export interface JobDashboard {
   _id: string;
+  userId: string;
   jobTitle: string;
+  jobRole: string;
+  companyName: string;
   workMode: string;
-  updatedAt: string;
-  applicants: string;
+  updatedAt: Date;
+  createdAt: Date;
+  applicants: string[];
   jobStatus: "open" | "Pending" | "closed";
   type: string;
 }
 
 interface DashboardJobCardProps {
-  jobDetails: Job[];
+  jobDetails: JobDashboard[];
 }
 
-const getStatusColor = (status: Job["jobStatus"]): string => {
+const getStatusColor = (status: JobDashboard["jobStatus"]): string => {
   switch (status) {
     case "open":
       return "success.main";
@@ -31,6 +35,7 @@ const getStatusColor = (status: Job["jobStatus"]): string => {
 
 const DashboardJobCard: React.FC<DashboardJobCardProps> = ({ jobDetails }) => {
   const navigate = useNavigate();
+  console.log("job details", jobDetails);
 
   return (
     <>

@@ -7,11 +7,10 @@ import { CiSettings } from "react-icons/ci";
 import Personal from "./Personal";
 import Profile from "./Profile";
 import SocialLinks from "./SocialLinks";
-import AccountSettings from "./AccountSettings";
 import Contact from "./Contact";
 
 const Settings: React.FC = () => {
-  const [selector, setSelector] = useState<Number>(0);
+  const [selector, setSelector] = useState<number>(0);
 
   // List of sections with their corresponding components
   const sections = [

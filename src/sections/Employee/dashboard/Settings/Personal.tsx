@@ -103,14 +103,16 @@ const Personal = () => {
 
               <Typography>Upload your Cv/Resume</Typography>
               <Stack
-                spacing={2}
-                alignItems="center"
-                justifyContent="center"
-                border={2}
-                borderStyle="dashed"
-                borderRadius={2}
-                p={5}
-                width="100%"
+                sx={{
+                  spacing: 2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: 2,
+                  borderStyle: "dashed",
+                  borderRadius: 2,
+                  p: 5,
+                  width: "100%",
+                }}
               >
                 <MdOutlineCloudUpload size={36} />
                 <Typography fontWeight="bold">

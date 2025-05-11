@@ -10,9 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
+
 import { useGetAppliedJobsQuery } from "../../../services/jobsApi";
 import notFound from "../../../assets/404.png";
+import DashboardJobCard, {
+  Job,
+} from "../../../components/Common/CandidateDashboardJobCard";
 
 // src/types/jobTypes.ts
 
@@ -25,16 +28,19 @@ export interface AppliedJob {
 }
 
 export interface JobResponse {
-  data: AppliedJob[];
+  success: boolean;
+  message: string;
+  appliedJobs: Job[];
+  count: number;
 }
 
 const AppliedJobs: React.FC = () => {
-  const { data, isLoading } = useGetAppliedJobsQuery<JobResponse>();
-  const [appliedJobs, setappliedJobs] = useState([]);
+  const { data, isLoading } = useGetAppliedJobsQuery();
+  const [appliedJobs, setappliedJobs] = useState<Job[]>([]);
   useEffect(() => {
     if (data) {
-      console.log("applied jobs:", data.data);
-      setappliedJobs(data.data);
+      console.log("applied jobs:", data.appliedJobs);
+      setappliedJobs(data.appliedJobs);
     }
   }, [data]);
   if (isLoading) {

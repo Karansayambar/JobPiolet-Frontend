@@ -46,7 +46,7 @@ const FindJob: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const itemsPerPage = 12;
 
-  const { data } = useGetAllJobsQuery<GetJobsResponse>();
+  const data = useGetAllJobsQuery<GetJobsResponse>();
 
   useEffect(() => {
     if (data?.jobs) {
@@ -185,7 +185,7 @@ const FindJob: React.FC = () => {
                 inputProps={{ "aria-label": "location" }}
                 value={locationInput}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearchInput(e.target.value)
+                  setLocationInput(e.target.value)
                 }
               />
             </Search>

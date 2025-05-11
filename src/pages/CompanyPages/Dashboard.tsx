@@ -1,6 +1,5 @@
-import { Add, ArrowForward, Check, Pin } from "@mui/icons-material";
 import { Box, Divider, Stack, Typography, useTheme } from "@mui/material";
-import { Star, Bell, Gear, StackOverflowLogo } from "phosphor-react";
+import { Gear, StackOverflowLogo } from "phosphor-react";
 import { BsSuitcaseLg } from "react-icons/bs";
 
 import React, { useState } from "react";
@@ -18,7 +17,6 @@ import { useDispatch } from "react-redux";
 import { signOut } from "../../redux/slices/authSlice";
 import CompanyProfile from "../../sections/Employee/dashboard/CompanyProfile";
 import MyJobs from "../../sections/Employee/dashboard/MyJobs";
-import PlansPage from "../../sections/Employee/dashboard/PlansPage";
 import PlansAndBillingPage from "../../sections/Employee/dashboard/PlansAndBillingPage";
 import Settings from "../../sections/Employee/dashboard/Settings/Settings";
 
@@ -73,14 +71,7 @@ const DashboardPage: React.FC = () => {
     localStorage.removeItem("user_id");
     localStorage.removeItem("profileCreated");
     localStorage.removeItem("companyProfile");
-    dispatch(
-      signOut({
-        isLogginedIn: false,
-        token: "",
-        userId: "",
-        role: "",
-      })
-    );
+    dispatch(signOut());
     navigate("/");
   };
   return (

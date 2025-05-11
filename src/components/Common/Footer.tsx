@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
       {/* Main Grid Container */}
       <Grid container spacing={8} justifyContent="center">
         {/* Logo & Contact Section */}
-        <Grid item xs={12} md={4}>
+        <Grid>
           <Stack spacing={2}>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Suitcase size={24} weight="bold" />
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Quick Links Section */}
-        <Grid item xs={6} md={2}>
+        <Grid>
           <Box textAlign={{ xs: "center", md: "left" }}>
             <Typography variant="h6" fontWeight={600} mb={2}>
               Quick Links
@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Candidate Section */}
-        <Grid item xs={6} md={2}>
+        <Grid>
           <Typography variant="h6" fontWeight={600} mb={2}>
             Candidate
           </Typography>
@@ -74,7 +74,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Employers Section */}
-        <Grid item xs={6} md={2}>
+        <Grid>
           <Box textAlign={{ xs: "center", md: "left" }}>
             <Typography variant="h6" fontWeight={600} mb={2}>
               Employers
@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Support Section */}
-        <Grid item xs={6} md={2}>
+        <Grid>
           <Typography variant="h6" fontWeight={600} mb={2}>
             Support
           </Typography>

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   candidateProfileData: {
     candidateInfo: {
+      avatar: "",
       userFullName: "",
       title: "",
       experience: "",

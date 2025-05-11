@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import planImage from "../../../assets/plan-image.png";
 import { Check } from "@mui/icons-material";
+import { useState } from "react";
 // import { loadStripe } from "@stripe/stripe-js";
 
 // const stripePromise = loadStripe(
@@ -66,8 +67,8 @@ const plans = [
 ];
 
 const PlansPage = () => {
-  const [loading, setLoading] = React.useState(false); // Loading state for payment
-  const [error, setError] = React.useState(""); // Error state for API calls
+  const [loading, setLoading] = useState(false); // Loading state for payment
+  const [error, setError] = useState(""); // Error state for API calls
 
   const handlePayment = async (plan: any) => {
     const token = localStorage.getItem("token");
@@ -144,7 +145,7 @@ const PlansPage = () => {
         {error && <Alert severity="error">{error}</Alert>}
         <Grid container spacing={5} py={5} justifyContent="center">
           {plans.map((plan, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid key={index}>
               <Card
                 variant="outlined"
                 sx={{

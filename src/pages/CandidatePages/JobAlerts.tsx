@@ -1,6 +1,6 @@
 import { Stack, Table, TableBody, Typography } from "@mui/material";
 import React from "react";
-import DashboardJobCard from "../../components/Common/CandidateDashboardJobCard";
+// import DashboardJobCard from "../../components/Common/CandidateDashboardJobCard";
 
 const JobAlerts: React.FC = () => {
   return (
@@ -19,9 +19,7 @@ const JobAlerts: React.FC = () => {
         Job Alerts (9 new jobs)
       </Typography>
       <Table>
-        <TableBody>
-          <DashboardJobCard />
-        </TableBody>
+        <TableBody>{/* <DashboardJobCard /> */}</TableBody>
       </Table>
     </Stack>
   );

@@ -1,41 +1,37 @@
 // src/types/job.ts
 
+export interface Applicant {
+  userId: string;
+  appliedAt: string;
+  status: "pending" | "shortlisted" | "rejected";
+}
+
 export interface Job {
   _id: string;
-  userId: string;
-  jobTitle: string;
-  jobRole: string;
-  companyName: string;
-  type: string;
-  minSalary: string;
-  maxSalary: string;
-  salaryType: string;
-  education: string;
-  vacancies: string;
-  workMode: string;
-  jobLevel: string;
-  industry: string;
-  jobStatus: string;
-  jobFunction: string;
-  workingHours: string;
-  contractLength: string;
-  address: string;
-  posted: string;
-  state: string;
-  experience: string;
-  deadline: string;
-  city: string;
-  applicants: number;
-  views: number;
-  jobDescription: string;
-  country: string;
-  jobResponsibilities: string[];
-  jobRequirements: string[];
-  jobBenefits: string[];
-  sills: string[];
-  // languages: string[];
-  logo: string;
-  jobPreferences: string[];
+  position: string;
+  company: string;
+  designation: "fullTime" | "partTime" | "internship";
+  avatar: string;
+  locationType: "remote" | "in-office" | "hybrid";
+  description: string;
+  requirements: string;
+  desirable: string;
+  benefits: string;
+  salary: string;
+  location: string;
+  jobOverview: {
+    jobPosted: string;
+    jobExpireIn: string;
+    jobLevel: string;
+    experience: string;
+    education: string;
+    jobTags: string[];
+  };
+  postedBy: string;
+  isActive: boolean;
+  applicants: Applicant[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const stateOptions = [

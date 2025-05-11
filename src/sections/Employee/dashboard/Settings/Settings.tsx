@@ -27,27 +27,26 @@ const Settings: React.FC = () => {
       dispatch(updateCompanyData(profile));
     }
   }, [data]);
-
   const sections = [
     {
       label: "Company Info",
       icon: <FaUserAlt size={22} />,
-      component: <CompanyInfo />,
+      component: CompanyInfo,
     },
     {
       label: "Founding Info",
       icon: <PiUserCircleLight size={28} />,
-      component: <FoundingInfo />,
+      component: FoundingInfo,
     },
     {
       label: "Social Links",
       icon: <FaGlobe size={22} />,
-      component: <SocialLinks />,
+      component: SocialLinks,
     },
     {
       label: "Account Settings",
       icon: <CiSettings size={28} />,
-      component: <Contact />,
+      component: Contact,
     },
   ];
 
@@ -73,7 +72,10 @@ const Settings: React.FC = () => {
           </Stack>
         ))}
       </Stack>
-      <Stack py={3}>{sections[selector]?.component}</Stack>
+      <Stack py={3}>
+        {sections[selector] &&
+          React.createElement(sections[selector].component)}
+      </Stack>
     </Stack>
   );
 };

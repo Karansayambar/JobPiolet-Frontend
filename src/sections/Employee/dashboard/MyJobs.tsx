@@ -7,31 +7,27 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import DashboardJobCard from "../../../components/Common/CompanyDashboardJobCard";
-import { useEffect } from "react";
-import { useGetAllJobsQuery } from "../../../services/jobsApi"; // Correct hook import
+import DashboardJobCard, {
+  JobDashboard,
+} from "../../../components/Common/CompanyDashboardJobCard";
+import { useEffect, useState } from "react";
+import { useGetMyJobsQuery } from "../../../services/jobsApi"; // Correct hook import
 import NotFound from "../../../assets/404.png";
 
-// src/types/jobTypes.ts
-
-export interface Job {
-  id: string;
-  title: string;
-  status: string;
-  applications: number;
-  // Add more fields based on your backend response
-}
-
 export interface AllJobsResponse {
-  jobs: Job[];
+  success: boolean;
+  message: string;
+  jobs: JobDashboard[];
 }
 
 const MyJobs: React.FC = () => {
-  const { data, error, isLoading } = useGetAllJobsQuery(); // Use getAllJobs query here
+  const { data, error, isLoading } = useGetMyJobsQuery();
+  const [jobs, setJobs] = useState<JobDashboard[]>([]);
 
   useEffect(() => {
-    if (data) {
-      console.log("Fetched Jobs:", data);
+    if (data && data.jobs) {
+      console.log("Fetched Jobs from my jobs:", data);
+      setJobs(data.jobs);
     }
   }, [data]);
 
@@ -51,26 +47,27 @@ const MyJobs: React.FC = () => {
     );
   }
 
+  // Check if data exists and has jobs array
+  // const jobs = data?.jobs || [];
+
   return (
     <>
-      {data && data.jobs && data.jobs.length > 0 ? (
+      {jobs.length > 0 ? (
         <Stack
           flex={4}
           bgcolor="background.paper"
           p={3}
           borderRadius={2}
-          overflow="auto" // or "scroll"
-          height="800px" // Set a specific height
+          overflow="auto"
+          height="800px"
           sx={{
-            "&::-webkit-scrollbar": { display: "none" }, // Hides scrollbar in Webkit browsers
+            "&::-webkit-scrollbar": { display: "none" },
           }}
         >
-          {/* Statistics Cards */}
           <Stack py={4}>
             <Typography variant="h6">My Jobs</Typography>
           </Stack>
 
-          {/* Jobs Table */}
           <Table>
             <TableHead>
               <TableRow
@@ -83,8 +80,7 @@ const MyJobs: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <DashboardJobCard jobDetails={data.jobs} />{" "}
-              {/* Pass the jobs correctly */}
+              <DashboardJobCard jobDetails={jobs} />
             </TableBody>
           </Table>
         </Stack>

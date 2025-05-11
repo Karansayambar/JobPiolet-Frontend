@@ -9,31 +9,39 @@ import {
   updateCompanyData,
   updateStep,
 } from "../../../redux/slices/createCompanyProfileSlice";
+import { RootState } from "../../../redux/store";
+
+type SocialLinksFormValues = {
+  socialLinks: {
+    platform: string;
+    link: string;
+  }[];
+};
 
 const SocialLinks: React.FC = () => {
   const dispatch = useDispatch();
-  const { step } = useSelector((state) => state.company);
-  const { companyProfileData } = useSelector((state) => state.company);
-  const infoData = companyProfileData.socialLinks;
+  const { step, companyProfileData } = useSelector(
+    (state: RootState) => state.company
+  );
+  const infoData = companyProfileData.SocialInfo;
 
-  const methods = useForm({
+  const methods = useForm<SocialLinksFormValues>({
     defaultValues: {
       socialLinks: [],
     },
   });
 
-  const { reset } = methods;
+  const { reset, setValue, watch, handleSubmit } = methods;
+  const socialLinks = watch("socialLinks");
 
+  // Load existing data into form on mount/update
   useEffect(() => {
-    if (infoData) {
+    if (infoData && infoData.length) {
       reset({
-        socialLinks: infoData.socialLinks || "",
+        socialLinks: infoData,
       });
     }
   }, [infoData, reset]);
-
-  const { setValue, watch } = methods;
-  const socialLinks = watch("socialLinks");
 
   const handleAddSocialLink = () => {
     setValue("socialLinks", [...socialLinks, { platform: "", link: "" }]);
@@ -47,19 +55,19 @@ const SocialLinks: React.FC = () => {
   };
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    dispatch(updateCompanyData({ SocialInfo: data }));
+    console.log("Social Links Data:", data);
+    dispatch(updateCompanyData({ socialLinks: data.socialLinks }));
     dispatch(updateStep(step + 1));
   };
+
   return (
-    <Box width={"50vw"}>
+    <Box width="50vw">
       <Stack>
-        <FormProvider methods={methods}>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           {socialLinks.map((_, index) => (
-            <Stack py={2}>
+            <Stack py={2} key={index}>
               <Typography>Social Link {index + 1}</Typography>
               <RHFSocialForm
-                key={index}
                 index={index}
                 onRemove={() => handleRemoveSocialLink(index)}
               />
@@ -70,14 +78,12 @@ const SocialLinks: React.FC = () => {
             <BsPlus size={28} />
             Add new social link
           </Button>
+
           <Stack direction="row" justifyContent="flex-start" spacing={2} pt={3}>
             <Button variant="outlined" type="button">
               Previous
             </Button>
-            <Button
-              variant="contained"
-              onClick={methods.handleSubmit(onSubmit)}
-            >
+            <Button variant="contained" onClick={handleSubmit(onSubmit)}>
               Save & Next
             </Button>
           </Stack>

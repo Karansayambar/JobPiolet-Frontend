@@ -77,7 +77,10 @@ const HeroComponent: React.FC = () => {
 
                   <Search>
                     <SearchIconWrapper>
-                      <PinDropOutlined color="#709CE6" size={18} />
+                      <PinDropOutlined
+                        style={{ color: "#709CE6" }}
+                        fontSize="small"
+                      />
                     </SearchIconWrapper>
                     <StyledInputBase
                       placeholder="Yout Location"

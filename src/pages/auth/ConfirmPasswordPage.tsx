@@ -1,12 +1,12 @@
 import { Stack, Typography } from "@mui/material";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import * as Yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 import NewPasswordForm from "../../sections/auth/NewPasswordForm";
 
 const ConfirmPasswordPage = () => {
-  const VerifyCodeSchema = Yup.object().shape({});
+  // const VerifyCodeSchema = Yup.object().shape({});
   return (
-    <Stack alignItems={"center"} mt={30} >
+    <Stack alignItems={"center"} mt={30}>
       <Stack textAlign={"center"} spacing={2} mb={3}>
         <Typography variant="h6" fontSize={30}>
           Reset Password

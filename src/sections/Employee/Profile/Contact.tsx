@@ -1,6 +1,7 @@
 // pages/Contact.tsx
-import React, { useEffect } from "react";
-import { Button, Stack } from "@mui/material";
+
+import { useEffect, useState } from "react";
+import { Button, Snackbar, Stack } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,23 +12,36 @@ import {
   updateStep,
 } from "../../../redux/slices/createCompanyProfileSlice";
 import { useCreateCompanyProfileMutation } from "../../../services/companyApi";
+import { RootState } from "../../../redux/store"; // ✅ your typed Redux RootState
+
+// 📌 Type for form fields
+type ContactFormValues = {
+  address: string;
+  phone: string;
+  email: string;
+};
 
 const Contact = () => {
   const { step, companyProfileData } = useSelector(
-    (state: any) => state.company
+    (state: RootState) => state.company
   );
 
-  // const user_id = useSelector((state: any) => state.auth);
-  // const user_id = "67ecc38ce95d3ea12c7f0495";
   const infoData = companyProfileData.contactInfo;
   const user_id = localStorage.getItem("user_id");
-  console.log("user_id", user_id);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [createCompanyProfile, { isLoading }] =
     useCreateCompanyProfileMutation();
 
-  const methods = useForm({
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: "success" | "error";
+  }>({ open: false, message: "", severity: "success" });
+
+  const methods = useForm<ContactFormValues>({
     defaultValues: {
       address: "",
       phone: "",
@@ -37,6 +51,8 @@ const Contact = () => {
   });
 
   const { handleSubmit, reset } = methods;
+
+  // Populate form if infoData exists
   useEffect(() => {
     if (infoData) {
       reset({
@@ -47,12 +63,17 @@ const Contact = () => {
     }
   }, [infoData, reset]);
 
-  const onSave = (data: any) => {
+  const onSave = (data: ContactFormValues) => {
     dispatch(updateCompanyData({ contactInfo: data }));
+    setSnackbar({
+      open: true,
+      message: "Contact information saved!",
+      severity: "success",
+    });
   };
 
-  const onSubmit = async (data: any) => {
-    console.log("ppp", user_id, step, companyProfileData);
+  const onSubmit = async (data: ContactFormValues) => {
+    dispatch(updateCompanyData({ contactInfo: data }));
 
     try {
       const response = await createCompanyProfile({
@@ -62,9 +83,19 @@ const Contact = () => {
       }).unwrap();
 
       console.log("✅ Success:", response);
+      setSnackbar({
+        open: true,
+        message: "Profile submitted successfully!",
+        severity: "success",
+      });
       dispatch(updateStep(step + 1));
     } catch (err) {
       console.error("❌ Error:", err);
+      setSnackbar({
+        open: true,
+        message: "Failed to submit profile. Try again.",
+        severity: "error",
+      });
     }
   };
 
@@ -76,8 +107,9 @@ const Contact = () => {
           <RHFTextField name="phone" label="Phone" />
           <RHFTextField name="email" label="Email" />
         </Stack>
+
         <Stack direction="row" justifyContent="flex-start" spacing={2} pt={3}>
-          <Button variant="outlined" type="button">
+          <Button variant="outlined" type="button" onClick={() => navigate(-1)}>
             Previous
           </Button>
           <Button
@@ -85,13 +117,22 @@ const Contact = () => {
             type="button"
             onClick={handleSubmit(onSave)}
           >
-            save
+            Save
           </Button>
           <Button variant="contained" type="submit" disabled={isLoading}>
             {isLoading ? "Submitting..." : "Submit"}
           </Button>
         </Stack>
       </FormProvider>
+
+      {/* Snackbar for feedback */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        message={snackbar.message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
     </Stack>
   );
 };

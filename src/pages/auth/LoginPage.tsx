@@ -1,5 +1,4 @@
 import { Box, Button, Link, Stack, Typography } from "@mui/material";
-import loginImage from "../../assets/auth/authHero.png";
 import AuthLoginForm from "../../sections/auth/loginForm";
 import { FacebookOutlined, Google } from "@mui/icons-material";
 import SideImage from "../../components/Common/SideImage";

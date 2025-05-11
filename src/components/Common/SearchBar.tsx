@@ -7,36 +7,26 @@ import {
   useTheme,
 } from "@mui/material";
 import Logo from "../../assets/auth/Logo.png";
-import React from "react";
 import { CaretDown, MagnifyingGlass } from "phosphor-react";
 import Search from "../Search/Search";
 import SearchIconWrapper from "../Search/SearchWrapper";
 import StyledInputBase from "../Search/StyledInputBase";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { signOut } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const theme = useTheme();
-  const { isLoggedIn, token, user_Id } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("clicking");
     localStorage.removeItem("role");
     localStorage.removeItem("token");
     localStorage.removeItem("user_id");
     localStorage.removeItem("profileCreated");
     localStorage.removeItem("companyProfile");
-    dispatch(
-      signOut({
-        isLoggedIn: false,
-        token: "",
-        user_Id: "",
-        role: "",
-      })
-    );
+    dispatch(signOut());
     navigate("/");
   };
 

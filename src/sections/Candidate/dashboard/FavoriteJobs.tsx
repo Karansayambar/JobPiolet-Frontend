@@ -7,17 +7,23 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
+import DashboardJobCard, {
+  Job,
+} from "../../../components/Common/CandidateDashboardJobCard";
 import { useGetAllfavoritesQuery } from "../../../services/jobsApi";
 import notFound from "../../../assets/404.png";
 
+export type FavoriteJobsResponse = {
+  message: string;
+  favoriteJobs: Job[];
+};
 const FavoriteJobs: React.FC = () => {
-  const [favouriteJob, setFaviorateJob] = useState([]);
+  const [favouriteJob, setFaviorateJob] = useState<Job[]>([]);
   const { data, isLoading } = useGetAllfavoritesQuery();
   useEffect(() => {
     if (data) {
       console.log("data form favorite", data);
-      setFaviorateJob(data.favoriteJobs);
+      setFaviorateJob(data?.favoriteJobs);
     }
   }, [data]);
   if (isLoading) {

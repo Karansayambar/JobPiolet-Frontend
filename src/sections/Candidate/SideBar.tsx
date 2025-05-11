@@ -171,7 +171,7 @@ const SideBar: React.FC<SideBarProps> = ({ handleSidebarClose }) => {
         <Autocomplete
           options={roles}
           value={selectedRole}
-          onChange={(newValue) => handleRoleChange(newValue)}
+          onChange={(_event, newValue) => handleRoleChange(newValue)}
           renderInput={(params) => (
             <TextField {...params} label="Job Role" variant="outlined" />
           )}
@@ -207,7 +207,7 @@ const SideBar: React.FC<SideBarProps> = ({ handleSidebarClose }) => {
         <Autocomplete
           options={locations}
           value={selectedLocation}
-          onChange={(newValue) => handleLocationChange(newValue)}
+          onChange={(_event, newValue) => handleLocationChange(newValue)}
           renderInput={(params) => (
             <TextField {...params} label="Job Location" variant="outlined" />
           )}

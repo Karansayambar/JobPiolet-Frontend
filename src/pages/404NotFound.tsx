@@ -1,7 +1,6 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import notFound from "../assets/404.png";
-import { useSelector } from "react-redux";
 
 const NotFound = () => {
   const navigate = useNavigate();

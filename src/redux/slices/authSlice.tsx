@@ -26,11 +26,14 @@ const authSlice = createSlice({
       state.role = action.payload.role;
       localStorage.setItem("token", action.payload.token);
     },
-    signOut(state, action) {
+    signOut(state) {
       state.isLoggedIn = false;
       state.token = "";
       state.user_id = null;
+      state.role = "";
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("user_id");
     },
     updateRegisterEmail(state, action) {
       state.email = action.payload.email;

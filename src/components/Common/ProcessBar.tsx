@@ -3,8 +3,7 @@ import logo from "../../assets/auth/Logo.png";
 
 // Define the progress bar component
 const ProcessBar = () => {
-  const { step } = useSelector((state) => state.company);
-  console.log("i am happy", step);
+  const { step } = useSelector((state: RootState) => state.company);
   return (
     <Stack
       direction={"row"}
@@ -37,6 +36,7 @@ import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -56,7 +56,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 const CustomizedProgressBars = () => {
-  const { step } = useSelector((state) => state.company);
+  const { step } = useSelector((state: RootState) => state.company);
   return (
     <Stack spacing={2} sx={{ flexGrow: 1 }}>
       <BorderLinearProgress variant="determinate" value={(step * 100) / 4} />

@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,11 +12,14 @@ import {
   updateStep,
 } from "../../../redux/slices/createCompanyProfileSlice";
 import { useEffect } from "react";
+import { RootState } from "../../../redux/store";
 
 const CompanyInfo = () => {
   const dispatch = useDispatch();
   const { step } = useSelector((state: any) => state.company);
-  const { companyProfileData } = useSelector((state) => state.company);
+  const { companyProfileData } = useSelector(
+    (state: RootState) => state.company
+  );
 
   const infoData = companyProfileData.companyInfo;
 

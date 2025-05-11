@@ -19,13 +19,12 @@ export default function RHFCodes({
   const { control } = useFormContext<FieldValues>();
 
   const handleChangeWithNextField = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    handleChange: (value: string) => void
   ) => {
     const { maxLength, value, name } = event.target;
 
     const fieldIndex = name.replace(keyName, "");
-
     const fieldIntIndex = Number(fieldIndex);
 
     const nextfield = document.querySelector<HTMLInputElement>(
@@ -40,7 +39,7 @@ export default function RHFCodes({
       nextfield.focus();
     }
 
-    handleChange(event);
+    handleChange(value);
   };
 
   return (

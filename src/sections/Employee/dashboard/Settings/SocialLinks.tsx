@@ -1,5 +1,5 @@
 import { Stack, TextField, Button } from "@mui/material";
-import { useController } from "react-hook-form";
+import { useController, useFormContext } from "react-hook-form";
 
 interface RHFSocialFormProps {
   index: number;
@@ -7,13 +7,17 @@ interface RHFSocialFormProps {
 }
 
 const RHFSocialForm: React.FC<RHFSocialFormProps> = ({ index, onRemove }) => {
+  const { control } = useFormContext(); // Get control from form context
+
   const { field: platformField } = useController({
-    name: `socialLinks[${index}].platform`,
+    name: `socialLinks.${index}.platform`,
+    control,
     defaultValue: "",
   });
 
   const { field: linkField } = useController({
-    name: `socialLinks[${index}].link`,
+    name: `socialLinks.${index}.link`,
+    control,
     defaultValue: "",
   });
 

@@ -1,10 +1,26 @@
 import { Box, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 
-const Question = ({ question, index, onAnswer }) => {
-  const [selectedOption, setSelectedOption] = useState({});
+interface QuestionProps {
+  question: {
+    question: string;
+    options: string[];
+    answer: string;
+  };
+  index: number;
+  onAnswer: (result: {
+    qIndex: number;
+    selectedOption: string;
+    isCorrect: boolean;
+  }) => void;
+}
 
-  const handleSelectOption = (option) => {
+const Question = ({ question, index, onAnswer }: QuestionProps) => {
+  const [selectedOption, setSelectedOption] = useState<Record<number, string>>(
+    {}
+  );
+
+  const handleSelectOption = (option: string) => {
     setSelectedOption((prev) => ({
       ...prev,
       [index]: option,

@@ -1,44 +1,45 @@
-import { Container, Divider, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { CiUser } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaGlobe } from "react-icons/fa";
 import { FaAt } from "react-icons/fa6";
 
 import CompanyInfo from "../../sections/Employee/Profile/CompanyInfo";
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import FoundingInfo from "../../sections/Employee/Profile/FoundingInfo";
 import SocialLinks from "../../sections/Employee/Profile/SocialLinks";
 import Contact from "../../sections/Employee/Profile/Contact";
 import ProcessBar from "../../components/Common/ProcessBar";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../redux/store";
 
 const sections = [
   {
     label: "Company Info",
     icon: <CiUser size={22} />,
-    component: <CompanyInfo />,
+    component: CompanyInfo,
   },
   {
     label: "Founding Info",
     icon: <FaRegUserCircle size={22} />,
-    component: <FoundingInfo />,
+    component: FoundingInfo,
   },
   {
     label: "Social Media Info",
     icon: <FaGlobe size={22} />,
-    component: <SocialLinks />,
+    component: SocialLinks,
   },
   {
     label: "Contact",
     icon: <FaAt size={22} />,
-    component: <Contact />,
+    component: Contact,
   },
 ];
 
 const CreateProfile = () => {
   // const [selector, setSelector] = useState<Number>(0);
-  const { step } = useSelector((state) => state.company);
+  const { step } = useSelector((state: RootState) => state.company);
   const navigate = useNavigate();
   useEffect(() => {
     if (step === 4) {
@@ -71,7 +72,7 @@ const CreateProfile = () => {
         ))}
       </Stack>
       <Stack py={3} width={"100vw"} alignItems={"center"}>
-        {sections[step]?.component}
+        {sections[step] && React.createElement(sections[step].component)}
       </Stack>
     </Stack>
   );

@@ -1,5 +1,4 @@
 import { Stack, Typography } from "@mui/material";
-import JobCard from "../../Common/JobCard";
 
 // JobList component to render multiple JobCards
 const FeaturedJobs: React.FC = () => {

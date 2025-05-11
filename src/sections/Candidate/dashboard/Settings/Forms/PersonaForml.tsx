@@ -14,7 +14,10 @@ import { RootState } from "../../../../../redux/store";
 const PersonalForm: React.FC = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { candidateProfileData } = useSelector((state: RootState) => state);
+  const candidateProfileData = useSelector(
+    (state: RootState) => state.candidate.candidateProfileData
+  );
+
   const [selectedResume, setSelectedResume] = useState<File | null>(null);
 
   // get data from candidate slice
@@ -37,7 +40,7 @@ const PersonalForm: React.FC = () => {
     if (personalInfo) {
       reset({
         avatar: "",
-        fullName: personalInfo.fullName || "",
+        fullName: personalInfo.userFullName || "",
         title: personalInfo.title || "",
         experience: personalInfo.experience || "",
         education: personalInfo.education || "",

@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Box, Button, Stack, Typography } from "@mui/material";
-
 import FormProvider from "../../../hooks/hooks-form/FormProvider";
 import RHFSelect from "../../../hooks/hooks-form/RHFSelect";
 import RHFTextField from "../../../hooks/hooks-form/RHFTextField";
@@ -12,58 +11,69 @@ import {
   updateCompanyData,
   updateStep,
 } from "../../../redux/slices/createCompanyProfileSlice";
+import { RootState } from "../../../redux/store";
+
+// 1️⃣ Type for form values
+type FoundingInfoFormValues = {
+  organisationType: string;
+  industryType: string;
+  teamSize: string;
+  // yearOfEstablishment: Date | null;
+  companyWebsite: string;
+  companyVision: string;
+};
 
 const FoundingInfo = () => {
-  const { step } = useSelector((state) => state.company);
-  const { companyProfileData } = useSelector((state) => state.company);
+  const { step, companyProfileData } = useSelector(
+    (state: RootState) => state.company
+  );
 
   const infoData = companyProfileData.foundingInfo;
   const dispatch = useDispatch();
-  const methods = useForm({
+
+  // 2️⃣ Form initialization with type
+  const methods = useForm<FoundingInfoFormValues>({
     defaultValues: {
       organisationType: "",
       industryType: "",
       teamSize: "",
-      yearOfEstablishment: null,
+      // yearOfEstablishment: null,
       companyWebsite: "",
       companyVision: "",
     },
   });
 
-  const { reset } = methods;
+  const { reset, handleSubmit } = methods;
+
   useEffect(() => {
     if (infoData) {
       reset({
         organisationType: infoData.organisationType || "",
         industryType: infoData.industryType || "",
         teamSize: infoData.teamSize || "",
-        yearOfEstablishment: infoData.yearOfEstablishment || "",
+        // yearOfEstablishment: infoData.yearOfEstablishment
+        //   ? new Date(infoData.yearOfEstablishment)
+        //   : null,
         companyWebsite: infoData.companyWebsite || "",
         companyVision: infoData.companyVision || "",
       });
     }
   }, [infoData, reset]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: FoundingInfoFormValues) => {
     console.log("Form Submitted:", data);
-    // You can call an API or move to next step here
     dispatch(updateCompanyData({ foundingInfo: data }));
     dispatch(updateStep(step + 1));
   };
 
   return (
     <Box width={"50vw"}>
-      <FormProvider methods={methods}>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h6" gutterBottom>
           Founding Information
         </Typography>
 
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          mb={2}
-          fullwidth
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={2}>
           <RHFSelect
             name="organisationType"
             label="Organisation Type"
@@ -102,7 +112,7 @@ const FoundingInfo = () => {
           <Button variant="outlined" type="button">
             Previous
           </Button>
-          <Button variant="contained" onClick={methods.handleSubmit(onSubmit)}>
+          <Button variant="contained" type="submit">
             Save & Next
           </Button>
         </Stack>

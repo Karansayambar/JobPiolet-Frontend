@@ -20,20 +20,19 @@ import { useRegisterMutation } from "../../services/authApi";
 import { updateRegisterEmail } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 
-// Define form values shape
-type RegisterFormValues = {
+type RoleType = "candidate" | "company";
+
+interface RegisterFormValues {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  role: string;
-};
+  role: RoleType;
+}
 
 const AuthRegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [selectRole, setSelectRole] = useState<"candidate" | "company" | "">(
-    ""
-  );
+  const [selectRole, setSelectRole] = useState<RoleType>("candidate");
   const [register] = useRegisterMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,7 +46,9 @@ const AuthRegisterPage: React.FC = () => {
     password: Yup.string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters"),
-    role: Yup.string().oneOf(["candidate", "company"]).required(),
+    role: Yup.string()
+      .oneOf(["candidate", "company"])
+      .required("Role is required"),
   });
 
   const defaultValues: RegisterFormValues = {
@@ -58,28 +59,36 @@ const AuthRegisterPage: React.FC = () => {
     role: "candidate",
   };
 
-  const methods = useForm({
+  const methods = useForm<RegisterFormValues>({
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });
 
-  const { handleSubmit, setValue } = methods;
+  const {
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = methods;
 
   const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
-    console.log("Registering with email:", data.email);
-    console.log("Submitted Data:", data);
-
     try {
       const response = await register(data).unwrap();
       console.log("Registration successful:", response);
 
-      // Update Redux state with the registered email
       dispatch(updateRegisterEmail({ email: data.email }));
-
-      // Navigate to verify page
       navigate("/verify");
     } catch (error) {
       console.error("Registration failed:", error);
+    }
+  };
+
+  const handleRoleChange = (
+    _: React.MouseEvent<HTMLElement>,
+    newRole: RoleType | null
+  ) => {
+    if (newRole) {
+      setSelectRole(newRole);
+      setValue("role", newRole);
     }
   };
 
@@ -87,19 +96,14 @@ const AuthRegisterPage: React.FC = () => {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack sx={{ bgcolor: "#F1F2F4", borderRadius: "5px" }} p={2} my={3}>
         <Stack alignItems="center" my={2}>
-          <Typography textAlign={"center"} mb={1}>
+          <Typography textAlign="center" mb={1}>
             Create Account as a
           </Typography>
 
           <ToggleButtonGroup
             value={selectRole}
             exclusive
-            onChange={(_, newRole) => {
-              if (newRole) {
-                setSelectRole(newRole);
-                setValue("role", newRole);
-              }
-            }}
+            onChange={handleRoleChange}
             color="primary"
             sx={{
               bgcolor: "#F1F2F4",
@@ -122,7 +126,7 @@ const AuthRegisterPage: React.FC = () => {
             >
               <Stack direction="row" spacing={1} alignItems="center">
                 <User />
-                <Typography>Canditate</Typography>
+                <Typography>Candidate</Typography>
               </Stack>
             </ToggleButton>
 
@@ -146,9 +150,9 @@ const AuthRegisterPage: React.FC = () => {
             </ToggleButton>
           </ToggleButtonGroup>
 
-          {methods.formState.errors.role && (
+          {errors.role && (
             <Typography color="error" fontSize={12} mt={1}>
-              {methods.formState.errors.role.message}
+              {errors.role.message}
             </Typography>
           )}
         </Stack>
@@ -206,15 +210,13 @@ const AuthRegisterPage: React.FC = () => {
           size="large"
           type="submit"
           variant="contained"
-          // loading={isLoading}
           sx={{
             bgcolor: "text.primary",
             color: (theme) =>
-              theme.palette.mode === "light" ? "common.white" : "blue.800",
+              theme.palette.mode === "light" ? "common.white" : "grey.800",
             "&:hover": {
               bgcolor: "text.primary",
-              color: (theme) =>
-                theme.palette.mode === "light" ? "common.white" : "blue.800",
+              opacity: 0.9,
             },
           }}
         >

@@ -1,16 +1,20 @@
 import * as faceapi from "face-api.js";
 import { useEffect, useRef, useState } from "react";
 
+type DetectionEntry = {
+  time: string;
+  type: string;
+};
+
 const useFaceDetection = () => {
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [alerts, setAlerts] = useState<string[]>([]);
-  const [detectionLog, setDetectionLog] = useState([]);
+  const [detectionLog, setDetectionLog] = useState<DetectionEntry[]>([]);
 
   useEffect(() => {
     const loadModels = async () => {
       await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
     };
-
     loadModels();
   }, []);
 
@@ -25,33 +29,29 @@ const useFaceDetection = () => {
         console.error("Camera access error:", err);
       }
     };
-
     startVideo();
   }, []);
 
   useEffect(() => {
-    const detectFaces = async () => {
-      if (!videoRef.current) return;
-      const interval = setInterval(async () => {
-        const detections = await faceapi.detectAllFaces(
-          videoRef.current,
-          new faceapi.TinyFaceDetectorOptions()
-        );
+    if (!videoRef.current) return;
 
-        if (detections.length > 1) {
-          const timestamp = new Date().toISOString();
-          setAlerts((prev) => [...prev, "⚠️ Multiple faces detected"]);
-          setDetectionLog((prev) => [
-            ...prev,
-            { time: timestamp, type: "Multiple Faces" },
-          ]);
-        }
-      }, 3000); // every 3 seconds
+    const interval = setInterval(async () => {
+      const detections = await faceapi.detectAllFaces(
+        videoRef.current as HTMLVideoElement,
+        new faceapi.TinyFaceDetectorOptions()
+      );
 
-      return () => clearInterval(interval);
-    };
+      if (detections.length > 1) {
+        const timestamp = new Date().toISOString();
+        setAlerts((prev) => [...prev, "⚠️ Multiple faces detected"]);
+        setDetectionLog((prev) => [
+          ...prev,
+          { time: timestamp, type: "Multiple Faces" },
+        ]);
+      }
+    }, 3000);
 
-    detectFaces();
+    return () => clearInterval(interval);
   }, []);
 
   return { videoRef, alerts, detectionLog };

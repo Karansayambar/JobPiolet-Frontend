@@ -1,6 +1,6 @@
-import { Box, Stack, Typography, IconButton } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
-import { Bag, Suitcase } from "phosphor-react";
+import { Suitcase } from "phosphor-react";
 import loginImage from "../../assets/auth/authHero.png";
 
 const SideImage: React.FC = () => {

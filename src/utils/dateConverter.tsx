@@ -1,4 +1,4 @@
-export const dateConverter = (dateString: string) => {
+export const dateConverter = (dateString: Date) => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",

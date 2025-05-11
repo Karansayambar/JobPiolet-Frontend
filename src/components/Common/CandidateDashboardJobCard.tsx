@@ -15,8 +15,8 @@ import { dateConverter } from "../../utils/dateConverter";
 import { useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
 
-interface Job {
-  id: number;
+export interface Job {
+  _id: number;
   jobTitle?: string;
   jobDetails?: {
     jobTitle?: string;
@@ -30,10 +30,9 @@ interface Job {
   city?: string;
   minSalary?: string;
   maxSalary?: string;
-  createdAt: string;
+  createdAt: Date;
   workMode?: string;
   status: "Active" | "Pending" | "Rejected";
-  _id?: string;
 }
 
 interface DashboardJobCardProps {
@@ -70,6 +69,8 @@ const DashboardJobCard: React.FC<DashboardJobCardProps> = ({ data }) => {
   const navigate = useNavigate();
   const [job, setJob] = useState<Job[]>([]);
 
+  console.log("data from dashboardJobCard", data);
+
   useEffect(() => {
     setJob(data);
   }, [data]);
@@ -77,7 +78,7 @@ const DashboardJobCard: React.FC<DashboardJobCardProps> = ({ data }) => {
   return (
     <>
       {job?.map((job: Job) => (
-        <TableRow key={job.id}>
+        <TableRow key={job._id}>
           <TableCell>
             <Stack direction="row" alignItems="center" gap={2}>
               {/* <img

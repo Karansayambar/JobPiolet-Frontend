@@ -16,17 +16,19 @@ type ProfileFormValues = {
   gender: string;
   maritalStatus: string;
   address: string;
-  dateOfBirth: Date | null;
+  dateOfBirth: string | null;
   biography: string;
 };
 
 const ProfileForm: React.FC = () => {
-  const candidateProfileData = useSelector((state: RootState) => state);
+  const candidateProfileData = useSelector(
+    (state: RootState) => state.candidate.candidateProfileData
+  );
   const dispatch = useDispatch();
 
   const theme = useTheme();
 
-  const profileInfo = candidateProfileData?.userInfo;
+  const profileInfo = candidateProfileData?.profileInfo;
 
   const methods = useForm<ProfileFormValues>({
     defaultValues: {
@@ -97,17 +99,6 @@ const ProfileForm: React.FC = () => {
         {/* Marital Status & Education */}
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} py={2}>
           <RHFTextField name="address" label="Address" />
-
-          {/* <RHFSelect
-            name="education"
-            label="Education"
-            options={[
-              { value: "btech", label: "B.Tech" },
-              { value: "bca", label: "BCA" },
-              { value: "mca", label: "MCA" },
-              { value: "bsc", label: "BSC" },
-            ]}
-          /> */}
         </Stack>
 
         {/* Experience & Date of Birth */}
@@ -120,21 +111,6 @@ const ProfileForm: React.FC = () => {
               { value: "unmarried", label: "Unmarried" },
             ]}
           />
-          {/* <RHFSelect
-            name="experience"
-            label="Experience"
-            options={[
-              { value: "0year", label: "0 Year" },
-              { value: "1year", label: "1 Year" },
-              { value: "2year", label: "2 Years" },
-              { value: "3year", label: "3 Years" },
-              { value: "4year", label: "4 Years" },
-              { value: "5year", label: "5 Years" },
-              { value: "6year", label: "6 Years" },
-              { value: "7year", label: "7 Years" },
-              { value: "8year", label: "8+ Years" },
-            ]}
-          /> */}
           <RHFDatePicker name="dateOfBirth" label="Date of Birth" />
         </Stack>
         <RHFTextArea
