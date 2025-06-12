@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Book, BookmarkSimple, Calendar, Link } from "phosphor-react";
 import { useEffect, useState } from "react";
-import { Duration } from "../../components/Common/JobCard";
+import { CompanyLogoStyle, Duration } from "../../components/Common/JobCard";
 import {
   ArrowForward,
   Facebook,
@@ -33,6 +33,7 @@ import {
   useGetFavioriteJobQuery,
   useGetJobDetailQuery,
 } from "../../services/jobsApi";
+import CompanyLogo from "../../components/Common/CompanyLogo";
 
 const JobDetails = () => {
   const { jobId } = useParams();
@@ -108,7 +109,7 @@ const JobDetails = () => {
 
       {/* Job Details */}
       {job ? (
-        <Stack px={50}>
+        <Stack px={20}>
           {/* Job Heading */}
           <Stack
             py={4}
@@ -117,7 +118,9 @@ const JobDetails = () => {
             justifyContent="space-between"
           >
             <Stack direction="row" alignItems="center" gap={2}>
-              <img src={logo} height={50} alt={job?.companyName} />
+              <CompanyLogoStyle>
+              <CompanyLogo companyName={job.companyName} size={60} />
+            </CompanyLogoStyle>
               <Stack>
                 <Typography variant="h5">{job?.jobTitle}</Typography>
                 <Stack direction="row" gap={2}>

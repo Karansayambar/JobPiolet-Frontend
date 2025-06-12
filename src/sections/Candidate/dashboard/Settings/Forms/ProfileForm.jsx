@@ -21,9 +21,8 @@ const ProfileForm = () => {
   const profileInfo = candidateProfileData?.profileInfo;
 
   const methods =
-    useForm <
-    ProfileFormValues >
-    {
+    useForm
+    ({
       defaultValues: {
         nationality: "",
         gender: "",
@@ -32,7 +31,7 @@ const ProfileForm = () => {
         dateOfBirth: null,
         biography: "",
       },
-    };
+    });
 
   const { reset } = methods;
 

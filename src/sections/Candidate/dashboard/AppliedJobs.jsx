@@ -35,7 +35,7 @@ const AppliedJobs = () => {
   }
   return (
     <>
-      {appliedJobs ? (
+      {appliedJobs.length > 0 ? (
         <Stack
           flex={4}
           bgcolor="background.paper"

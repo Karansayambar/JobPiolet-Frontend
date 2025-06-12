@@ -19,20 +19,66 @@ import { FaBell } from "react-icons/fa";
 import { useGetAllJobsQuery } from "../../../services/jobsApi";
 import { useEffect, useState } from "react";
 import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
+import { createSocket } from "../../../utils/socket";
 
 const Overview = () => {
   const theme = useTheme();
   const [jobs, setJobs] = useState([]);
 
-  const { data } = useGetAllJobsQuery();
+  // const { data } = useGetAllJobsQuery();
 
-  useEffect(() => {
-    if (data) {
-      console.log("Fetched Jobs:", data.jobs);
-      const allJobs = data.jobs;
-      setJobs(allJobs);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log("Fetched Jobs:", data.jobs);
+  //     const allJobs = data.jobs;
+  //     setJobs(allJobs);
+  //   }
+  // }, [data]);
+
+   useEffect(() => {
+    const userJobTitle = localStorage.getItem("title")?.toLowerCase();
+
+    // Create socket after token is saved
+    const socket = createSocket();
+
+    // On connect, then emit
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+      socket.emit("getJobsForUser");
+    });
+
+    // Listen for jobs
+    socket.on("jobsForUser", (data) => {
+      console.log("Received jobs:", data);
+      if (data.success) {
+        setJobs(data.matchingJobs);
+      } else {
+        console.error(data.message);
+        setJobs([]);
+        setMessage(data.message);
+      }
+    });
+
+    // Listen for new job broadcast
+    socket.on("newJobPosted", (newJob) => {
+      if (userJobTitle) {
+        if (
+          newJob.jobRole.toLowerCase().includes(userJobTitle) ||
+          newJob.jobTitle.toLowerCase().includes(userJobTitle)
+        ) {
+          setJobs((prevJobs) => [...prevJobs, newJob]);
+          alert(`New matching job: ${newJob.jobRole}`);
+        }
+      }
+    });
+
+    // Clean up on unmount
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, []);
 
   const stats = [
     { label: "Applied Jobs", count: 2, icon: <IoBag size={30} /> },

@@ -19,7 +19,7 @@ import CustomIcons from "../../utils/PaginationItem";
 import SideBar from "../../sections/Candidate/SideBar";
 import { useSelector } from "react-redux";
 import { useGetAllJobsQuery } from "../../services/jobsApi";
-
+import { createSocket } from './../../utils/socket';
 const FindJob = () => {
   const theme = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
@@ -30,15 +30,63 @@ const FindJob = () => {
   const [page, setPage] = useState(1);
   const [jobs, setJobs] = useState([]);
   const itemsPerPage = 12;
+  const [isConnected, setISConnected] = useState(false);
 
-  const { data: data } = useGetAllJobsQuery();
+  // const { data: data } = useGetAllJobsQuery();
+
+  // useEffect(() => {
+  //   if (data?.jobs) {
+  //     setJobs(data?.jobs);
+  //     // console.log("jobs", data);
+  //   }
+  // }, [data]);
+    // const userJobTitle = localStorage.getItem("title")?.toLowerCase();
+
 
   useEffect(() => {
-    if (data?.jobs) {
-      setJobs(data?.jobs);
-      console.log("jobs", data);
-    }
-  }, [data]);
+    const userJobTitle = localStorage.getItem("title")?.toLowerCase();
+
+    // Create socket after token is saved
+   const socket = createSocket();
+
+    // On connect, then emit
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+      socket.emit("getJobsForUser");
+    });
+
+    // Listen for jobs
+    socket.on("jobsForUser", (data) => {
+      console.log("Received jobs:", data);
+      if (data.success) {
+        setJobs(data.matchingJobs);
+      } else {
+        console.error(data.message);
+        setJobs([]);
+        setMessage(data.message);
+      }
+    });
+
+    // Listen for new job broadcast
+    socket.on("newJobPosted", (newJob) => {
+      if (userJobTitle) {
+        if (
+          newJob.jobRole.toLowerCase().includes(userJobTitle) ||
+          newJob.jobTitle.toLowerCase().includes(userJobTitle)
+        ) {
+          setJobs((prevJobs) => [...prevJobs, newJob]);
+          alert(`New matching job: ${newJob.jobRole}`);
+        }
+      }
+    });
+
+    // Clean up on unmount
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, []);
 
   const filters = useSelector((state) => state.jobs.filters);
   const handleSearch = () => {
@@ -47,7 +95,7 @@ const FindJob = () => {
       const [key, value] = item.split(":").map((str) => str.trim());
       if (key && value) parsedFilters[key] = value;
     });
-    console.log("parsedFilters", parsedFilters);
+    // console.log("parsedFilters", parsedFilters);
 
     const quick = jobs.filter(
       (el) =>
@@ -74,8 +122,8 @@ const FindJob = () => {
       return jobTypeMatch || locationMatch || roleMatch;
     });
 
-    console.log("advance", advance);
-    console.log("quick", quick);
+    // console.log("advance", advance);
+    // console.log("quick", quick);
 
     if (Object.keys(parsedFilters).length > 0) {
       setAdvanceFilters(advance);
@@ -111,9 +159,9 @@ const FindJob = () => {
       ? quickFilter
       : jobs;
 
-  const startIndex = (page - 1) * itemsPerPage;
-  const currentJobs = finalData.slice(startIndex, startIndex + itemsPerPage);
-  const totalPages = Math.ceil(finalData.length / itemsPerPage);
+  // const startIndex = (page - 1) * itemsPerPage;
+  // const currentJobs = finalData.slice(startIndex, startIndex + itemsPerPage);
+  // const totalPages = Math.ceil(finalData.length / itemsPerPage);
 
   return (
     <>
@@ -208,24 +256,24 @@ const FindJob = () => {
 
         {/* Jobs Grid */}
         <Stack
-          px={30}
+          px={10}
           spacing={3}
           gap={3}
           direction="column"
           alignItems={"center"}
           sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}
         >
-          {currentJobs?.map((job, index) => (
+          {jobs?.map((job, index) => (
             <JobCard key={`${job.id} - ${index}`} job={job} />
           ))}
         </Stack>
 
         {/* Pagination */}
-        <CustomIcons
+        {/* <CustomIcons
           count={totalPages}
           page={page}
           onChange={handlePageChange}
-        />
+        /> */}
       </Box>
 
       {/* Filter Sidebar */}

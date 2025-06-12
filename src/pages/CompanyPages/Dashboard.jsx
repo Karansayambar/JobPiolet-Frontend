@@ -2,7 +2,7 @@ import { Box, Divider, Stack, Typography, useTheme } from "@mui/material";
 import { Gear, StackOverflowLogo } from "phosphor-react";
 import { BsSuitcaseLg } from "react-icons/bs";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Overview from "../../sections/Candidate/dashboard/Overview";
 import { IoAddCircleSharp } from "react-icons/io5";
@@ -26,6 +26,7 @@ const DashboardPage = () => {
 
   const [selectedSection, setSelectedSection] = useState("Overview");
   const dispatch = useDispatch();
+
   const menuItems = [
     {
       label: "Overview",

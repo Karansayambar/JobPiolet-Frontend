@@ -18,7 +18,7 @@ export const Duration = styled("div")(({ theme }) => ({
   textAlign: "center",
 }));
 
-const CompanyLogoStyle = styled("div")(() => ({
+export const CompanyLogoStyle = styled("div")(() => ({
   position: "relative",
   borderRadius: 3, // Removed quotes, now valid
   backgroundColor: "#e1f5fe",
@@ -42,7 +42,7 @@ const JobCard = ({ job }) => {
       sx={{
         border: "1px solid #ddd",
         borderRadius: "8px",
-        padding: 4,
+        padding: 2,
         background:
           "linear-gradient(to right,rgba(245, 185, 20, 0.08),rgba(255, 255, 255, 0.97))",
         transition: "all 0.3s ease",
@@ -50,9 +50,9 @@ const JobCard = ({ job }) => {
           boxShadow: 3,
         },
       }}
-      minWidth={500}
+      minWidth={350}
     >
-      <Stack gap={2}>
+      <Stack gap={2} >
         <Box onClick={() => navigate(`/candidate/findjob/${job._id}`)}>
           <Typography variant="body1" fontWeight={600} fontSize={22}>
             {job.jobTitle}

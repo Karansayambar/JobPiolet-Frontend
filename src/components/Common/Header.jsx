@@ -25,6 +25,8 @@ const Header = () => {
   const handleSignout = () => {
     localStorage.removeItem("role");
     localStorage.removeItem("user_id");
+    localStorage.removeItem("title");
+    
     navigate("/");
   };
 

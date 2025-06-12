@@ -5,13 +5,12 @@ import RHFSocialForm from "../../../../hooks/hooks-form/RHFSocial";
 
 const SocialLinks = () => {
   const methods =
-    useForm <
-    FormValues >
+    useForm (
     {
       defaultValues: {
         socialLinks: [{ platform: "", link: "" }],
       },
-    };
+    });
 
   const [socialLinks, setSocialLinks] = useState([{ platform: "", link: "" }]);
 

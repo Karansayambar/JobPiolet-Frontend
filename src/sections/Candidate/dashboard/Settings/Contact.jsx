@@ -19,8 +19,7 @@ const Contact = () => {
     useCreateCandidateProfileMutation();
 
   const methods =
-    useForm <
-    ContactFormValues >
+    useForm(
     {
       defaultValues: {
         address: "",
@@ -28,7 +27,7 @@ const Contact = () => {
         email: "",
       },
       mode: "onChange",
-    };
+    });
 
   const { handleSubmit, reset } = methods;
 

@@ -66,6 +66,8 @@ const AuthLoginForm = () => {
       localStorage.setItem("token", response.token);
       localStorage.setItem("user_id", response.user_id);
       localStorage.setItem("profileCreated", response.profileCreated);
+      localStorage.setItem("title", response?.title);
+
 
       if (response.role === "company") {
         if (!response.profileCreated) {

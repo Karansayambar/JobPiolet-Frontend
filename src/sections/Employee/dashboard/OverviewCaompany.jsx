@@ -9,7 +9,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow,
+  TableRow, 
   Typography,
   useTheme,
 } from "@mui/material";
@@ -30,6 +30,8 @@ const OverviewCompany = () => {
       console.log("Fetched Jobs:", data);
     }
   }, [data]);
+
+ 
 
   const openJobs = data?.jobs.filter((el) => el.jobStatus === "open");
 
