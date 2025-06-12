@@ -1,5 +1,4 @@
 // src/types/job.ts
-// kevin@aitechtures.com
 export const stateOptions = [
   { label: "Andhra Pradesh", value: "Andhra Pradesh" },
   { label: "Arunachal Pradesh", value: "Arunachal Pradesh" },

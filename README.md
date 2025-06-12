@@ -55,9 +55,16 @@ export default tseslint.config({
 
 # JobPiolet-Frontend
 
+VITE_API_BASE_URL=http://localhost:5000
+
 user details
-for user karansayambar@gmail.com
 password : 123456789
 
-for employee karansayambar0101@gmail.com
-password : 123456789
+company
+karansayambar0101@gmail.com
+
+candidate
+arjun.sharma45@example.com - React Developer
+sarah.johnson88@example.com - Fullstack Developer
+karansayambar@gmail.com - Backend Developer
+rohan.mehta23@example.com - Data Analyst
