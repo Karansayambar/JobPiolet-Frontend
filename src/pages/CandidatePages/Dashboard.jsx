@@ -28,31 +28,31 @@ const menuItems = [
   {
     id: 0,
     label: "Overview",
-    icon: <StackOverflowLogo size={20} />,
+    icon: <StackOverflowLogo size={23} />,
     component: <Overview />,
   },
   {
     id: 1,
     label: "Applied Jobs",
-    icon: <BsSuitcaseLg size={20} />,
+    icon: <BsSuitcaseLg size={23} />,
     component: <AppliedJobs />,
   },
   {
     id: 2,
     label: "Favorite Jobs",
-    icon: <Star size={20} />,
+    icon: <Star size={23} />,
     component: <FavoriteJobs />,
   },
   {
     id: 3,
     label: "Job Alerts",
-    icon: <Bell size={20} />,
+    icon: <Bell size={23} />,
     component: <JobAlerts />,
   },
   {
     id: 4,
     label: "Settings",
-    icon: <Gear size={20} />,
+    icon: <Gear size={23} />,
     component: <Settings />,
   },
 ];
@@ -101,7 +101,7 @@ const DashboardPage = () => {
               onClick={() => setSelectedSection(item.label)}
             >
               <Tooltip title={item.label} placement="top-start" arrow>
-                <IconButton>{item.icon}</IconButton>
+                <IconButton p={2}>{item.icon}</IconButton>
               </Tooltip>
               {sideMenum && <Typography>{item.label}</Typography>}
             </Stack>
