@@ -14,7 +14,7 @@ const ResetPasswordPage = () => {
         height="100%"
         width={"100vw"}
       >
-        <Box width="30%" p={4} px={20}>
+        <Box p={4} px={{ md: 20 }}>
           <Typography variant="h4" gutterBottom>
             Forgot Password
           </Typography>
@@ -49,7 +49,7 @@ const ResetPasswordPage = () => {
             </Button>
           </Stack>
         </Box>
-        <Box width="50%" height="100%">
+        <Box width="50%" height="100%" display={{ xs: "none", md: "block" }}>
           <SideImage />
         </Box>
       </Stack>

@@ -19,7 +19,7 @@ const StatCard = ({ icon, numbers, title }) => (
     sx={{
       padding: 3,
       borderRadius: 1,
-      minWidth: 250,
+      minWidth: 200,
       maxWidth: 390,
       textAlign: "left",
       display: "flex",
@@ -109,7 +109,13 @@ const category = [
 
 const HeroChip = () => (
   <Box py={6}>
-    <Stack direction="row" spacing={4} flexWrap="wrap">
+    <Stack
+      direction="row"
+      alignItems={"center"}
+      justifyContent={"center"}
+      spacing={4}
+      flexWrap="wrap"
+    >
       {data.map((item, index) => (
         <StatCard key={index} {...item} />
       ))}
@@ -118,20 +124,24 @@ const HeroChip = () => (
 );
 
 const PopularCategoryChip = () => (
-  <Box py={6}>
-    <Stack
-      direction="row"
-      gap={4}
+  <Box marginTop={{ xs: 4, md: 0 }} py={{ md: 6 }}>
+    <Box
+      gap={{ md: 4 }}
+      overflow={"scroll"}
       sx={{
-        display: "grid",
-        alignItems: "center",
-        gridTemplateColumns: "repeat(4, 1fr)",
+        display: { xs: "flex", md: "grid" },
+        gridTemplateColumns: {
+          xs: "repeat(1, 1fr)",
+          sm: "repeat(2, 1fr)",
+          md: "repeat(3, 1fr)",
+          lg: "repeat(4, 1fr)",
+        },
       }}
     >
       {category.map((item, index) => (
         <StatCard key={index} {...item} />
       ))}
-    </Stack>
+    </Box>
   </Box>
 );
 

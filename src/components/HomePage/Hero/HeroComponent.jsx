@@ -24,7 +24,7 @@ const HeroComponent = () => {
       bgcolor={theme.palette.grey[100]}
     >
       <Stack
-        direction={"row"}
+        direction={{ xs: "column", md: "row" }}
         alignItems={"center"}
         justifyContent={"space-between"}
       >
@@ -59,7 +59,6 @@ const HeroComponent = () => {
                     borderRadius: 1,
                     px: 2,
                     py: 2,
-                    width: "100%",
                     maxWidth: 700,
                   }}
                 >

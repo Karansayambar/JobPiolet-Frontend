@@ -44,7 +44,7 @@ const RegisterPage = () => {
             </Button>
           </Stack>
         </Box>
-        <Box height="100%">
+        <Box height="100%" display={{ xs: "none", md: "block" }}>
           <SideImage />
         </Box>
       </Stack>

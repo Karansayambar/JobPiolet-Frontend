@@ -35,7 +35,7 @@ const Overview = () => {
   //   }
   // }, [data]);
 
-   useEffect(() => {
+  useEffect(() => {
     const userJobTitle = localStorage.getItem("title")?.toLowerCase();
 
     // Create socket after token is saved
