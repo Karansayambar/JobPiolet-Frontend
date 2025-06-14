@@ -1,4 +1,4 @@
-import { Stack, Typography, useTheme } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import banner1 from "../../../assets/auth/Candidate & Employers.jpg";
 import banner2 from "../../../assets/auth/Candidate & Employers (1).jpg";
 import { TestimonialCard, testimonials } from "../../Common/TestimonialCard";
@@ -29,14 +29,32 @@ const Testimonial = () => {
         </Stack>
       </Stack>
       <Stack
-        direction={"row"}
+        direction={{ xs: "column", md: "row" }}
         alignItems={"center"}
         justifyContent={"center"}
         gap={4}
-        p={10}
+        p={{ xs: 4, sm: 10 }}
       >
-        <img src={banner1} />
-        <img src={banner2} />
+        <Box
+          component="img"
+          width={{ xs: "90%" }}
+          sx={{
+            height: "auto", // maintain aspect ratio
+            objectFit: "cover", // optional: control how image fits
+          }}
+          src={banner1}
+          alt="Descriptive alt text" // Always include alt text
+        />
+        <Box
+          component="img"
+          width={{ xs: "90%" }}
+          sx={{
+            height: "auto", // maintain aspect ratio
+            objectFit: "cover", // optional: control how image fits
+          }}
+          src={banner2}
+          alt="Descriptive alt text" // Always include alt text
+        />
       </Stack>
     </>
   );

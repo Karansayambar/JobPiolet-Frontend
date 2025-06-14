@@ -8,14 +8,16 @@ const LoginPage = () => {
   return (
     <Box height="100vh" padding={0}>
       <Stack
-        direction={{ xs: "column", md: "row" }}
+        direction={{ xs: "row" }}
         alignItems="center"
         justifyContent="space-between"
         height="100%"
-        width={"100vw"}
       >
         {/* Left Section - Login Form */}
-        <Box width={{ xs: "100%", md: "50%", lg: "30%" }} p={4} px={20}>
+        <Box
+          width={{ xs: "100%", md: "50%", lg: "30%" }}
+          sx={{ px: { xs: 4, md: 10, lg: 20 } }}
+        >
           <Typography variant="h4" gutterBottom>
             Sign in
           </Typography>
@@ -49,7 +51,11 @@ const LoginPage = () => {
         </Box>
 
         {/* Right Section - Side Image */}
-        <Box width={{ xs: "100%", md: "50%" }} height="100%">
+        <Box
+          display={{ xs: "none", md: "block" }}
+          width={{ xs: "100%", md: "50%" }}
+          height="100%"
+        >
           <SideImage />
         </Box>
       </Stack>

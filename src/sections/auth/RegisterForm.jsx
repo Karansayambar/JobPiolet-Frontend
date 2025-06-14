@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 const AuthRegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [selectRole, setSelectRole] = useState < RoleType > "candidate";
+  const [selectRole, setSelectRole] = useState("candidate");
   const [register] = useRegisterMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,13 +49,10 @@ const AuthRegisterPage = () => {
     role: "candidate",
   };
 
-  const methods =
-    useForm <
-    RegisterFormValues >
-    {
-      resolver: yupResolver(RegisterSchema),
-      defaultValues,
-    };
+  const methods = useForm({
+    resolver: yupResolver(RegisterSchema),
+    defaultValues,
+  });
 
   const {
     handleSubmit,
