@@ -20,10 +20,14 @@ import { useGetAllJobsQuery } from "../../../services/jobsApi";
 import { useEffect, useState } from "react";
 import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
 import { createSocket } from "../../../utils/socket";
+import useAppliedJobs from "../../../hooks/useAppliedJobs";
+import useFavoriteJobs from "../../../hooks/useFavoriteJobs";
 
 const Overview = () => {
   const theme = useTheme();
   const [jobs, setJobs] = useState([]);
+  const { appliedJobs, message, count } = useAppliedJobs();
+  const { favoriteCount } = useFavoriteJobs();
 
   // const { data } = useGetAllJobsQuery();
 
@@ -34,6 +38,7 @@ const Overview = () => {
   //     setJobs(allJobs);
   //   }
   // }, [data]);
+  console.log("applied jobs", appliedJobs);
 
   useEffect(() => {
     const userJobTitle = localStorage.getItem("title")?.toLowerCase();
@@ -81,8 +86,16 @@ const Overview = () => {
   }, []);
 
   const stats = [
-    { label: "Applied Jobs", count: 2, icon: <IoBag size={30} /> },
-    { label: "Favorite Jobs", count: 1, icon: <CiBookmark size={30} /> },
+    {
+      label: "Applied Jobs",
+      count: count,
+      icon: <IoBag size={30} />,
+    },
+    {
+      label: "Favorite Jobs",
+      count: favoriteCount,
+      icon: <CiBookmark size={30} />,
+    },
     { label: "Job Alerts", count: 0, icon: <FaBell size={30} /> },
   ];
 

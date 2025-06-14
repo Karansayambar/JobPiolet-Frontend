@@ -98,7 +98,9 @@ const DashboardJobCard = ({ data }) => {
             </Stack>
           </TableCell>
           <TableCell>
-            <Typography>{dateConverter(job.createdAt)}</Typography>
+            <Typography>
+              {dateConverter(job.createdAt || job.applicationDate)}
+            </Typography>
           </TableCell>
           <TableCell>
             <Stack direction="row" alignItems="center" gap={1}>
@@ -108,11 +110,11 @@ const DashboardJobCard = ({ data }) => {
                 direction={"row"}
                 gap={1}
               >
-                {job.status === "Active" ? (
+                {job.status === "active" ? (
                   <MdWork color="green" />
-                ) : job.status === "Pending" ? (
+                ) : job.status === "pending" ? (
                   <MdAccessTime color="orange" />
-                ) : job.status === "Rejected" ? (
+                ) : job.status === "rejected" ? (
                   <MdCancel color="red" />
                 ) : (
                   <MdLock color="gray" />
@@ -127,7 +129,7 @@ const DashboardJobCard = ({ data }) => {
               onClick={() => {
                 console.log("jobId", job);
                 navigate(
-                  `/candidate/findjob/${job._id ?? job.jobDetails?._id}`
+                  `/candidate/findjob/${job._id ?? job.jobDetails?._id}`,
                 );
               }}
             >
