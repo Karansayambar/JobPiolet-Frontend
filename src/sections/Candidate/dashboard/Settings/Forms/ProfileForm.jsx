@@ -12,7 +12,7 @@ import RHFTextField from "../../../../../hooks/hooks-form/RHFTextField";
 
 const ProfileForm = () => {
   const candidateProfileData = useSelector(
-    (state) => state.candidate.candidateProfileData
+    (state) => state.candidate.candidateProfileData,
   );
   const dispatch = useDispatch();
 
@@ -20,18 +20,16 @@ const ProfileForm = () => {
 
   const profileInfo = candidateProfileData?.profileInfo;
 
-  const methods =
-    useForm
-    ({
-      defaultValues: {
-        nationality: "",
-        gender: "",
-        maritalStatus: "",
-        address: "",
-        dateOfBirth: null,
-        biography: "",
-      },
-    });
+  const methods = useForm({
+    defaultValues: {
+      nationality: "",
+      gender: "",
+      maritalStatus: "",
+      address: "",
+      dateOfBirth: null,
+      biography: "",
+    },
+  });
 
   const { reset } = methods;
 
@@ -64,7 +62,7 @@ const ProfileForm = () => {
   };
 
   return (
-    <Stack>
+    <Stack maxWidth={1200} p={{ md: 5 }}>
       <FormProvider methods={methods} onSubmit={methods.handleSubmit(onSubmit)}>
         {/* Nationality & Gender */}
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} py={2}>

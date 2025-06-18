@@ -1,13 +1,21 @@
 import {
+  alpha,
+  Avatar,
   Box,
   Button,
+  Card,
+  CardContent,
+  Chip,
   CircularProgress,
+  Container,
   Divider,
   Grid,
   IconButton,
   List,
   ListItem,
+  Paper,
   Stack,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -16,8 +24,10 @@ import { useEffect, useState } from "react";
 import { CompanyLogoStyle, Duration } from "../../components/Common/JobCard";
 import {
   ArrowForward,
+  AttachMoney,
   Facebook,
   LinkedIn,
+  LocationOn,
   Mail,
   WalletOutlined,
   X,
@@ -96,75 +106,157 @@ const JobDetails = () => {
   return (
     <Box>
       {/* Header */}
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        p={2}
-        bgcolor={theme.palette.grey[300]}
+      <Paper
+        elevation={0}
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+          bgcolor: "white",
+        }}
       >
-        <Typography variant="h6">Job Details</Typography>
-        <Typography variant="body2">Home / Find Job</Typography>
-      </Stack>
+        <Container maxWidth="xl">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            py={3}
+          >
+            <Typography variant="h4" fontWeight={600} color="text.primary">
+              Job Details
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Home / Find Job
+            </Typography>
+          </Stack>
+        </Container>
+      </Paper>
 
       {/* Job Details */}
       {job ? (
         <Stack px={20}>
           {/* Job Heading */}
-          <Stack
-            py={4}
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
+          <Card
+            sx={{
+              my: 4,
+              borderRadius: 3,
+              overflow: "visible",
+              position: "relative",
+            }}
           >
-            <Stack direction="row" alignItems="center" gap={2}>
-              <CompanyLogoStyle>
-              <CompanyLogo companyName={job.companyName} size={60} />
-            </CompanyLogoStyle>
-              <Stack>
-                <Typography variant="h5">{job?.jobTitle}</Typography>
-                <Stack direction="row" gap={2}>
-                  <Typography variant="body2">at {job?.companyName}</Typography>
-                  <Duration>{job?.workMode}</Duration>
+            <CardContent sx={{ p: 4 }}>
+              <Stack
+                direction={{ xs: "column", md: "row" }}
+                alignItems={{ xs: "flex-start", md: "center" }}
+                justifyContent="space-between"
+                spacing={3}
+              >
+                <Stack direction="row" alignItems="center" spacing={3}>
+                  <Avatar
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      bgcolor: alpha(theme.palette.primary.main, 0.1),
+                      border: `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                    }}
+                  >
+                    <CompanyLogo companyName={job.companyName} size={40} />
+                  </Avatar>
+                  <Stack spacing={1}>
+                    <Typography variant="h4" fontWeight={700} color="primary">
+                      {job?.jobTitle}
+                    </Typography>
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                      <Typography variant="h6" color="text.secondary">
+                        at {job?.companyName}
+                      </Typography>
+                      <Chip
+                        label={job?.workMode}
+                        color="primary"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      mt={1}
+                    >
+                      <LocationOn fontSize="small" color="action" />
+                      <Typography variant="body2" color="text.secondary">
+                        {job?.city}, {job?.address}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </Stack>
+
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Tooltip
+                    title={
+                      localFavorited
+                        ? "Remove from favorites"
+                        : "Add to favorites"
+                    }
+                  >
+                    <IconButton
+                      onClick={handleFavorite}
+                      sx={{
+                        bgcolor: localFavorited
+                          ? alpha(theme.palette.primary.main, 0.1)
+                          : "transparent",
+                        border: `2px solid ${localFavorited ? theme.palette.primary.main : theme.palette.grey[300]}`,
+                        "&:hover": {
+                          bgcolor: alpha(theme.palette.primary.main, 0.1),
+                        },
+                      }}
+                    >
+                      <BookmarkSimple
+                        size={24}
+                        weight={localFavorited ? "fill" : "regular"}
+                        color={
+                          localFavorited
+                            ? theme.palette.primary.main
+                            : theme.palette.grey[600]
+                        }
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => navigate(`/candidate/test/${jobId}`)}
+                    disabled={isAppliedValue?.isApplied || isLoading}
+                    endIcon={<ArrowForward />}
+                    sx={{
+                      borderRadius: 2,
+                      py: 1.5,
+                      px: 3,
+                      fontWeight: 600,
+                      boxShadow: theme.shadows[8],
+                    }}
+                  >
+                    {isLoading
+                      ? "Applying..."
+                      : isAppliedValue?.isApplied
+                        ? "Applied"
+                        : "Apply Now"}
+                  </Button>
                 </Stack>
               </Stack>
-            </Stack>
-            <Stack direction="row" alignItems="center" gap={3}>
-              <IconButton onClick={() => handleFavorite()}>
-                <BookmarkSimple
-                  size={26}
-                  weight={localFavorited ? "fill" : "regular"}
-                  color={localFavorited ? "#1976d2" : "#757575"}
-                />
-              </IconButton>
-              <Button
-                variant="contained"
-                onClick={() => navigate(`/candidate/test/${jobId}`)}
-                // onClick={
-                //   !isAppliedValue?.isApplied && !isLoading
-                //     ? handleApply
-                //     : "undefined"
-                // }
-                disabled={isAppliedValue?.isApplied || isLoading}
-              >
-                {isLoading
-                  ? "Applying..."
-                  : isAppliedValue?.isApplied
-                  ? "Applied"
-                  : "Applay Now"}
-                <ArrowForward />
-              </Button>
-            </Stack>
-          </Stack>
-
+            </CardContent>
+          </Card>
           {/* Job Body */}
           <Stack direction="row" gap={10}>
             {/* Left Side */}
             <Stack flex={3}>
-              <Typography variant="h6" fontSize={25} fontWeight={600} mb={2}>
+              <Typography variant="h5" fontWeight={700} mb={3}>
                 Job Description
               </Typography>
-              <Typography fontSize={20} mb={3}>
+              <Typography
+                variant="body1"
+                lineHeight={1.8}
+                color="text.secondary"
+              >
                 {job?.jobDescription}
               </Typography>
 
@@ -174,7 +266,13 @@ const JobDetails = () => {
               <List>
                 {job?.jobRequirements?.map((req, index) => (
                   <ListItem key={index} sx={{ fontSize: "20px" }}>
-                    <BsDot /> {req}
+                    <Typography
+                      variant="body1"
+                      lineHeight={1.8}
+                      color="text.secondary"
+                    >
+                      <BsDot /> {req}
+                    </Typography>
                   </ListItem>
                 ))}
               </List>
@@ -185,7 +283,13 @@ const JobDetails = () => {
               <List>
                 {job?.jobResponsibilities?.map((benefit, index) => (
                   <ListItem key={index} sx={{ fontSize: "20px" }}>
-                    <BsDot /> {benefit}
+                    <Typography
+                      variant="body1"
+                      lineHeight={1.8}
+                      color="text.secondary"
+                    >
+                      <BsDot /> {benefit}
+                    </Typography>
                   </ListItem>
                 ))}
               </List>
@@ -196,7 +300,13 @@ const JobDetails = () => {
               <List>
                 {job?.jobPreferences?.map((benefit, index) => (
                   <ListItem key={index} sx={{ fontSize: "20px" }}>
-                    <BsDot /> {benefit}
+                    <Typography
+                      variant="body1"
+                      lineHeight={1.8}
+                      color="text.secondary"
+                    >
+                      <BsDot /> {benefit}
+                    </Typography>
                   </ListItem>
                 ))}
               </List>
@@ -205,146 +315,182 @@ const JobDetails = () => {
             {/* Right Side */}
             <Stack flex={2} p={3} borderRadius={2} gap={4}>
               {/* Salary & Job Location */}
-              <Grid
-                container
-                spacing={2}
-                alignItems="center"
-                border="1px solid grey"
-                borderRadius={2}
-                justifyContent={"space-between"}
-                p={4}
-              >
-                {/* Salary Section */}
-                <Grid textAlign="center">
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    Salary (USD)
-                  </Typography>
-                  <Typography variant="h6">
-                    {`${job?.minSalary} - ${job?.maxSalary}`}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    {job?.salaryType} Salary
-                  </Typography>
-                </Grid>
+              <Card elevation={2} sx={{ borderRadius: 3 }}>
+                <CardContent sx={{ p: 4, textAlign: "center" }}>
+                  <Stack spacing={3} direction={"row"}>
+                    <Box>
+                      <Stack direction={"row"} alignItems={"center"}>
+                        <AttachMoney
+                          sx={{ fontSize: 48, color: "primary.main", mb: 1 }}
+                        />
+                        <Typography
+                          variant="h6"
+                          fontWeight={600}
+                          color="text.secondary"
+                        >
+                          Salary (USD)
+                        </Typography>
+                      </Stack>
+                      <Typography variant="h4" fontWeight={400} color="primary">
+                        ${job?.minSalary} - ${job?.maxSalary}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {job?.salaryType} Salary
+                      </Typography>
+                    </Box>
 
-                {/* Vertical Divider */}
-                <Grid display="flex" justifyContent="center">
-                  <Divider
-                    orientation="vertical"
-                    flexItem
-                    sx={{ height: "100%" }}
-                  />
-                </Grid>
+                    <Divider />
 
-                {/* Job Location Section */}
-                <Grid textAlign="center">
-                  <Book size={32} />
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    {job?.city ?? "Location Unavailable"}
-                  </Typography>
-                  <Typography variant="body2">{job?.address}</Typography>
-                </Grid>
-              </Grid>
+                    <Box>
+                      <Stack direction={"row"} alignItems={"center"}>
+                        <LocationOn
+                          sx={{ fontSize: 32, color: "primary.main", mb: 1 }}
+                        />
+                        <Typography variant="h6" fontWeight={600}>
+                          {job?.city ?? "Location Unavailable"}
+                        </Typography>
+                      </Stack>
+                      <Typography variant="body2" color="text.secondary">
+                        {job?.address}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </CardContent>
+              </Card>
 
               {/* Job Benefits */}
-              <Stack border={1} p={2} borderRadius={2}>
-                <Typography p={2} variant="h6">
-                  Job Benefits
-                </Typography>
-                <Stack direction="row" flexWrap="wrap" p={2} gap={2}>
-                  {job?.jobBenefits?.map((benefit, index) => (
-                    <Duration key={index}>{benefit}</Duration>
-                  ))}
-                </Stack>
+              <Card elevation={2} sx={{ borderRadius: 3 }}>
+                <CardContent sx={{ p: 4 }}>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                    mb={3}
+                    color="primary"
+                  >
+                    Job Benefits
+                  </Typography>
+                  <Stack direction="row" flexWrap="wrap" gap={1} mb={4}>
+                    {job?.jobBenefits?.map((benefit, index) => (
+                      <Chip
+                        key={index}
+                        label={benefit}
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                      />
+                    ))}
+                  </Stack>
 
-                <Typography p={2} variant="h6">
-                  Skills
-                </Typography>
-                <Stack direction="row" flexWrap="wrap" p={2} gap={2}>
-                  {job?.sills?.map((benefit, index) => (
-                    <Duration key={index}>{benefit}</Duration>
-                  ))}
-                </Stack>
-              </Stack>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                    mb={3}
+                    color="primary"
+                  >
+                    Required Skills
+                  </Typography>
+                  <Stack direction="row" flexWrap="wrap" gap={1}>
+                    {job?.sills?.map((skill, index) => (
+                      <Chip
+                        key={index}
+                        label={skill}
+                        variant="filled"
+                        color="secondary"
+                        size="small"
+                      />
+                    ))}
+                  </Stack>
+                </CardContent>
+              </Card>
 
               {/* Job Overview */}
-              <Stack
-                border="1px solid grey"
-                borderRadius={2}
-                p={2}
-                spacing={2}
-                textAlign={"start"}
-              >
-                <Typography variant="h6" fontWeight="bold" p={2}>
-                  Job Overview
-                </Typography>
-
-                <Grid container spacing={5} justifyContent="start">
-                  {[
-                    {
-                      icon: <Calendar size={24} />,
-                      label: "Job Posted",
-                      value: job?.posted,
-                    },
-                    {
-                      icon: <BsClock size={24} />,
-                      label: "Job Expire In",
-                      value: job?.deadline,
-                    },
-                    {
-                      icon: <BsClock size={24} />,
-                      label: "Job Level",
-                      value: job?.jobLevel,
-                    },
-                    {
-                      icon: <WalletOutlined fontSize="medium" />,
-                      label: "Experience",
-                      value: job.experience,
-                    },
-                    {
-                      icon: <WalletOutlined fontSize="medium" />,
-                      label: "Working Hours",
-                      value: job.workingHours,
-                    },
-                    {
-                      icon: <WalletOutlined fontSize="medium" />,
-                      label: "Job Status",
-                      value: job.jobStatus,
-                    },
-                    {
-                      icon: <WalletOutlined fontSize="medium" />,
-                      label: "Contract Length",
-                      value: job.contractLength,
-                    },
-                    {
-                      icon: <MdCastForEducation size={24} />,
-                      label: "Education",
-                      value: job.education,
-                    },
-                    {
-                      icon: <MdCastForEducation size={24} />,
-                      label: "Vacancies",
-                      value: job.vacancies,
-                    },
-                  ].map((item, index) => (
-                    <Grid key={index}>
-                      <Stack alignItems="center" spacing={1} width={100}>
-                        <Box color={theme.palette.primary.main}>
-                          {item.icon}
-                        </Box>
-                        <Box textAlign="center">
-                          <Typography variant="subtitle2" fontWeight="bold">
-                            {item.label}
-                          </Typography>
-                          <Typography variant="body2">
-                            {item.value ?? "N/A"}
-                          </Typography>
-                        </Box>
-                      </Stack>
+              <Card elevation={2} sx={{ borderRadius: 3 }}>
+                <Stack>
+                  <Typography variant="h6" fontWeight="bold" p={2}>
+                    Job Overview
+                  </Typography>
+                  <CardContent sx={{ p: 2 }}>
+                    <Grid container spacing={5} justifyContent="start">
+                      {[
+                        {
+                          icon: <Calendar size={24} />,
+                          label: "Job Posted",
+                          value: job?.posted,
+                        },
+                        {
+                          icon: <BsClock size={24} />,
+                          label: "Job Expire In",
+                          value: job?.deadline,
+                        },
+                        {
+                          icon: <BsClock size={24} />,
+                          label: "Job Level",
+                          value: job?.jobLevel,
+                        },
+                        {
+                          icon: <WalletOutlined fontSize="medium" />,
+                          label: "Experience",
+                          value: job.experience,
+                        },
+                        {
+                          icon: <WalletOutlined fontSize="medium" />,
+                          label: "Working Hours",
+                          value: job.workingHours,
+                        },
+                        {
+                          icon: <WalletOutlined fontSize="medium" />,
+                          label: "Job Status",
+                          value: job.jobStatus,
+                        },
+                        {
+                          icon: <WalletOutlined fontSize="medium" />,
+                          label: "Contract Length",
+                          value: job.contractLength,
+                        },
+                        {
+                          icon: <MdCastForEducation size={24} />,
+                          label: "Education",
+                          value: job.education,
+                        },
+                        {
+                          icon: <MdCastForEducation size={24} />,
+                          label: "Vacancies",
+                          value: job.vacancies,
+                        },
+                      ].map((item, index) => (
+                        <Grid key={index}>
+                          <Stack
+                            alignItems="center"
+                            spacing={1}
+                            textAlign="center"
+                          >
+                            <Box
+                              sx={{
+                                p: 1.5,
+                                borderRadius: 2,
+                                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                color: "primary.main",
+                              }}
+                            >
+                              {item.icon}
+                            </Box>
+                            <Typography
+                              variant="caption"
+                              fontWeight={600}
+                              color="text.secondary"
+                            >
+                              {item.label}
+                            </Typography>
+                            <Typography variant="body2" fontWeight={600}>
+                              {item.value ?? "N/A"}
+                            </Typography>
+                          </Stack>
+                        </Grid>
+                      ))}
                     </Grid>
-                  ))}
-                </Grid>
-              </Stack>
+                  </CardContent>
+                </Stack>
+              </Card>
 
               {/* Share Job */}
               <Stack

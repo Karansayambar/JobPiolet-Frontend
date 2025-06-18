@@ -26,8 +26,13 @@ export const candidateApi = createApi({
         body,
       }),
     }),
+    getCandidateProfile: builder.query({
+      query: () => `/getCandidateProfile`,
+    }),
   }),
 });
 
-export const { useCreateCandidateProfileMutation, useGetProfileQuery } =
-  candidateApi;
+export const {
+  useCreateCandidateProfileMutation,
+  useGetCandidateProfileQuery,
+} = candidateApi;

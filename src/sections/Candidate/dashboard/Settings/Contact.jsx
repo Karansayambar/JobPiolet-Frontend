@@ -18,16 +18,14 @@ const Contact = () => {
   const [createCandidateProfile, { isLoading }] =
     useCreateCandidateProfileMutation();
 
-  const methods =
-    useForm(
-    {
-      defaultValues: {
-        address: "",
-        phone: "",
-        email: "",
-      },
-      mode: "onChange",
-    });
+  const methods = useForm({
+    defaultValues: {
+      address: "",
+      phone: "",
+      email: "",
+    },
+    mode: "onChange",
+  });
 
   const { handleSubmit, reset } = methods;
 
@@ -63,7 +61,7 @@ const Contact = () => {
   };
 
   return (
-    <Stack width="50vw">
+    <Stack maxWidth={1200} p={{ md: 5 }}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack gap={4}>
           <RHFTextField name="address" label="Address" />
