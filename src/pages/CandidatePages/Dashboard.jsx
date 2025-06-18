@@ -14,6 +14,7 @@ import {
   StackOverflowLogo,
   ArrowsInLineHorizontal,
   ArrowsOutLineHorizontal,
+  User,
 } from "phosphor-react";
 import { BsSuitcaseLg } from "react-icons/bs";
 
@@ -23,6 +24,7 @@ import AppliedJobs from "../../sections/Candidate/dashboard/AppliedJobs";
 import FavoriteJobs from "../../sections/Candidate/dashboard/FavoriteJobs";
 import JobAlerts from "./JobAlerts";
 import Settings from "../../sections/Candidate/dashboard/Settings/Settings";
+import ProfilePage from "../../sections/Candidate/dashboard/ProfilePage";
 
 const menuItems = [
   {
@@ -54,6 +56,12 @@ const menuItems = [
     label: "Settings",
     icon: <Gear size={23} />,
     component: <Settings />,
+  },
+  {
+    id: 5,
+    label: "Profile",
+    icon: <User size={23} />,
+    component: <ProfilePage />,
   },
 ];
 
