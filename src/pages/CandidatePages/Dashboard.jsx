@@ -22,9 +22,9 @@ import { useState } from "react";
 import Overview from "../../sections/Candidate/dashboard/Overview";
 import AppliedJobs from "../../sections/Candidate/dashboard/AppliedJobs";
 import FavoriteJobs from "../../sections/Candidate/dashboard/FavoriteJobs";
-import JobAlerts from "./JobAlerts";
 import Settings from "../../sections/Candidate/dashboard/Settings/Settings";
 import ProfilePage from "../../sections/Candidate/dashboard/ProfilePage";
+import JobAlerts from "../../sections/Candidate/dashboard/JobAlerts";
 
 const menuItems = [
   {
@@ -148,7 +148,12 @@ const DashboardPage = () => {
 
         {/* Right Content Area */}
         <Box flex={4}>
-          {menuItems.find((item) => item.label === selectedSection)?.component}
+          {menuItems.find((item) => item.label === selectedSection)?.label ===
+          "Overview" ? (
+            <Overview onEditProfile={() => setSelectedSection("Settings")} />
+          ) : (
+            menuItems.find((item) => item.label === selectedSection)?.component
+          )}
         </Box>
       </Stack>
     </Box>

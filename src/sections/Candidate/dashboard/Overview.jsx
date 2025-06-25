@@ -8,6 +8,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
   useTheme,
@@ -22,12 +23,18 @@ import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCa
 import { createSocket } from "../../../utils/socket";
 import useAppliedJobs from "../../../hooks/useAppliedJobs";
 import useFavoriteJobs from "../../../hooks/useFavoriteJobs";
+import useAlertJobs from "../../../hooks/useAlertJobs";
+import Settings from "./Settings/Settings";
+import { useNavigate } from "react-router-dom";
 
-const Overview = () => {
+const Overview = ({ onEditProfile }) => {
   const theme = useTheme();
   const [jobs, setJobs] = useState([]);
   const { appliedJobs, message, count } = useAppliedJobs();
   const { favoriteCount } = useFavoriteJobs();
+  const { jobsAlert, alertCount } = useAlertJobs();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // const { data } = useGetAllJobsQuery();
 
@@ -39,6 +46,19 @@ const Overview = () => {
   //   }
   // }, [data]);
   console.log("applied jobs", appliedJobs);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const paginatedJobs = jobs.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   useEffect(() => {
     const userJobTitle = localStorage.getItem("title")?.toLowerCase();
@@ -60,7 +80,6 @@ const Overview = () => {
       } else {
         console.error(data.message);
         setJobs([]);
-        setMessage(data.message);
       }
     });
 
@@ -96,10 +115,16 @@ const Overview = () => {
       count: favoriteCount,
       icon: <CiBookmark size={30} />,
     },
-    { label: "Job Alerts", count: 0, icon: <FaBell size={30} /> },
+    { label: "Job Alerts", count: alertCount, icon: <FaBell size={30} /> },
   ];
 
   const bgColors = ["#D6E6FF", "#FFE6CC", "#D4EDDA"]; // Light Blue, Light Orange, Light Green
+
+  const navigate = useNavigate();
+
+  // const handleEditProfile = () => {
+  //   navigate("/settings");
+  // };
 
   return (
     <Stack
@@ -167,8 +192,9 @@ const Overview = () => {
         <Button
           variant="outlined"
           sx={{ color: "white", borderColor: "white" }}
+          onClick={onEditProfile}
         >
-          Edit Profile <ArrowForward />
+          Edit Profile
         </Button>
       </Stack>
 
@@ -196,8 +222,18 @@ const Overview = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <DashboardJobCard data={jobs} />
+          {/* <DashboardJobCard data={jobs} /> */}
+          <DashboardJobCard data={paginatedJobs} />
         </TableBody>
+        <TablePagination
+          component="div"
+          count={jobs.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}
+        />
       </Table>
     </Stack>
   );
