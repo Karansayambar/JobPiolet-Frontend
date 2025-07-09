@@ -18,13 +18,14 @@ import {
 } from "phosphor-react";
 import { BsSuitcaseLg } from "react-icons/bs";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Overview from "../../sections/Candidate/dashboard/Overview";
 import AppliedJobs from "../../sections/Candidate/dashboard/AppliedJobs";
 import FavoriteJobs from "../../sections/Candidate/dashboard/FavoriteJobs";
 import Settings from "../../sections/Candidate/dashboard/Settings/Settings";
 import ProfilePage from "../../sections/Candidate/dashboard/ProfilePage";
 import JobAlerts from "../../sections/Candidate/dashboard/JobAlerts";
+import { useGetCandidateProfileQuery } from "../../services/candidateApi";
 
 const menuItems = [
   {
@@ -66,9 +67,24 @@ const menuItems = [
 ];
 
 const DashboardPage = () => {
+  const { data, isLoading, error } = useGetCandidateProfileQuery();
   const theme = useTheme();
   const [sideMenum, setSideMenu] = useState(false);
-  const [selectedSection, setSelectedSection] = useState("Overview");
+  const [selectedSection, setSelectedSection] = useState(() => {
+    if (data && data.candidateProfileData) {
+      return "Overview"; // Default to Overview if profile data exists
+    } else {
+      return "Settings"; // Default to Profile if no profile data
+    }
+  });
+
+  useEffect(() => {
+    if (data && data.candidateProfileData) {
+      setSelectedSection("Overview");
+    } else {
+      setSelectedSection("Settings");
+    }
+  }, [data]);
   const handleToggleSidebar = () => {
     setSideMenu(!sideMenum);
   };

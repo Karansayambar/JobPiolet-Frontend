@@ -112,7 +112,7 @@ const PlansPage = () => {
 
   return (
     <>
-      <Box>
+      <Box py={8}>
         <Stack
           direction={"row"}
           alignItems={"center"}

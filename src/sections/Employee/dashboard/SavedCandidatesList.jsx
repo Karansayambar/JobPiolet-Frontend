@@ -52,7 +52,7 @@ const SavedCandidatesList = () => {
   ];
 
   return (
-    <Stack spacing={2} p={3}>
+    <Stack spacing={2} py={8}>
       {savedCandidates.map((candidate) => (
         <SavedCandidatesCard
           key={candidate.id}

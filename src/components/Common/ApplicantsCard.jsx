@@ -6,9 +6,11 @@ import {
   Stack,
   Typography,
   ListItem,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import { dateConverter } from "../../utils/dateConverter";
-import { Download } from "phosphor-react";
+import { BookmarkSimple, Download } from "phosphor-react";
 import { useState } from "react";
 import ViewApplicantsDetailsModel from "../../sections/Employee/dashboard/ViewApplicantsDetailsModel";
 
@@ -43,11 +45,17 @@ const ApplicantsCard = ({ applicants }) => {
               key={applicant.id || `applicant-${index}`}
               mb={2}
               border={1}
-              width={250}
+              width={300}
               borderRadius={2}
               borderColor={"#e0e0e0"}
             >
-              <Stack direction="row" alignItems="center" spacing={2} p={2}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={"space-between"}
+                spacing={2}
+                p={2}
+              >
                 <Avatar
                   src={applicant.candidateInfo.avatar}
                   alt={applicant.candidateInfo.fullName}
@@ -61,6 +69,11 @@ const ApplicantsCard = ({ applicants }) => {
                     {applicant.candidateInfo.title || "No title provided"}
                   </Typography>
                 </Stack>
+                <Tooltip title={"Save"} placement="top-start" arrow>
+                  <IconButton>
+                    <BookmarkSimple />
+                  </IconButton>
+                </Tooltip>
               </Stack>
 
               <Divider />

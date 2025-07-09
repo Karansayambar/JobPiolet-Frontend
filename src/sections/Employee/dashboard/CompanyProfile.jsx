@@ -19,7 +19,7 @@ const CompanyProfile = () => {
   }, [data]);
 
   return (
-    <Box bgcolor={"#f5f5f5"} minHeight="100vh">
+    <Box bgcolor={"#f5f5f5"} minHeight="100vh" py={8}>
       {/* Banner + Logo Section */}
       <Box position="relative" width="100%" height="350px">
         <Box

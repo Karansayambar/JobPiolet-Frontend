@@ -2,7 +2,6 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { BsPlus } from "react-icons/bs";
 import { useForm } from "react-hook-form";
-import FormProvider from "../../../hooks/hooks-form/FormProvider";
 import RHFSocialForm from "../../../hooks/hooks-form/RHFSocial";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,19 +14,15 @@ const SocialLinks = () => {
   const { step, companyProfileData } = useSelector((state) => state.company);
   const infoData = companyProfileData.SocialInfo;
 
-  const methods =
-    useForm <
-    SocialLinksFormValues >
-    {
-      defaultValues: {
-        socialLinks: [],
-      },
-    };
+  const methods = useForm({
+    defaultValues: {
+      socialLinks: [],
+    },
+  });
 
   const { reset, setValue, watch, handleSubmit } = methods;
   const socialLinks = watch("socialLinks");
 
-  // Load existing data into form on mount/update
   useEffect(() => {
     if (infoData && infoData.length) {
       reset({
@@ -43,7 +38,7 @@ const SocialLinks = () => {
   const handleRemoveSocialLink = (index) => {
     setValue(
       "socialLinks",
-      socialLinks.filter((_, i) => i !== index)
+      socialLinks.filter((_, i) => i !== index),
     );
   };
 
@@ -76,7 +71,7 @@ const SocialLinks = () => {
             <Button variant="outlined" type="button">
               Previous
             </Button>
-            <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+            <Button variant="contained" type="submit">
               Save & Next
             </Button>
           </Stack>

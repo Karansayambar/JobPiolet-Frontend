@@ -1,4 +1,4 @@
-import { Button, Divider, Stack, Typography } from "@mui/material";
+import { Button, Divider, Snackbar, Stack, Typography } from "@mui/material";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,12 +12,13 @@ import {
   updateStep,
 } from "../../../redux/slices/createCompanyProfileSlice";
 import { useEffect } from "react";
+import { useState } from "react";
 
 const CompanyInfo = () => {
   const dispatch = useDispatch();
   const { step } = useSelector((state) => state.company);
   const { companyProfileData } = useSelector((state) => state.company);
-
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const infoData = companyProfileData.companyInfo;
 
   const methods = useForm({
@@ -29,6 +30,11 @@ const CompanyInfo = () => {
     },
     mode: "onChange",
   });
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setOpenSnackbar(false);
+  };
 
   const { register, handleSubmit, reset } = methods;
   useEffect(() => {
@@ -52,7 +58,7 @@ const CompanyInfo = () => {
       {
         method: "POST",
         body: formData,
-      }
+      },
     );
     const data = await res.json();
     return data.secure_url; // <- Cloudinary image URL
@@ -81,6 +87,7 @@ const CompanyInfo = () => {
 
     dispatch(updateCompanyData({ companyInfo: dataToStore }));
     dispatch(updateStep(step + 1));
+    setOpenSnackbar(true);
   };
 
   return (
@@ -91,29 +98,6 @@ const CompanyInfo = () => {
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack direction="row" gap={4} py={3}>
-          {/* Logo Upload */}
-          {/* <Stack
-            spacing={2}
-            alignItems="center"
-            justifyContent="center"
-            sx={{
-              border: 2,
-              borderStyle: "dashed",
-              borderRadius: 2,
-              backgroundColor: "#E5E5E5",
-              p: 5,
-              width: "100%",
-              cursor: "pointer",
-            }}
-            component="label"
-          >
-            <MdOutlineCloudUpload size={36} />
-            <Typography fontWeight="bold">Browse File or Drop here</Typography>
-            <Typography fontSize="14px" color="gray">
-              Only JPG and PNG format available. Max file size 12MB.
-            </Typography>
-            <input type="file" hidden accept="image/*" {...register("logo")} />
-          </Stack> */}
           {infoData.logoUrl ? (
             <Stack sx={{ width: "30%" }}>
               <Stack
@@ -277,6 +261,13 @@ const CompanyInfo = () => {
           Save & Next <ArrowForward />
         </Button>
       </FormProvider>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        message="Company Information Saved Successfully!"
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      />
     </Stack>
   );
 };

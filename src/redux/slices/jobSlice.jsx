@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   jobs: [],
-  filteredJobs: [],
   filters: {},
+  filteredJobs: [],
 };
 
 // jobSlice.js
@@ -12,50 +12,45 @@ const jobSlice = createSlice({
   initialState,
   reducers: {
     // Load all jobs
-    // getAllJobs(state, action) {
-    //   state.jobs = action.payload || jobs;
-    //   state.filteredJobs = jobs; // Initialize filteredJobs with all jobs
-    // },
+    getAllJobs(state, action) {
+      console.log("action payload:", action.payload);
+      state.jobs = action.payload || jobs;
+    },
 
     setFilters(state, action) {
       state.filters = { ...state.filters, ...action.payload };
-      // applyFilters(state);
+      applyFilters(state);
     },
 
     // Reset all filters
-    resetFilters(state) {
-      state.filters = initialState.filters;
-      state.filteredJobs = state.jobs;
-    },
+    // resetFilters(state) {
+    //   state.filters = initialState.filters;
+    //   state.filteredJobs = state.jobs;
+    // },
   },
 });
 
 // Helper function for filtering logic
-// function applyFilters(state) {
-//   const { role, location, salary, experience, remoteOnly, searchQuery } =
-//     state.filters;
+function applyFilters(state) {
+  const { Role, JobType, Location } = state.filters;
 
-//   state.filteredJobs = state.jobs.filter((job) => {
-//     const matchesRole = !role || job.role === role;
-//     const matchesLocation =
-//       !location || job.location.toLowerCase().includes(location.toLowerCase());
-//     const matchesSalary = !salary || job.salary >= Number(salary);
-//     const matchesExperience = !experience || job.experienceLevel === experience;
-//     const matchesRemote = !remoteOnly || job.remote === true;
-//     const matchesSearch =
-//       !searchQuery ||
-//       job.title.toLowerCase().includes(searchQuery.toLowerCase());
+  state.filteredJobs = state.jobs.filter((job) => {
+    const matchesRole =
+      !Role || job.jobTitle.toLowerCase().includes(Role.toLowerCase());
+    const matchesJobType =
+      !JobType || job.workMode.toLowerCase().includes(JobType.toLowerCase());
+    const matchesLocation =
+      !Location || job.city.toLowerCase().includes(Location.toLowerCase());
+    console.log("Filtering jobs:", {
+      matchesRole,
+      matchesJobType,
+      matchesLocation,
+    });
+    console.log("Job details:", matchesJobType, matchesRole, matchesLocation);
+    return matchesRole && matchesJobType && matchesLocation;
+  });
+}
 
-//     return (
-//       matchesRole &&
-//       matchesLocation &&
-//       matchesSalary &&
-//       matchesExperience &&
-//       matchesRemote &&
-//       matchesSearch
-//     );
-//   });
-// }
-
-export const { setFilters, resetFilters } = jobSlice.actions;
+export const { setFilters, resetFilters, getAllJobs, filteredJobs } =
+  jobSlice.actions;
 export default jobSlice.reducer;

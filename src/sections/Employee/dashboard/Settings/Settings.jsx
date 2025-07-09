@@ -51,7 +51,7 @@ const Settings = () => {
   ];
 
   return (
-    <Stack>
+    <Stack py={6}>
       <Stack direction={"row"} gap={4}>
         {sections.map((section, index) => (
           <Stack

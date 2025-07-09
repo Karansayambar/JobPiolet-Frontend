@@ -14,13 +14,13 @@ const getStatusColor = (status) => {
   }
 };
 
-const DashboardJobCard = ({ jobDetails }) => {
+const DashboardJobCard = ({ jobs }) => {
   const navigate = useNavigate();
-  console.log("job details", jobDetails);
+  console.log("job details", jobs);
 
   return (
     <>
-      {jobDetails.map((job) => (
+      {jobs?.map((job) => (
         <TableRow key={job._id}>
           <TableCell>
             <Stack direction="row" alignItems="center" gap={2}>

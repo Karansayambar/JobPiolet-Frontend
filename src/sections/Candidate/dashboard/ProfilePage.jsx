@@ -40,7 +40,19 @@ export default function ProfilePage() {
       </Container>
     );
 
-  if (error || !data)
+  if (!data || !data.candidateProfileData)
+    return (
+      <Container sx={{ py: 8, textAlign: "center" }}>
+        <Typography variant="h5" color="text.secondary">
+          No profile data found
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          Please Update your profile.
+        </Typography>
+      </Container>
+    );
+
+  if (error)
     return (
       <Container sx={{ py: 8, textAlign: "center" }}>
         <Typography variant="h5" color="error">
