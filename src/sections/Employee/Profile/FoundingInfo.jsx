@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Snackbar, Stack, Typography } from "@mui/material";
 import FormProvider from "../../../hooks/hooks-form/FormProvider";
 import RHFSelect from "../../../hooks/hooks-form/RHFSelect";
 import RHFTextField from "../../../hooks/hooks-form/RHFTextField";
@@ -11,27 +11,29 @@ import {
   updateCompanyData,
   updateStep,
 } from "../../../redux/slices/createCompanyProfileSlice";
+import { useState } from "react";
 
 const FoundingInfo = () => {
   const { step, companyProfileData } = useSelector((state) => state.company);
-
   const infoData = companyProfileData.foundingInfo;
   const dispatch = useDispatch();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   // 2️⃣ Form initialization with type
-  const methods =
-    useForm <
-    FoundingInfoFormValues >
-    {
-      defaultValues: {
-        organisationType: "",
-        industryType: "",
-        teamSize: "",
-        // yearOfEstablishment: null,
-        companyWebsite: "",
-        companyVision: "",
-      },
-    };
+  const methods = useForm({
+    defaultValues: {
+      organisationType: "",
+      industryType: "",
+      teamSize: "",
+      // yearOfEstablishment: null,
+      companyWebsite: "",
+      companyVision: "",
+    },
+  });
 
   const { reset, handleSubmit } = methods;
 
@@ -54,6 +56,11 @@ const FoundingInfo = () => {
     console.log("Form Submitted:", data);
     dispatch(updateCompanyData({ foundingInfo: data }));
     dispatch(updateStep(step + 1));
+    setSnackbar({
+      open: true,
+      message: "Founding information saved!",
+      severity: "success",
+    });
   };
 
   return (
@@ -107,6 +114,13 @@ const FoundingInfo = () => {
           </Button>
         </Stack>
       </FormProvider>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        message={snackbar.message}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      />
     </Box>
   );
 };

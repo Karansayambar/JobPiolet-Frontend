@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   return (
-    <Box sx={{ mt: 4 }}>
+    <Box>
       <Outlet />
     </Box>
   );

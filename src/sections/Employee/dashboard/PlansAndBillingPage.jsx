@@ -27,7 +27,7 @@ const PlansAndBillingPage = () => {
   const formattedPrice = paymentData.price ? `${paymentData.price} USD` : "N/A";
 
   return (
-    <Box p={4}>
+    <Box py={8}>
       <Typography variant="h4" fontWeight={700} mb={4}>
         Plans & Billing
       </Typography>

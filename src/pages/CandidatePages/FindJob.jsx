@@ -17,126 +17,76 @@ import { PinDropOutlined } from "@mui/icons-material";
 import JobCard from "../../components/Common/JobCard";
 import CustomIcons from "../../utils/PaginationItem";
 import SideBar from "../../sections/Candidate/SideBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetAllJobsQuery } from "../../services/jobsApi";
-import { createSocket } from './../../utils/socket';
+import { getAllJobs } from "../../redux/slices/jobSlice";
 const FindJob = () => {
   const theme = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [locationInput, setLocationInput] = useState("");
-  const [quickFilter, setQuickFilter] = useState([]);
-  const [advanceFilters, setAdvanceFilters] = useState([]);
   const [page, setPage] = useState(1);
   const [jobs, setJobs] = useState([]);
   const itemsPerPage = 12;
-  const [isConnected, setISConnected] = useState(false);
-
-  // const { data: data } = useGetAllJobsQuery();
-
-  // useEffect(() => {
-  //   if (data?.jobs) {
-  //     setJobs(data?.jobs);
-  //     // console.log("jobs", data);
-  //   }
-  // }, [data]);
-    // const userJobTitle = localStorage.getItem("title")?.toLowerCase();
-
+  const [allJobs, setAllJobs] = useState([]);
+  const { data: data } = useGetAllJobsQuery();
+  const dispatch = useDispatch();
+  const { filteredJobs } = useSelector((state) => state.jobs.filteredJobs);
 
   useEffect(() => {
-    const userJobTitle = localStorage.getItem("title")?.toLowerCase();
-
-    // Create socket after token is saved
-   const socket = createSocket();
-
-    // On connect, then emit
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-      socket.emit("getJobsForUser");
-    });
-
-    // Listen for jobs
-    socket.on("jobsForUser", (data) => {
-      console.log("Received jobs:", data);
-      if (data.success) {
-        setJobs(data.matchingJobs);
-      } else {
-        console.error(data.message);
-        setJobs([]);
-        setMessage(data.message);
-      }
-    });
-
-    // Listen for new job broadcast
-    socket.on("newJobPosted", (newJob) => {
-      if (userJobTitle) {
-        if (
-          newJob.jobRole.toLowerCase().includes(userJobTitle) ||
-          newJob.jobTitle.toLowerCase().includes(userJobTitle)
-        ) {
-          setJobs((prevJobs) => [...prevJobs, newJob]);
-          alert(`New matching job: ${newJob.jobRole}`);
-        }
-      }
-    });
-
-    // Clean up on unmount
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, []);
-
-  const filters = useSelector((state) => state.jobs.filters);
-  const handleSearch = () => {
-    const parsedFilters = {};
-    Object.values(filters).forEach((item) => {
-      const [key, value] = item.split(":").map((str) => str.trim());
-      if (key && value) parsedFilters[key] = value;
-    });
-    // console.log("parsedFilters", parsedFilters);
-
-    const quick = jobs.filter(
-      (el) =>
-        el.location.toLowerCase().includes(locationInput.toLowerCase()) ||
-        el.title.toLowerCase().includes(searchInput.toLowerCase())
-    );
-
-    const advance = jobs.filter((el) => {
-      const jobTypeMatch = parsedFilters["Job-Type"]
-        ? el.type.toLowerCase().trim().normalize() ===
-          parsedFilters["Job-Type"].toLowerCase().trim().normalize()
-        : true;
-
-      const locationMatch = parsedFilters.Location
-        ? el.location.toLowerCase().trim().normalize() ===
-          parsedFilters.Location.toLowerCase().trim().normalize()
-        : true;
-
-      const roleMatch = parsedFilters.Role
-        ? el.title.toLowerCase().trim().normalize() ===
-          parsedFilters.Role.toLowerCase().trim().normalize()
-        : true;
-      console.log(jobTypeMatch, locationMatch, roleMatch);
-      return jobTypeMatch || locationMatch || roleMatch;
-    });
-
-    // console.log("advance", advance);
-    // console.log("quick", quick);
-
-    if (Object.keys(parsedFilters).length > 0) {
-      setAdvanceFilters(advance);
-      setQuickFilter([]);
-    } else if (searchInput || locationInput) {
-      setQuickFilter(quick);
-      setAdvanceFilters([]);
-    } else {
-      setAdvanceFilters([]);
-      setQuickFilter([]);
-      setPage(1); // Reset to first page on new search
+    if (data?.jobs) {
+      setJobs(data?.jobs);
+      setAllJobs(data?.jobs);
+      dispatch(getAllJobs(data?.jobs));
+      // console.log("jobs", data);
     }
-  };
+  }, [data, filteredJobs, dispatch]);
+  // const userJobTitle = localStorage.getItem("title")?.toLowerCase();
+
+  // useEffect(() => {
+  //   const userJobTitle = localStorage.getItem("title")?.toLowerCase();
+
+  //   // Create socket after token is saved
+  //   const socket = createSocket();
+
+  //   // On connect, then emit
+  //   socket.on("connect", () => {
+  //     console.log("Socket connected:", socket.id);
+  //     socket.emit("getJobsForUser");
+  //   });
+
+  //   // Listen for jobs
+  //   socket.on("jobsForUser", (data) => {
+  //     console.log("Received jobs:", data);
+  //     if (data.success) {
+  //       setJobs(data.matchingJobs);
+  //       setAllJobs(data.matchingJobs);
+  //     } else {
+  //       console.error(data.message);
+  //       setJobs([]);
+  //       setMessage(data.message);
+  //     }
+  //   });
+
+  //   // Listen for new job broadcast
+  //   socket.on("newJobPosted", (newJob) => {
+  //     if (userJobTitle) {
+  //       if (
+  //         newJob.jobRole.toLowerCase().includes(userJobTitle) ||
+  //         newJob.jobTitle.toLowerCase().includes(userJobTitle)
+  //       ) {
+  //         setJobs((prevJobs) => [...prevJobs, newJob]);
+  //         alert(`New matching job: ${newJob.jobRole}`);
+  //       }
+  //     }
+  //   });
+
+  //   // Clean up on unmount
+  //   return () => {
+  //     if (socket) {
+  //       socket.disconnect();
+  //     }
+  //   };
+  // }, []);
 
   const handleSidebarClose = () => {
     setShowSidebar(false);
@@ -151,17 +101,31 @@ const FindJob = () => {
     setPage(value);
   };
 
-  // 🔥 Final data to display
-  const finalData =
-    advanceFilters.length > 0
-      ? advanceFilters
-      : quickFilter.length > 0
-      ? quickFilter
-      : jobs;
+  // Filter jobs based on search input
+  const handleSearch = (e) => {
+    setSearchInput(e.target.value);
+    const searchValue = e.target.value.toLowerCase();
+    if (!searchValue) {
+      setJobs(allJobs); // Reset to all jobs if search input is empty
+      return;
+    }
+    const filteredJobs = jobs?.filter(
+      (job) =>
+        console.log("Job:", job) ||
+        job.jobTitle.toLowerCase().includes(searchValue) ||
+        job.jobRole.toLowerCase().includes(searchValue) ||
+        job.companyName.toLowerCase().includes(searchValue) ||
+        job.city.toLowerCase().includes(searchValue)
+    );
+    setJobs(filteredJobs);
+  };
 
-  // const startIndex = (page - 1) * itemsPerPage;
-  // const currentJobs = finalData.slice(startIndex, startIndex + itemsPerPage);
-  // const totalPages = Math.ceil(finalData.length / itemsPerPage);
+  const handleFilterChange = (filters) => {};
+  console.log("Filtered Jobs:", filteredJobs);
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const currentJobs = jobs.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(jobs.length / itemsPerPage);
 
   return (
     <>
@@ -201,14 +165,14 @@ const FindJob = () => {
                 placeholder="Job title, keyword, company"
                 inputProps={{ "aria-label": "JobTitle, Company" }}
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={(e) => handleSearch(e)}
               />
             </Search>
 
             <Divider orientation="vertical" flexItem />
 
             {/* Search by location */}
-            <Search>
+            {/* <Search>
               <SearchIconWrapper>
                 <PinDropOutlined style={{ color: "#709CE6", fontSize: 18 }} />
               </SearchIconWrapper>
@@ -218,7 +182,7 @@ const FindJob = () => {
                 value={locationInput}
                 onChange={(e) => setLocationInput(e.target.value)}
               />
-            </Search>
+            </Search> */}
 
             {/* Buttons */}
             <Stack gap={2} direction={"row"}>
@@ -246,7 +210,6 @@ const FindJob = () => {
                   fontSize: 16,
                   width: "200px",
                 }}
-                onClick={handleSearch}
               >
                 Find Job
               </Button>
@@ -263,17 +226,17 @@ const FindJob = () => {
           alignItems={"center"}
           sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}
         >
-          {jobs?.map((job, index) => (
+          {currentJobs?.map((job, index) => (
             <JobCard key={`${job.id} - ${index}`} job={job} />
           ))}
         </Stack>
 
         {/* Pagination */}
-        {/* <CustomIcons
+        <CustomIcons
           count={totalPages}
           page={page}
           onChange={handlePageChange}
-        /> */}
+        />
       </Box>
 
       {/* Filter Sidebar */}

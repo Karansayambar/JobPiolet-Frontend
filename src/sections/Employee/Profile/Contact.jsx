@@ -31,17 +31,14 @@ const Contact = () => {
     severity: "success",
   });
 
-  const methods =
-    useForm <
-    ContactFormValues >
-    {
-      defaultValues: {
-        address: "",
-        phone: "",
-        email: "",
-      },
-      mode: "onChange",
-    };
+  const methods = useForm({
+    defaultValues: {
+      address: "",
+      phone: "",
+      email: "",
+    },
+    mode: "onChange",
+  });
 
   const { handleSubmit, reset } = methods;
 

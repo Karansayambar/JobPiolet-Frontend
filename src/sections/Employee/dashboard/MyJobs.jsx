@@ -4,6 +4,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
@@ -15,6 +16,8 @@ import NotFound from "../../../assets/404.png";
 const MyJobs = () => {
   const { data, error, isLoading } = useGetMyJobsQuery();
   const [jobs, setJobs] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
 
   useEffect(() => {
     if (data && data.jobs) {
@@ -22,6 +25,19 @@ const MyJobs = () => {
       setJobs(data.jobs);
     }
   }, [data]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const paginatedJobs = jobs.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   if (isLoading) {
     return (
@@ -47,16 +63,13 @@ const MyJobs = () => {
       {jobs.length > 0 ? (
         <Stack
           flex={4}
-          bgcolor="background.paper"
-          p={3}
           borderRadius={2}
           overflow="auto"
-          height="800px"
           sx={{
             "&::-webkit-scrollbar": { display: "none" },
           }}
         >
-          <Stack py={4}>
+          <Stack py={8}>
             <Typography variant="h6">My Jobs</Typography>
           </Stack>
 
@@ -72,8 +85,17 @@ const MyJobs = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <DashboardJobCard jobDetails={jobs} />
+              <DashboardJobCard jobs={paginatedJobs} />
             </TableBody>
+            <TablePagination
+              component="div"
+              count={jobs.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5, 10, 25]}
+            />
           </Table>
         </Stack>
       ) : (

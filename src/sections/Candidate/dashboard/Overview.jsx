@@ -20,11 +20,10 @@ import { FaBell } from "react-icons/fa";
 import { useGetAllJobsQuery } from "../../../services/jobsApi";
 import { useEffect, useState } from "react";
 import DashboardJobCard from "../../../components/Common/CandidateDashboardJobCard";
-import { createSocket } from "../../../utils/socket";
+import { useSocket } from "../../../utils/socket";
 import useAppliedJobs from "../../../hooks/useAppliedJobs";
 import useFavoriteJobs from "../../../hooks/useFavoriteJobs";
 import useAlertJobs from "../../../hooks/useAlertJobs";
-import Settings from "./Settings/Settings";
 import { useNavigate } from "react-router-dom";
 
 const Overview = ({ onEditProfile }) => {
@@ -35,6 +34,7 @@ const Overview = ({ onEditProfile }) => {
   const { jobsAlert, alertCount } = useAlertJobs();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const socket = useSocket();
 
   // const { data } = useGetAllJobsQuery();
 
@@ -64,42 +64,41 @@ const Overview = ({ onEditProfile }) => {
     const userJobTitle = localStorage.getItem("title")?.toLowerCase();
 
     // Create socket after token is saved
-    const socket = createSocket();
-
-    // On connect, then emit
-    socket.on("connect", () => {
+    if (socket) {
+      // On connect, then emit
       console.log("Socket connected:", socket.id);
       socket.emit("getJobsForUser");
-    });
 
-    // Listen for jobs
-    socket.on("jobsForUser", (data) => {
-      console.log("Received jobs:", data);
-      if (data.success) {
-        setJobs(data.matchingJobs);
-      } else {
-        console.error(data.message);
-        setJobs([]);
-      }
-    });
-
-    // Listen for new job broadcast
-    socket.on("newJobPosted", (newJob) => {
-      if (userJobTitle) {
-        if (
-          newJob.jobRole.toLowerCase().includes(userJobTitle) ||
-          newJob.jobTitle.toLowerCase().includes(userJobTitle)
-        ) {
-          setJobs((prevJobs) => [...prevJobs, newJob]);
-          alert(`New matching job: ${newJob.jobRole}`);
+      // Listen for jobs
+      socket.on("jobsForUser", (data) => {
+        console.log("Received jobs:", data);
+        if (data.success) {
+          setJobs(data.matchingJobs);
+        } else {
+          console.error(data.message);
+          setJobs([]);
         }
-      }
-    });
+      });
+
+      // Listen for new job broadcast
+      socket.on("newJobPosted", (newJob) => {
+        if (userJobTitle) {
+          if (
+            newJob.jobRole.toLowerCase().includes(userJobTitle) ||
+            newJob.jobTitle.toLowerCase().includes(userJobTitle)
+          ) {
+            setJobs((prevJobs) => [...prevJobs, newJob]);
+            alert(`New matching job: ${newJob.jobRole}`);
+          }
+        }
+      });
+    }
 
     // Clean up on unmount
     return () => {
       if (socket) {
-        socket.disconnect();
+        socket.off("newJobPosted");
+        socket.off("jobsForUser");
       }
     };
   }, []);
@@ -210,31 +209,47 @@ const Overview = ({ onEditProfile }) => {
       </Stack>
 
       {/* Jobs Table */}
-      <Table>
-        <TableHead>
-          <TableRow
-            sx={{ textTransform: "uppercase", bgcolor: "action.hover" }}
-          >
-            <TableCell>Jobs</TableCell>
-            <TableCell>Date Applied</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {/* <DashboardJobCard data={jobs} /> */}
-          <DashboardJobCard data={paginatedJobs} />
-        </TableBody>
-        <TablePagination
-          component="div"
-          count={jobs.length}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
-      </Table>
+      {appliedJobs.length > 0 ? (
+        <Table>
+          <TableHead>
+            <TableRow
+              sx={{ textTransform: "uppercase", bgcolor: "action.hover" }}
+            >
+              <TableCell>Jobs</TableCell>
+              <TableCell>Date Applied</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {/* <DashboardJobCard data={jobs} /> */}
+            <DashboardJobCard data={paginatedJobs} />
+          </TableBody>
+          <TablePagination
+            component="div"
+            count={jobs.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </Table>
+      ) : (
+        <Stack
+          direction={"column"}
+          alignItems="center"
+          justifyContent="center"
+          py={5}
+        >
+          <Typography variant="h6" color="text.secondary">
+            No jobs found Related to Your Profile.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Complete Yout profile
+          </Typography>
+        </Stack>
+      )}
     </Stack>
   );
 };

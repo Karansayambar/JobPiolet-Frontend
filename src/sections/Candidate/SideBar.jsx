@@ -19,11 +19,10 @@ import { useDispatch } from "react-redux";
 import { setFilters } from "../../redux/slices/jobSlice";
 
 const locations = [
-  "New York",
-  "San Francisco",
-  "London",
-  "Dhaka",
-  "Berlin",
+  "Pune",
+  "Hydrabad",
+  "Mumbai",
+  "Delhi",
   "Bangalore",
   "Remote",
 ];
@@ -45,7 +44,7 @@ const salaryRanges = [
 const SideBar = ({ handleSidebarClose }) => {
   const dispatch = useDispatch();
 
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({});
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedJobType, setSelectedJobType] = useState("Job");
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -55,10 +54,13 @@ const SideBar = ({ handleSidebarClose }) => {
   // Update filters dynamically
   const updateFilters = (type, value) => {
     setSelectedFilters((prevFilters) => {
-      const newFilters = prevFilters.filter(
-        (item) => !item.startsWith(type + ":")
-      );
-      return value ? [...newFilters, `${type}: ${value}`] : newFilters;
+      const newFilters = { ...prevFilters };
+      if (value) {
+        newFilters[type] = value;
+      } else {
+        delete newFilters(type);
+      }
+      return newFilters;
     });
   };
 
@@ -70,7 +72,7 @@ const SideBar = ({ handleSidebarClose }) => {
 
   const handleJobTypeChange = (event) => {
     setSelectedJobType(event.target.value);
-    updateFilters("Job-Type", event.target.value);
+    updateFilters("JobType", event.target.value);
   };
 
   const handleLocationChange = (newValue) => {
@@ -101,7 +103,7 @@ const SideBar = ({ handleSidebarClose }) => {
       prevFilters.filter((item) => item !== filter)
     );
     if (filter.startsWith("Role:")) setSelectedRole(null);
-    if (filter.startsWith("Job-Type:")) setSelectedJobType("Job");
+    if (filter.startsWith("JobType:")) setSelectedJobType("Job");
     if (filter.startsWith("Location:")) setSelectedLocation(null);
     if (filter.startsWith("Salary:")) {
       setSelectedSalary("40-60");

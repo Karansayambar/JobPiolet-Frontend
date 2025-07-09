@@ -54,14 +54,13 @@
 // };
 
 // export default RHFSocialForm;
-
 import { Stack, TextField, IconButton } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const RHFSocialForm = ({ index, onRemove }) => {
-  const { control } = useFormContext();
-
+  const { control } = useFormContext(); // ✅ now this will work
+  console.log("form context 👇", context);
   return (
     <Stack direction="row" spacing={2} alignItems="center">
       <Controller

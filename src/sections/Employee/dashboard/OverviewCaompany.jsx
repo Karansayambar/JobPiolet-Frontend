@@ -13,24 +13,29 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  TablePagination,
 } from "@mui/material";
 import { CiBookmark } from "react-icons/ci";
 import DashboardJobCard from "../../../components/Common/CompanyDashboardJobCard";
 import { useGetMyJobsQuery } from "../../../services/jobsApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Suitcase } from "phosphor-react";
 import notfound from "../../../assets/404.png";
+import img1 from "../../../assets/plan-image.png";
 
 const OverviewCompany = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
+  const [page, setPage] = useState(0);
+  const [jobs, setJobs] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const { data, isLoading } = useGetMyJobsQuery();
 
   useEffect(() => {
     if (data) {
       console.log("Fetched Jobs:", data);
+      setJobs(data?.jobs);
     }
   }, [data]);
 
@@ -49,6 +54,19 @@ const OverviewCompany = () => {
     },
   ];
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const paginatedJobs = jobs.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
@@ -57,12 +75,30 @@ const OverviewCompany = () => {
     );
   }
 
+  if (!data || data?.jobs.length === 0) {
+    return (
+      <Stack alignItems={"center"} p={2}>
+        <img
+          style={{
+            width: "100%",
+            maxWidth: 500,
+            height: "auto",
+          }}
+          src={notfound}
+          alt="No jobs found"
+        />
+        <Typography variant={isMobile ? "body1" : "h6"}>
+          No Jobs Posted Yet
+        </Typography>
+      </Stack>
+    );
+  }
   const bgColors = ["#D6E6FF", "#FFE6CC", "#D4EDDA"];
 
   return (
     <Stack
       flex={4}
-      bgcolor="background.paper"
+      // bgcolor="background.paper"
       p={{ xs: 1, sm: 2, md: 3 }}
       height={{ xs: "auto", md: "100vh" }}
       borderRadius={2}
@@ -72,88 +108,101 @@ const OverviewCompany = () => {
       }}
     >
       {/* Welcome Message */}
-      <Typography variant={isMobile ? "subtitle1" : "h6"}>
-        Hello, Easter Howard
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        Here is your daily activities and job alerts
-      </Typography>
+      <Box>
+        <Typography variant={isMobile ? "subtitle1" : "h6"}>
+          Hello, Easter Howard
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Here is your daily activities and job alerts
+        </Typography>
 
-      {/* Statistics Cards */}
-      <Stack direction="row" gap={2} py={3} flexWrap="wrap">
-        {stats.map((item, index) => (
-          <Stack
-            key={index}
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            borderRadius={2}
-            p={2}
-            width={{ xs: 200 }}
+        {/* Statistics Cards */}
+        <Stack
+          direction={"flex"}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+        >
+          <Stack direction="row" gap={2} py={3} flexWrap="wrap">
+            {stats.map((item, index) => (
+              <Stack
+                key={index}
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                borderRadius={2}
+                p={2}
+                width={{ xs: 200 }}
+                sx={{
+                  backgroundColor: bgColors[index],
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <Box>
+                  <Typography variant={isMobile ? "h5" : "h4"}>
+                    {item.count}
+                  </Typography>
+                  <Typography
+                    variant={isMobile ? "caption" : "body2"}
+                    color={theme.palette.primary.main}
+                  >
+                    {item.label}
+                  </Typography>
+                </Box>
+                <Box color={theme.palette.primary.main}>{item.icon}</Box>
+              </Stack>
+            ))}
+          </Stack>
+          <Box>
+            <img style={{ width: "250px" }} src={img1} />
+          </Box>
+        </Stack>
+
+        {/* Profile Completion Card */}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          alignItems="center"
+          justifyContent="space-between"
+          p={{ xs: 1.5, sm: 3 }}
+          bgcolor="#E05151"
+          borderRadius={3}
+          color="white"
+          spacing={2}
+        >
+          <Stack direction="row" alignItems="center" gap={2}>
+            <Avatar
+              sx={{
+                bgcolor: "white",
+                color: "#E05151",
+                width: { xs: 32, sm: 40 },
+                height: { xs: 32, sm: 40 },
+              }}
+            />
+            <Stack>
+              <Typography
+                variant={isMobile ? "body2" : "body1"}
+                fontWeight="bold"
+              >
+                Your profile editing is not completed
+              </Typography>
+              <Typography variant={isMobile ? "caption" : "body2"}>
+                Complete your profile to build your custom resume.
+              </Typography>
+            </Stack>
+          </Stack>
+          <Button
+            variant="outlined"
+            size={isMobile ? "small" : "medium"}
             sx={{
-              backgroundColor: bgColors[index],
+              color: "white",
+              borderColor: "white",
+              whiteSpace: "nowrap",
             }}
           >
-            <Box>
-              <Typography variant={isMobile ? "h5" : "h4"}>
-                {item.count}
-              </Typography>
-              <Typography
-                variant={isMobile ? "caption" : "body2"}
-                color="text.secondary"
-              >
-                {item.label}
-              </Typography>
-            </Box>
-            <Box color={theme.palette.primary.main}>{item.icon}</Box>
-          </Stack>
-        ))}
-      </Stack>
-
-      {/* Profile Completion Card */}
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        alignItems="center"
-        justifyContent="space-between"
-        p={{ xs: 1.5, sm: 3 }}
-        bgcolor="#E05151"
-        borderRadius={3}
-        color="white"
-        spacing={2}
-      >
-        <Stack direction="row" alignItems="center" gap={2}>
-          <Avatar
-            sx={{
-              bgcolor: "white",
-              color: "#E05151",
-              width: { xs: 32, sm: 40 },
-              height: { xs: 32, sm: 40 },
-            }}
-          />
-          <Stack>
-            <Typography
-              variant={isMobile ? "body2" : "body1"}
-              fontWeight="bold"
-            >
-              Your profile editing is not completed
-            </Typography>
-            <Typography variant={isMobile ? "caption" : "body2"}>
-              Complete your profile to build your custom resume.
-            </Typography>
-          </Stack>
+            Edit Profile{" "}
+            <ArrowForward fontSize={isMobile ? "small" : "medium"} />
+          </Button>
         </Stack>
-        <Button
-          variant="outlined"
-          size={isMobile ? "small" : "medium"}
-          sx={{
-            color: "white",
-            borderColor: "white",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Edit Profile <ArrowForward fontSize={isMobile ? "small" : "medium"} />
-        </Button>
-      </Stack>
+      </Box>
 
       {/* Recently Applied Jobs */}
       <Stack
@@ -174,8 +223,12 @@ const OverviewCompany = () => {
       </Stack>
 
       {/* Jobs Table */}
-      {data ? (
-        <Box sx={{ overflowX: "auto", height: "100vh" }}>
+      {data && (
+        <Box
+          sx={{
+            overflowX: "auto",
+          }}
+        >
           <Table sx={{ minWidth: 500 }}>
             <TableHead>
               <TableRow
@@ -194,26 +247,20 @@ const OverviewCompany = () => {
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {data && <DashboardJobCard jobDetails={data?.jobs} />}
+            <TableBody sx={{ bgcolor: theme.palette.background.table }}>
+              {data?.jobs && <DashboardJobCard jobs={paginatedJobs} />}
             </TableBody>
+            <TablePagination
+              component="div"
+              count={jobs.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5, 10, 25]}
+            />
           </Table>
         </Box>
-      ) : (
-        <Stack alignItems={"center"} p={2}>
-          <img
-            style={{
-              width: "100%",
-              maxWidth: 500,
-              height: "auto",
-            }}
-            src={notfound}
-            alt="No jobs found"
-          />
-          <Typography variant={isMobile ? "body1" : "h6"}>
-            No Jobs Posted Yet
-          </Typography>
-        </Stack>
       )}
     </Stack>
   );

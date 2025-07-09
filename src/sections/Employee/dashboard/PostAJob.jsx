@@ -10,7 +10,6 @@ const PostAJob = () => {
 
   // Log the data for debugging purposes
   useEffect(() => {
-    console.log("I am here");
     if (data) {
       console.log("Payment Details:", data);
     }
@@ -36,7 +35,7 @@ const PostAJob = () => {
 
   // Render the main content based on the payment status
   return (
-    <Box>
+    <Box py={8}>
       <Typography variant="h5">Post a Job</Typography>
       {status === "active" ? <JobPostForm /> : <PlansPage />}
     </Box>

@@ -19,7 +19,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { Book, BookmarkSimple, Calendar, Link } from "phosphor-react";
+import { BookmarkSimple, Calendar, Link } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { CompanyLogoStyle, Duration } from "../../components/Common/JobCard";
 import {
@@ -156,7 +156,10 @@ const JobDetails = () => {
                       width: 80,
                       height: 80,
                       bgcolor: alpha(theme.palette.primary.main, 0.1),
-                      border: `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                      border: `2px solid ${alpha(
+                        theme.palette.primary.main,
+                        0.2
+                      )}`,
                     }}
                   >
                     <CompanyLogo companyName={job.companyName} size={40} />
@@ -204,7 +207,11 @@ const JobDetails = () => {
                         bgcolor: localFavorited
                           ? alpha(theme.palette.primary.main, 0.1)
                           : "transparent",
-                        border: `2px solid ${localFavorited ? theme.palette.primary.main : theme.palette.grey[300]}`,
+                        border: `2px solid ${
+                          localFavorited
+                            ? theme.palette.primary.main
+                            : theme.palette.grey[300]
+                        }`,
                         "&:hover": {
                           bgcolor: alpha(theme.palette.primary.main, 0.1),
                         },
@@ -238,8 +245,8 @@ const JobDetails = () => {
                     {isLoading
                       ? "Applying..."
                       : isAppliedValue?.isApplied
-                        ? "Applied"
-                        : "Apply Now"}
+                      ? "Applied"
+                      : "Apply Now"}
                   </Button>
                 </Stack>
               </Stack>

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 
 const HeroComponent = lazy(() =>
   import("../../components/HomePage/Hero/HeroComponent")

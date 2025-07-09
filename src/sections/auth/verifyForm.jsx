@@ -37,14 +37,11 @@ export default function VerifyForm() {
   };
 
   // Initialize react-hook-form
-  const methods =
-    useForm <
-    VerifyFormValues >
-    {
-      mode: "onChange",
-      resolver: yupResolver(VerifyCodeSchema),
-      defaultValues,
-    };
+  const methods = useForm({
+    mode: "onChange",
+    resolver: yupResolver(VerifyCodeSchema),
+    defaultValues,
+  });
 
   const { handleSubmit } = methods;
 

@@ -26,7 +26,9 @@ const ResetPasswordForm = () => {
   const onSubmit = async (data) => {
     try {
       const response = await resetPassword(data).unwrap();
-      console.log("Reset password request successful:", response);
+      if (response.status?.success) {
+        console.log("Reset Password Response:", response);
+      }
       enqueueSnackbar("Reset link sent to your email!", { variant: "success" }); // Optional
     } catch (error) {
       console.error("Reset Password Error:", error);
