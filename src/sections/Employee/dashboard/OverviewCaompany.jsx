@@ -93,8 +93,8 @@ const OverviewCompany = () => {
       </Stack>
     );
   }
-  const bgColors = ["#D6E6FF", "#FFE6CC", "#D4EDDA"];
-
+  const bgColorsLight = ["#D6E6FF", "#FFE6CC", "#D4EDDA"];
+  const bgColorsDark = ["#456882", "#D1A980", "#748873"];
   return (
     <Stack
       flex={4}
@@ -133,8 +133,12 @@ const OverviewCompany = () => {
                 p={2}
                 width={{ xs: 200 }}
                 sx={{
-                  backgroundColor: bgColors[index],
-                  color: theme.palette.primary.main,
+                  backgroundColor: `${
+                    theme.palette.mode === "dark"
+                      ? bgColorsDark[index]
+                      : bgColorsLight[index]
+                  }`,
+                  color: theme.palette.text.primary,
                 }}
               >
                 <Box>
@@ -143,12 +147,12 @@ const OverviewCompany = () => {
                   </Typography>
                   <Typography
                     variant={isMobile ? "caption" : "body2"}
-                    color={theme.palette.primary.main}
+                    color={theme.palette.text.primary}
                   >
                     {item.label}
                   </Typography>
                 </Box>
-                <Box color={theme.palette.primary.main}>{item.icon}</Box>
+                <Box>{item.icon}</Box>
               </Stack>
             ))}
           </Stack>

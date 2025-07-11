@@ -1,5 +1,12 @@
 import { PiCurrencyDollarThin } from "react-icons/pi";
-import { Button, Stack, TableCell, TableRow, Typography } from "@mui/material";
+import {
+  Button,
+  Stack,
+  TableCell,
+  TableRow,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { dateConverter } from "../../utils/dateConverter";
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +23,7 @@ const getStatusColor = (status) => {
 
 const DashboardJobCard = ({ jobs }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
   console.log("job details", jobs);
 
   return (
@@ -30,11 +38,19 @@ const DashboardJobCard = ({ jobs }) => {
                 </Stack>
                 <Stack direction="row" alignItems="center" gap={2}>
                   <Stack direction="row" alignItems="center" gap={1}>
-                    <Typography variant="body2">{job.workMode}</Typography>
+                    <Typography
+                      variant="body2"
+                      color={theme.palette.text.secondary}
+                    >
+                      {job.workMode}
+                    </Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" gap={1}>
                     <PiCurrencyDollarThin size={20} />
-                    <Typography variant="body2">
+                    <Typography
+                      variant="body2"
+                      color={theme.palette.text.secondary}
+                    >
                       {dateConverter(job.updatedAt)}
                     </Typography>
                   </Stack>
@@ -56,6 +72,7 @@ const DashboardJobCard = ({ jobs }) => {
           </TableCell>
           <TableCell>
             <Button
+              style={{ color: theme.palette.text.main }}
               onClick={() => navigate(`/company/viewApplicants/${job._id}`)}
               variant="contained"
             >
