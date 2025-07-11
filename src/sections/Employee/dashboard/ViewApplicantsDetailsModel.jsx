@@ -1,15 +1,17 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 
 const ViewApplicantsDetailsModel = ({ applicant, onClose }) => {
+  const theme = useTheme();
   return (
     <Box
       width="700px"
       height="600px"
-      bgcolor="white"
       p={4}
       borderRadius={2}
+      border={1}
       boxShadow={4}
       position="relative"
+      bgcolor={theme.palette.background.default}
     >
       <Typography
         onClick={onClose}

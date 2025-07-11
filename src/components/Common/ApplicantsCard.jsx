@@ -8,25 +8,42 @@ import {
   ListItem,
   IconButton,
   Tooltip,
+  useTheme,
 } from "@mui/material";
 import { dateConverter } from "../../utils/dateConverter";
 import { BookmarkSimple, Download } from "phosphor-react";
 import { useState } from "react";
 import ViewApplicantsDetailsModel from "../../sections/Employee/dashboard/ViewApplicantsDetailsModel";
+import { useParams } from "react-router-dom";
+import {
+  useSaveCandidateMutation,
+  useUnsavedCandidateMutation,
+} from "../../services/companyApi";
 
-const ApplicantsCard = ({ applicants }) => {
+const ApplicantsCard = ({ applicants, setApplicants }) => {
   const [openModel, setOpenModel] = useState(false);
   const [selectedApplicant, setSelectedApplicant] = useState(null);
-
+  const [savedCandidate] = useSaveCandidateMutation();
+  const [unsavedCandidate] = useUnsavedCandidateMutation();
+  const theme = useTheme();
   const handleOpenModel = (applicant) => {
     setSelectedApplicant(applicant);
     setOpenModel(true);
   };
+  const jobId = useParams();
 
-  // const handleCloseModel = () => {
-  //   setOpenModel(false);
-  // };
-  console.log("applicant from ApplicantCard", applicants);
+  function handleSaveCandidate(candidateId, isSaved) {
+    const payload = { candidateId, jobId: jobId.id };
+    const action = isSaved ? unsavedCandidate : savedCandidate;
+
+    action(payload).then(() => {
+      setApplicants((prev) =>
+        prev.map((el) =>
+          el.userId === candidateId ? { ...el, isSaved: !isSaved } : el
+        )
+      );
+    });
+  }
 
   // Add safety checks
   if (!applicants || !Array.isArray(applicants)) {
@@ -35,7 +52,11 @@ const ApplicantsCard = ({ applicants }) => {
 
   return (
     <>
-      <Box p={4} style={{ opacity: openModel ? 0.3 : 1 }}>
+      <Box
+        p={4}
+        style={{ opacity: openModel ? 0.3 : 1 }}
+        bgcolor={theme.palette.background.paper}
+      >
         {applicants.map((applicant, index) => {
           // Skip if applicant data is invalid
           if (!applicant?.candidateInfo) return null;
@@ -70,8 +91,15 @@ const ApplicantsCard = ({ applicants }) => {
                   </Typography>
                 </Stack>
                 <Tooltip title={"Save"} placement="top-start" arrow>
-                  <IconButton>
-                    <BookmarkSimple />
+                  <IconButton
+                    onClick={() =>
+                      handleSaveCandidate(applicant.userId, applicant.isSaved)
+                    }
+                  >
+                    <BookmarkSimple
+                      weight={applicant.isSaved ? "fill" : "regular"}
+                      size={30}
+                    />
                   </IconButton>
                 </Tooltip>
               </Stack>
@@ -121,7 +149,6 @@ const ApplicantsCard = ({ applicants }) => {
               </Stack>
 
               <Typography
-                color="primary"
                 textAlign="center"
                 p={1}
                 onClick={() => handleOpenModel(applicant)}

@@ -26,8 +26,33 @@ export const companyApi = createApi({
         body,
       }),
     }),
+
+    saveCandidate: builder.mutation({
+      query: (body) => ({
+        url: "/save-candidate",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    unsavedCandidate: builder.mutation({
+      query: (body) => ({
+        url: "unsave-candidate",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    getSavedCandidatesDetails: builder.query({
+      query: () => `get-saved-candidates`,
+    }),
   }),
 });
 
-export const { useCreateCompanyProfileMutation, useGetProfileQuery } =
-  companyApi;
+export const {
+  useCreateCompanyProfileMutation,
+  useGetProfileQuery,
+  useSaveCandidateMutation,
+  useUnsavedCandidateMutation,
+  useGetSavedCandidatesDetailsQuery,
+} = companyApi;

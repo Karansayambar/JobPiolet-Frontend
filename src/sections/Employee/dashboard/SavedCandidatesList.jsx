@@ -1,63 +1,41 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { SavedCandidatesCard } from "../../../components/SavedCandidatesCard";
+import { useGetSavedCandidatesDetailsQuery } from "../../../services/companyApi";
+import { useEffect, useState } from "react";
+import { BookmarkSimple } from "phosphor-react";
 
 const SavedCandidatesList = () => {
-  const savedCandidates = [
-    { id: 1, name: "John Doe", profileImg: "https://via.placeholder.com/50" },
-    {
-      id: 2,
-      name: "Jane Smith",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 3,
-      name: "Michael Johnson",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 4,
-      name: "Emily Davis",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 5,
-      name: "Daniel Brown",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 6,
-      name: "Sophia Wilson",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 7,
-      name: "James Anderson",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 8,
-      name: "Olivia Thomas",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 9,
-      name: "William Martinez",
-      profileImg: "https://via.placeholder.com/50",
-    },
-    {
-      id: 10,
-      name: "Ava Hernandez",
-      profileImg: "https://via.placeholder.com/50",
-    },
-  ];
+  const [savedCandidates, setCandidates] = useState([]);
+  const { data, isLoading } = useGetSavedCandidatesDetailsQuery();
+
+  useEffect(() => {
+    if (data) {
+      // setCandidates((prev) => [...prev, data.savedCandidateDetails]);
+      setCandidates(data.savedCandidateDetails);
+    }
+  }, [data]);
+
+  if (savedCandidates) {
+    console.log("savedCandidates", savedCandidates);
+  }
 
   return (
-    <Stack spacing={2} py={8}>
-      {savedCandidates.map((candidate) => (
+    <Stack spacing={2} p={4}>
+      <Stack
+        display={"flex"}
+        direction={"row"}
+        alignItems={"center"}
+        gap={1}
+        py={2}
+      >
+        <Typography fontSize={25}>Saved Candidates</Typography>
+        <BookmarkSimple weight="fill" size={30} />
+      </Stack>
+      {savedCandidates?.map((candidate) => (
         <SavedCandidatesCard
-          key={candidate.id}
-          name={candidate.name}
-          profileImg={candidate.profileImg}
+          key={candidate._id}
+          name={candidate.candidateInfo.fullName}
+          profileImg={candidate.candidateInfo.avatar}
         />
       ))}
     </Stack>

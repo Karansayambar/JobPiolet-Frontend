@@ -15,7 +15,11 @@ export const SavedCandidatesCard = ({ name, profileImg }) => {
       mb={2}
     >
       <Stack direction="row" alignItems="center" spacing={2}>
-        <img src={profileImg} alt={name} style={{ borderRadius: "50%" }} />
+        <img
+          src={profileImg}
+          alt={name}
+          style={{ borderRadius: "50%", height: "80px", width: "80px" }}
+        />
         <Typography variant="h6">{name}</Typography>
       </Stack>
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
