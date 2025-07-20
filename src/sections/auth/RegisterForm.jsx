@@ -6,6 +6,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  useTheme,
 } from "@mui/material";
 import * as Yup from "yup";
 import React, { useState } from "react";
@@ -26,6 +27,7 @@ const AuthRegisterPage = () => {
   const [register] = useRegisterMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
@@ -81,7 +83,12 @@ const AuthRegisterPage = () => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack sx={{ bgcolor: "#F1F2F4", borderRadius: "5px" }} p={2} my={3}>
+      <Stack
+        bgcolor={theme.palette.background.paper}
+        sx={{ borderRadius: "5px" }}
+        p={2}
+        my={3}
+      >
         <Stack alignItems="center" my={2}>
           <Typography textAlign="center" mb={1}>
             Create Account as a
@@ -93,7 +100,6 @@ const AuthRegisterPage = () => {
             onChange={handleRoleChange}
             color="primary"
             sx={{
-              bgcolor: "#F1F2F4",
               borderRadius: "5px",
               p: 1,
             }}
@@ -197,15 +203,6 @@ const AuthRegisterPage = () => {
           size="large"
           type="submit"
           variant="contained"
-          sx={{
-            bgcolor: "text.primary",
-            color: (theme) =>
-              theme.palette.mode === "light" ? "common.white" : "grey.800",
-            "&:hover": {
-              bgcolor: "text.primary",
-              opacity: 0.9,
-            },
-          }}
         >
           Create Account
         </LoadingButton>

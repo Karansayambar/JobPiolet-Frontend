@@ -1,8 +1,9 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
 import { PopularCategoryChip } from "../../Common/HeroChip";
 import { ArrowForward } from "@mui/icons-material";
 
 const PopularCategory = () => {
+  const theme = useTheme();
   return (
     <Box px={{ xs: 4, sm: 6, md: 15, lg: 30 }} py={{ md: 10 }}>
       <Stack

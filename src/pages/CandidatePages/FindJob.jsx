@@ -129,7 +129,11 @@ const FindJob = () => {
 
   return (
     <>
-      <Box>
+      <Box
+        bgcolor={theme.palette.background.default}
+        color={theme.palette.text.primary}
+        height={"100vh"}
+      >
         {/* Header */}
         <Stack
           direction={"row"}
@@ -137,7 +141,8 @@ const FindJob = () => {
           justifyContent={"space-between"}
           p={3}
           px={30}
-          bgcolor={theme.palette.grey[100]}
+          bgcolor={theme.palette.background.paper}
+          color={theme.palette.text.primary}
         >
           <Typography>Job Details</Typography>
           <Typography>Home / Find Job /</Typography>
@@ -155,6 +160,8 @@ const FindJob = () => {
               py: 1,
               width: "100%",
             }}
+            bgcolor={theme.palette.background.paper}
+            color={theme.palette.text.primary}
           >
             {/* Search by title */}
             <Search>

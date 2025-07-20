@@ -111,7 +111,6 @@ const JobDetails = () => {
         sx={{
           borderBottom: 1,
           borderColor: "divider",
-          bgcolor: "white",
         }}
       >
         <Container maxWidth="xl">
@@ -133,7 +132,7 @@ const JobDetails = () => {
 
       {/* Job Details */}
       {job ? (
-        <Stack px={20}>
+        <Stack px={20} bgcolor={theme.palette.background.default}>
           {/* Job Heading */}
           <Card
             sx={{
@@ -165,7 +164,7 @@ const JobDetails = () => {
                     <CompanyLogo companyName={job.companyName} size={40} />
                   </Avatar>
                   <Stack spacing={1}>
-                    <Typography variant="h4" fontWeight={700} color="primary">
+                    <Typography variant="h4" fontWeight={700}>
                       {job?.jobTitle}
                     </Typography>
                     <Stack direction="row" alignItems="center" spacing={2}>
@@ -186,7 +185,10 @@ const JobDetails = () => {
                       mt={1}
                     >
                       <LocationOn fontSize="small" color="action" />
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography
+                        variant="body2"
+                        color={theme.palette.text.main}
+                      >
                         {job?.city}, {job?.address}
                       </Typography>
                     </Stack>
@@ -222,7 +224,7 @@ const JobDetails = () => {
                         weight={localFavorited ? "fill" : "regular"}
                         color={
                           localFavorited
-                            ? theme.palette.primary.main
+                            ? theme.palette.background.main
                             : theme.palette.grey[600]
                         }
                       />
@@ -256,7 +258,12 @@ const JobDetails = () => {
           <Stack direction="row" gap={10}>
             {/* Left Side */}
             <Stack flex={3}>
-              <Typography variant="h5" fontWeight={700} mb={3}>
+              <Typography
+                variant="h5"
+                fontWeight={700}
+                mb={3}
+                color={theme.palette.text.secondary}
+              >
                 Job Description
               </Typography>
               <Typography
@@ -267,7 +274,12 @@ const JobDetails = () => {
                 {job?.jobDescription}
               </Typography>
 
-              <Typography variant="h6" fontSize={25} fontWeight={600}>
+              <Typography
+                variant="h6"
+                fontSize={25}
+                color={theme.palette.text.secondary}
+                fontWeight={600}
+              >
                 Requirements
               </Typography>
               <List>
@@ -284,7 +296,13 @@ const JobDetails = () => {
                 ))}
               </List>
 
-              <Typography variant="h6" fontSize={25} fontWeight={600} mb={2}>
+              <Typography
+                variant="h6"
+                fontSize={25}
+                fontWeight={600}
+                mb={2}
+                color={theme.palette.text.secondary}
+              >
                 Responsibilities
               </Typography>
               <List>
@@ -301,7 +319,13 @@ const JobDetails = () => {
                 ))}
               </List>
 
-              <Typography variant="h6" fontSize={25} fontWeight={600} mb={2}>
+              <Typography
+                variant="h6"
+                fontSize={25}
+                fontWeight={600}
+                mb={2}
+                color={theme.palette.text.secondary}
+              >
                 Preferences
               </Typography>
               <List>
@@ -327,9 +351,7 @@ const JobDetails = () => {
                   <Stack spacing={3} direction={"row"}>
                     <Box>
                       <Stack direction={"row"} alignItems={"center"}>
-                        <AttachMoney
-                          sx={{ fontSize: 48, color: "primary.main", mb: 1 }}
-                        />
+                        <AttachMoney sx={{ fontSize: 48, mb: 1 }} />
                         <Typography
                           variant="h6"
                           fontWeight={600}
@@ -338,10 +360,10 @@ const JobDetails = () => {
                           Salary (USD)
                         </Typography>
                       </Stack>
-                      <Typography variant="h4" fontWeight={400} color="primary">
+                      <Typography variant="h4" fontWeight={400}>
                         ${job?.minSalary} - ${job?.maxSalary}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2">
                         {job?.salaryType} Salary
                       </Typography>
                     </Box>
@@ -350,9 +372,7 @@ const JobDetails = () => {
 
                     <Box>
                       <Stack direction={"row"} alignItems={"center"}>
-                        <LocationOn
-                          sx={{ fontSize: 32, color: "primary.main", mb: 1 }}
-                        />
+                        <LocationOn sx={{ fontSize: 32, mb: 1 }} />
                         <Typography variant="h6" fontWeight={600}>
                           {job?.city ?? "Location Unavailable"}
                         </Typography>
@@ -368,12 +388,7 @@ const JobDetails = () => {
               {/* Job Benefits */}
               <Card elevation={2} sx={{ borderRadius: 3 }}>
                 <CardContent sx={{ p: 4 }}>
-                  <Typography
-                    variant="h6"
-                    fontWeight={700}
-                    mb={3}
-                    color="primary"
-                  >
+                  <Typography variant="h6" fontWeight={700} mb={3}>
                     Job Benefits
                   </Typography>
                   <Stack direction="row" flexWrap="wrap" gap={1} mb={4}>
@@ -382,18 +397,12 @@ const JobDetails = () => {
                         key={index}
                         label={benefit}
                         variant="outlined"
-                        color="primary"
                         size="small"
                       />
                     ))}
                   </Stack>
 
-                  <Typography
-                    variant="h6"
-                    fontWeight={700}
-                    mb={3}
-                    color="primary"
-                  >
+                  <Typography variant="h6" fontWeight={700} mb={3}>
                     Required Skills
                   </Typography>
                   <Stack direction="row" flexWrap="wrap" gap={1}>
@@ -476,15 +485,15 @@ const JobDetails = () => {
                                 p: 1.5,
                                 borderRadius: 2,
                                 bgcolor: alpha(theme.palette.primary.main, 0.1),
-                                color: "primary.main",
                               }}
+                              color={theme.palette.text.main}
                             >
                               {item.icon}
                             </Box>
                             <Typography
                               variant="caption"
                               fontWeight={600}
-                              color="text.secondary"
+                              color={theme.palette.text.primary}
                             >
                               {item.label}
                             </Typography>

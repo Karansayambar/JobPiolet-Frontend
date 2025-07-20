@@ -76,7 +76,7 @@ const MostPopularVacancies = () => {
           ))}
         </List>
       </Stack>
-      <Stack spacing={3} py={8} bgcolor={theme.palette.grey[100]}>
+      <Stack spacing={3} py={8}>
         {/* Section Title */}
         <Typography variant="h4" fontWeight={600} textAlign={"center"} py={4}>
           How jobpilot work

@@ -21,7 +21,7 @@ const HeroComponent = () => {
     <Box
       px={{ xs: 2, sm: 6, md: 15, lg: 30 }}
       py={8}
-      bgcolor={theme.palette.grey[100]}
+      bgcolor={theme.palette.background.default}
     >
       <Stack
         direction={{ xs: "column", md: "row" }}

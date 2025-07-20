@@ -1,7 +1,8 @@
-import { Box, Icon, Stack, styled, Typography } from "@mui/material";
+import { Box, Icon, Stack, styled, Typography, useTheme } from "@mui/material";
 import { BookmarkSimple, MapPin } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
+import { useSelector } from "react-redux";
 
 // Styled component for job type
 export const Duration = styled("div")(({ theme }) => ({
@@ -33,18 +34,25 @@ export const CompanyLogoStyle = styled("div")(() => ({
 
 // JobCard component
 const JobCard = ({ job }) => {
+  const theme = useTheme();
+  const { themeMode } = useSelector((state) => state.theme);
   const navigate = useNavigate();
   console.log("jobId", job._id);
   // Random company logo (returns URL)
 
   return (
     <Box
+      bgcolor={theme.palette.background.paper}
+      color={theme.palette.text.primary}
       sx={{
         border: "1px solid #ddd",
         borderRadius: "8px",
         padding: 2,
-        background:
-          "linear-gradient(to right,rgba(245, 185, 20, 0.08),rgba(255, 255, 255, 0.97))",
+        background: `${
+          themeMode === "dark"
+            ? "linear-gradient(to right,rgba(245, 185, 20, 0.08),rgba(29, 27, 27, 0.72))"
+            : "linear-gradient(to right,rgba(245, 185, 20, 0.08),rgba(255, 255, 255, 0.97))"
+        }`,
         transition: "all 0.3s ease",
         "&:hover": {
           boxShadow: 3,
@@ -52,7 +60,7 @@ const JobCard = ({ job }) => {
       }}
       minWidth={350}
     >
-      <Stack gap={2} >
+      <Stack gap={2}>
         <Box onClick={() => navigate(`/candidate/findjob/${job._id}`)}>
           <Typography variant="body1" fontWeight={600} fontSize={22}>
             {job.jobTitle}

@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const candidateApi = createApi({
   reducerPath: "candidateApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/candidate", // Update this!
-    // baseUrl: "https://jobpiolet-backend-1.onrender.com/api/candidate",
+    // baseUrl: "http://localhost:5000/api/candidate", // Update this!
+    baseUrl: "https://jobpiolet-backend-1.onrender.com/api/candidate",
 
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
@@ -15,9 +15,9 @@ export const candidateApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getProfile: builder.query({
-      query: (userId) => `/get-profile?userId=${userId}`,
-    }),
+    // getProfile: builder.query({
+    //   query: (userId) => `/get-profile?userId=${userId}`,
+    // }),
 
     createCandidateProfile: builder.mutation({
       query: (body) => ({

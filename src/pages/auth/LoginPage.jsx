@@ -1,17 +1,24 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Link, Stack, Typography, useTheme } from "@mui/material";
 import AuthLoginForm from "../../sections/auth/loginForm";
 import { FacebookOutlined, Google } from "@mui/icons-material";
 import SideImage from "../../components/Common/SideImage";
 import { Link as RouterLink } from "react-router-dom"; // ✅ Import Router Link
 
 const LoginPage = () => {
+  const theme = useTheme();
   return (
-    <Box height="100vh" padding={0}>
+    <Box
+      height="100vh"
+      width={"100vw"}
+      padding={0}
+      bgcolor={theme.palette.background.default}
+    >
       <Stack
         direction={{ xs: "row" }}
         alignItems="center"
         justifyContent="space-between"
         height="100%"
+        color={theme.palette.text.primary}
       >
         {/* Left Section - Login Form */}
         <Box
@@ -24,7 +31,12 @@ const LoginPage = () => {
 
           <Typography py={2}>
             Don't have an account?{" "}
-            <Link component={RouterLink} to="/register" variant="subtitle1">
+            <Link
+              component={RouterLink}
+              to="/register"
+              variant="subtitle1"
+              color={theme.palette.info.main}
+            >
               Create Account
             </Link>
           </Typography>

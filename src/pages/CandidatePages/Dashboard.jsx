@@ -15,6 +15,8 @@ import {
   ArrowsInLineHorizontal,
   ArrowsOutLineHorizontal,
   User,
+  Moon,
+  Sun,
 } from "phosphor-react";
 import { BsSuitcaseLg } from "react-icons/bs";
 
@@ -26,6 +28,8 @@ import Settings from "../../sections/Candidate/dashboard/Settings/Settings";
 import ProfilePage from "../../sections/Candidate/dashboard/ProfilePage";
 import JobAlerts from "../../sections/Candidate/dashboard/JobAlerts";
 import { useGetCandidateProfileQuery } from "../../services/candidateApi";
+import { toggleTheme } from "../../redux/slices/themeSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const menuItems = [
   {
@@ -70,16 +74,14 @@ const DashboardPage = () => {
   const { data, isLoading, error } = useGetCandidateProfileQuery();
   const theme = useTheme();
   const [sideMenum, setSideMenu] = useState(false);
-  const [selectedSection, setSelectedSection] = useState(() => {
-    if (data && data.candidateProfileData) {
-      return "Overview"; // Default to Overview if profile data exists
-    } else {
-      return "Settings"; // Default to Profile if no profile data
-    }
-  });
+  const dispatch = useDispatch();
+
+  const [selectedSection, setSelectedSection] = useState("Overview");
+  const { themeMode } = useSelector((state) => state.theme);
 
   useEffect(() => {
-    if (data && data.candidateProfileData) {
+    if (data) {
+      console.log("profile data of user", data);
       setSelectedSection("Overview");
     } else {
       setSelectedSection("Settings");
@@ -90,7 +92,15 @@ const DashboardPage = () => {
   };
 
   return (
-    <Box py={5}>
+    <Box
+      py={5}
+      style={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        padding: "20px",
+      }}
+      height={"100vh"}
+    >
       <Divider />
       <Stack direction="row" spacing={5} px={3} py={3}>
         {/* Left Sidebar */}
@@ -112,7 +122,9 @@ const DashboardPage = () => {
               alignItems="center"
               bgcolor={
                 item.label === selectedSection
-                  ? "#D6E6FF"
+                  ? themeMode === "dark"
+                    ? "#6480acff"
+                    : "#D6E6FF"
                   : theme.palette.background.paper
               }
               mb={1}
@@ -131,6 +143,26 @@ const DashboardPage = () => {
             </Stack>
           ))}
           {/* Sidebar Toggle Button */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            gap={1}
+            sx={{
+              cursor: "pointer",
+              p: 1,
+              borderRadius: 1,
+              "&:hover": {
+                backgroundColor: theme.palette.action.hover,
+              },
+              transition: "background-color 0.2s ease",
+            }}
+          >
+            {themeMode === "dark" ? (
+              <Moon size={28} onClick={() => dispatch(toggleTheme())} />
+            ) : (
+              <Sun size={28} onClick={() => dispatch(toggleTheme())} />
+            )}
+          </Stack>
           <Stack
             direction="row"
             alignItems="center"
