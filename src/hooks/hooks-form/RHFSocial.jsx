@@ -60,7 +60,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 const RHFSocialForm = ({ index, onRemove }) => {
   const { control } = useFormContext(); // ✅ now this will work
-  console.log("form context 👇", context);
+  console.log("form context 👇", control);
   return (
     <Stack direction="row" spacing={2} alignItems="center">
       <Controller

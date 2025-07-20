@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { Suspense, lazy } from "react";
 
 const HeroComponent = lazy(() =>
@@ -15,8 +15,13 @@ const FeaturedJobs = lazy(() =>
 );
 const Testimonial = lazy(() => import("../../components/HomePage/Testimonial"));
 const HomePage = () => {
+  const theme = useTheme();
+
   return (
-    <Box>
+    <Box
+      bgcolor={theme.palette.background.default}
+      color={theme.palette.text.primary}
+    >
       <Suspense fallback={<p>Loading...</p>}>
         <HeroComponent />
         <MostPopularVacancies />

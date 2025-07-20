@@ -26,7 +26,6 @@ const StatCard = ({ icon, numbers, title }) => (
       flexDirection: "row",
       alignItems: "center",
       gap: 2,
-      bgcolor: "white",
     }}
   >
     <Box p={1}>{icon}</Box>
@@ -135,6 +134,9 @@ const PopularCategoryChip = () => (
           sm: "repeat(2, 1fr)",
           md: "repeat(3, 1fr)",
           lg: "repeat(4, 1fr)",
+        },
+        "&::-webkit-scrollbar": {
+          display: "none",
         },
       }}
     >

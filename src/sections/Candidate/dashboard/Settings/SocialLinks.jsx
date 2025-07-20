@@ -25,7 +25,7 @@ const SocialLinks = () => {
       updatedLinks.map((_, idx) => ({
         platform: methods.getValues(`socialLinks.${idx}.platform`),
         link: methods.getValues(`socialLinks.${idx}.link`),
-      })),
+      }))
     );
   };
 

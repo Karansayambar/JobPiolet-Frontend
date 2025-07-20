@@ -1,12 +1,19 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Link, Stack, Typography, useTheme } from "@mui/material";
 import ResetPasswordForm from "../../sections/auth/ResetPasswordForm";
 import SideImage from "../../components/Common/SideImage";
 import { FacebookOutlined, Google } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 
 const ResetPasswordPage = () => {
+  const theme = useTheme();
   return (
-    <Box width="100vw" height="100vh" padding={0}>
+    <Box
+      width="100vw"
+      height="100vh"
+      padding={0}
+      bgcolor={theme.palette.background.default}
+      color={theme.palette.text.primary}
+    >
       <Stack
         direction="row"
         alignItems="center"

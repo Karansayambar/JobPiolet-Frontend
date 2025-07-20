@@ -7,6 +7,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
 import DashboardJobCard from "../../../components/Common/CompanyDashboardJobCard";
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(8);
+  const theme = useTheme();
 
   useEffect(() => {
     if (data && data.jobs) {

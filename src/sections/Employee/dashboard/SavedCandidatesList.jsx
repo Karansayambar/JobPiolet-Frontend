@@ -33,6 +33,7 @@ const SavedCandidatesList = () => {
       </Stack>
       {savedCandidates?.map((candidate) => (
         <SavedCandidatesCard
+          applicant={candidate}
           key={candidate._id}
           name={candidate.candidateInfo.fullName}
           profileImg={candidate.candidateInfo.avatar}

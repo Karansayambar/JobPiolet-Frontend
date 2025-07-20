@@ -17,6 +17,7 @@ const useFavoriteJobs = () => {
       try {
         socket.on("getFavoriteJobs", (data) => {
           if (data.success) {
+            console.log("data", data);
             setFavoriteJobs(data.favoriteJobsList);
             setFavoriteCount(data.favoriteJobsList.length);
             setMessage(data.message);

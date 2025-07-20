@@ -1,18 +1,20 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Link, Stack, Typography, useTheme } from "@mui/material";
 import { FacebookOutlined, Google } from "@mui/icons-material";
 import AuthRegisterPage from "../../sections/auth/RegisterForm";
 import SideImage from "../../components/Common/SideImage";
 import { Link as RouterLink } from "react-router-dom";
 
 const RegisterPage = () => {
+  const theme = useTheme();
   return (
-    <Box height="100vh" padding={0}>
+    <Box height="100vh" padding={0} bgcolor={theme.palette.background.default}>
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-around"
         height="100%"
         width={"100vw"}
+        color={theme.palette.text.primary}
       >
         <Box
           width={{ xs: "100%", md: "50%", lg: "30%" }}
@@ -24,7 +26,12 @@ const RegisterPage = () => {
 
           <Typography py={2}>
             Alredy have an accounr ?{" "}
-            <Link component={RouterLink} to="/" variant="subtitle1">
+            <Link
+              component={RouterLink}
+              to="/"
+              variant="subtitle1"
+              color={theme.palette.info.main}
+            >
               Log In
             </Link>
           </Typography>

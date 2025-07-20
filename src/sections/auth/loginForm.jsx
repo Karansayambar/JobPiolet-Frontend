@@ -68,7 +68,6 @@ const AuthLoginForm = () => {
       localStorage.setItem("profileCreated", response.profileCreated);
       localStorage.setItem("title", response?.title);
 
-
       if (response.role === "company") {
         if (!response.profileCreated) {
           navigate("/company/create-profile");

@@ -39,7 +39,7 @@ const Header = () => {
     <Box
       py={3}
       px={{ xs: 2, md: 10, lg: 30 }}
-      sx={{ bgcolor: theme.palette.grey[200] }}
+      sx={{ bgcolor: theme.palette.navbar }}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         {/* Navigation Links */}
@@ -64,7 +64,9 @@ const Header = () => {
                 >
                   <Typography
                     variant="body1"
-                    color={isActive ? "primary" : "text.secondary"}
+                    color={
+                      isActive ? `${theme.palette.text}` : "text.secondary"
+                    }
                   >
                     {item.label}
                   </Typography>

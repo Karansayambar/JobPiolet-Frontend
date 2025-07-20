@@ -32,7 +32,6 @@ export const TestimonialCard = ({ data }) => {
         maxWidth: 380,
         maxHeight: 300,
         borderRadius: 3,
-        backgroundColor: "background.paper",
         textAlign: "center",
         boxSizing: "border-box",
       }}

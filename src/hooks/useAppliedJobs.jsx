@@ -13,16 +13,11 @@ const useAppliedJobs = () => {
     setIsLoading(true);
     if (socket) {
       socket.emit("getAppliedJobs");
-
       socket.on("getAppliedJobs", (data) => {
         if (data.success) {
-          const jobs = data.appliedJobs.map((job) => ({
-            ...job.getJobDetails,
-            applicationDate: job.applicationDate,
-            status: job.status,
-          }));
-          setAppliedJobs(jobs);
-          setCount(data.count);
+          console.log("data", data);
+          setAppliedJobs(data.appliedJobs);
+          setCount(data.appliedJobs.length);
         } else {
           setAppliedJobs([]);
           setMessage(data.message);
@@ -35,6 +30,7 @@ const useAppliedJobs = () => {
       socket?.off("getAppliedJobs");
     };
   }, []);
+
   return { appliedJobs, message, count, isLoading };
 };
 

@@ -9,6 +9,7 @@ import {
   Paper,
   Fade,
   Slide,
+  useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Send } from "@mui/icons-material";
@@ -22,6 +23,7 @@ const ChatBot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesRef = useRef([]);
   const messagesEndRef = useRef(null);
+  const theme = useTheme();
 
   const socket = useSocket();
   // Scroll to bottom when messages update
@@ -156,7 +158,6 @@ const ChatBot = () => {
                 flex: 1,
                 p: 2,
                 overflowY: "auto",
-                bgcolor: "#fafafa",
               }}
             >
               {messages.map((msg, i) => (
@@ -227,7 +228,6 @@ const ChatBot = () => {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                 sx={{
-                  bgcolor: "#f5f5f5",
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 1,
                   },

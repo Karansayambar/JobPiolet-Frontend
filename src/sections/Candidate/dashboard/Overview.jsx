@@ -14,7 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { IoBag } from "react-icons/io5";
-import { CiBookmark } from "react-icons/ci";
+import { BookmarkSimple } from "phosphor-react";
 import { FaBell } from "react-icons/fa";
 
 import { useGetAllJobsQuery } from "../../../services/jobsApi";
@@ -25,6 +25,7 @@ import useAppliedJobs from "../../../hooks/useAppliedJobs";
 import useFavoriteJobs from "../../../hooks/useFavoriteJobs";
 import useAlertJobs from "../../../hooks/useAlertJobs";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Overview = ({ onEditProfile }) => {
   const theme = useTheme();
@@ -35,6 +36,7 @@ const Overview = ({ onEditProfile }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const socket = useSocket();
+  const { themeMode } = useSelector((state) => state.theme);
 
   // const { data } = useGetAllJobsQuery();
 
@@ -45,7 +47,6 @@ const Overview = ({ onEditProfile }) => {
   //     setJobs(allJobs);
   //   }
   // }, [data]);
-  console.log("applied jobs", appliedJobs);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -112,12 +113,13 @@ const Overview = ({ onEditProfile }) => {
     {
       label: "Favorite Jobs",
       count: favoriteCount,
-      icon: <CiBookmark size={30} />,
+      icon: <BookmarkSimple weight="fill" size={30} />,
     },
     { label: "Job Alerts", count: alertCount, icon: <FaBell size={30} /> },
   ];
 
-  const bgColors = ["#D6E6FF", "#FFE6CC", "#D4EDDA"]; // Light Blue, Light Orange, Light Green
+  const bgColorsLight = ["#D6E6FF", "#FFE6CC", "#D4EDDA"]; // Light Blue, Light Orange, Light Green
+  const bgColorsDark = ["#456882", "#D1A980", "#748873"];
 
   const navigate = useNavigate();
 
@@ -155,14 +157,18 @@ const Overview = ({ onEditProfile }) => {
             p={2}
             width={280}
             sx={{
-              backgroundColor: bgColors[index],
+              backgroundColor: `${
+                themeMode === "dark"
+                  ? bgColorsDark[index]
+                  : bgColorsLight[index]
+              }`,
             }}
           >
             <Box>
               <Typography variant="h4">{item.count}</Typography>
               <Typography color="text.secondary">{item.label}</Typography>
             </Box>
-            <Box color={theme.palette.primary.main}>{item.icon}</Box>
+            <Box color={theme.palette.primary}>{item.icon}</Box>
           </Stack>
         ))}
       </Stack>
@@ -209,7 +215,7 @@ const Overview = ({ onEditProfile }) => {
       </Stack>
 
       {/* Jobs Table */}
-      {appliedJobs.length > 0 ? (
+      {jobs.length > 0 ? (
         <Table>
           <TableHead>
             <TableRow

@@ -8,6 +8,7 @@ import {
   updateCompanyData,
   updateStep,
 } from "../../../redux/slices/createCompanyProfileSlice";
+import FormProvider from "../../../hooks/hooks-form/FormProvider";
 
 const SocialLinks = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const SocialLinks = () => {
   const handleRemoveSocialLink = (index) => {
     setValue(
       "socialLinks",
-      socialLinks.filter((_, i) => i !== index),
+      socialLinks.filter((_, i) => i !== index)
     );
   };
 

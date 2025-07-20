@@ -7,7 +7,7 @@ const Testimonial = () => {
   const theme = useTheme();
   return (
     <>
-      <Stack bgcolor={theme.palette.grey[100]} py={8}>
+      <Stack bgcolor={theme.palette.background.default} py={8}>
         <Typography
           textAlign={"center"}
           alignItems={"center"}

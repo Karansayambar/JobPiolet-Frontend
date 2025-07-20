@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material/styles";
 export const lightMint = createTheme({
   palette: {
     mode: "light",
-    primary: { main: "#e7f0fa" },
+    primary: { main: "#607996ff" },
     secondary: { main: "#0a65cc" },
     error: { main: "#E63946" },
     warning: { main: "#F4A261" },
@@ -14,6 +14,7 @@ export const lightMint = createTheme({
       default: "#F8F9FA",
       paper: "#FFFFFF",
     },
+    navbar: "#d8dde2ff",
     text: {
       main: "#0a65cc",
       primary: "#212529",
@@ -51,7 +52,9 @@ export const darkBlue = createTheme({
       default: "#121212",
       paper: "#1E1E1E",
     },
+    navbar: "#495057",
     text: {
+      main: "#0a65cc",
       primary: "#F8F9FA",
       secondary: "#CED4DA",
     },

@@ -32,7 +32,7 @@ import { BsGlobe } from "react-icons/bs";
 
 export default function ProfilePage() {
   const { data, isLoading, error } = useGetCandidateProfileQuery();
-
+  console.log("user profile data", data);
   if (isLoading)
     return (
       <Container sx={{ py: 8, textAlign: "center" }}>
@@ -40,7 +40,7 @@ export default function ProfilePage() {
       </Container>
     );
 
-  if (!data || !data.candidateProfileData)
+  if (!data || !data.userProfile)
     return (
       <Container sx={{ py: 8, textAlign: "center" }}>
         <Typography variant="h5" color="text.secondary">
@@ -61,10 +61,8 @@ export default function ProfilePage() {
       </Container>
     );
 
-  const { candidateProfileData } = data;
-  const { candidateInfo, contactInfo, profileInfo, appliedJobs } =
-    candidateProfileData;
-
+  const { userProfile } = data;
+  const { candidateInfo, contactInfo, profileInfo, appliedJobs } = userProfile;
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Profile Header */}

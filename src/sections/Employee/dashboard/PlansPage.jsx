@@ -81,7 +81,7 @@ const PlansPage = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        "http://localhost:5000/api/payment/create-subscription",
+        "https://job-piolet-frontend.vercel.app/api/payment/create-subscription",
         {
           method: "POST",
           headers: {
@@ -143,13 +143,20 @@ const PlansPage = () => {
           </Box>
         </Stack>
         {error && <Alert severity="error">{error}</Alert>}
-        <Grid container spacing={5} py={5} justifyContent="center">
+        <Stack
+          spacing={5}
+          py={5}
+          justifyContent="center"
+          direction={"flex"}
+          gap={2}
+        >
           {plans.map((plan, index) => (
-            <Grid key={index}>
+            <Stack key={index}>
               <Card
                 variant="outlined"
                 sx={{
-                  height: 550,
+                  height: "700px",
+                  width: "250px",
                   p: 2,
                   borderRadius: 2,
                   "&:hover": {
@@ -222,9 +229,9 @@ const PlansPage = () => {
                   </Button>
                 </CardContent>
               </Card>
-            </Grid>
+            </Stack>
           ))}
-        </Grid>
+        </Stack>
       </Box>
     </>
   );
